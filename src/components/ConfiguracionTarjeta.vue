@@ -1,7 +1,9 @@
 <template>
-  <div class="bg-gray-700 min-h-screen pt-10 py-10">
-    <div class="p-10 max-w-2xl mx-auto bg-green-200 rounded-2xl shadow-xl space-y-8">
-      <BaseHeading>Configuración de tarjetas</BaseHeading>
+  <div class="bg-[#08a04b] min-h-screen py-10 px-4 flex justify-center mt-8">
+    <div class="p-10 w-full max-w-3xl bg-white rounded-2xl shadow-2xl space-y-10">
+      <BaseHeading>
+        Configuración de tarjetas
+      </BaseHeading>
 
       <div
         v-for="card in cardTypes"
@@ -21,7 +23,7 @@
               min="1"
               max="31"
               placeholder="Introduzca su día de cierre"
-              class="w-full px-4 py-2 border rounded-lg bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-blue-200"
+              class="w-full px-4 py-2 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
             />
             <p class="text-xs text-gray-500 mt-1">El día del mes en que cierra tu tarjeta</p>
           </div>
@@ -36,38 +38,48 @@
               min="1"
               max="60"
               placeholder="Introduzca sus días de vencimiento"
-              class="w-full px-4 py-2 border rounded-lg bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-blue-200"
+              class="w-full px-4 py-2 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
             />
             <p class="text-xs text-gray-500 mt-1">Días después del cierre que vence el pago</p>
           </div>
         </div>
 
-        <div v-if="card.closingDay && card.daysUntilDue" class="bg-blue-50 p-3 rounded-lg">
+        <div
+          v-if="card.closingDay && card.daysUntilDue"
+          class="bg-blue-50 p-3 rounded-lg border border-blue-100"
+        >
           <p class="text-sm text-blue-800">
-            <strong>Vista previa:</strong> Cierra el día {{ card.closingDay }} de cada mes, 
+            <strong>Vista previa:</strong> Cierra el día {{ card.closingDay }} de cada mes,
             vence {{ card.daysUntilDue }} días después
           </p>
         </div>
       </div>
 
-    
+      <!-- Botón guardar -->
       <button
         @click="saveCardSettings"
-        class="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500"
+        class="w-55 px-6 py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-all duration-300 shadow-md mx-auto block"
       >
         Guardar configuración
       </button>
 
+      <!-- Botón limpiar campos -->
+      <button
+        @click="resetFormFields"
+        class="mt-2 w-55 px-6 py-2 border border-green-600 text-green-700 font-semibold rounded-xl hover:bg-green-100 transition-all duration-300 shadow-md mx-auto block"
+      >
+        Restablecer campos
+      </button>
 
       <transition name="fade">
-        <p v-if="message" class="text-green-600 font-medium mt-4 text-center">
+        <p v-if="message" class="text-green-600 font-medium text-center mt-4">
           {{ message }}
         </p>
       </transition>
 
-     
+      <!-- Resumen -->
       <transition name="fade">
-        <div class="bg-white p-6 rounded-xl shadow-md space-y-6">
+        <div class="bg-gray-50 p-6 rounded-xl shadow-md space-y-6">
           <h2 class="text-2xl font-semibold text-gray-800 text-center mb-6">
             Resumen de tu configuración
           </h2>
@@ -75,10 +87,10 @@
           <div
             v-for="card in cardTypes"
             :key="'summary-' + card.id"
-            class="border-b pb-4 last:border-b-0"
+            class="border-b pb-4 last:border-none"
           >
             <h3 class="text-lg font-bold text-green-700 mb-2">{{ card.name }}</h3>
-            <ul class="text-gray-700 space-y-1">
+            <ul class="text-gray-700 space-y-1 text-sm">
               <li>
                 <span class="font-medium">Día de cierre:</span>
                 {{ card.closingDay || 'No definido' }}
@@ -99,12 +111,14 @@
 import { ref, onMounted } from 'vue';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { useRouter } from 'vue-router';
 import BaseHeading from './BaseHeading.vue';
 
 const db = getFirestore();
 const userId = ref(null);
-const userDocId = ref(null); 
+const userDocId = ref(null);
 const message = ref('');
+const router = useRouter();
 
 const cardTypes = ref([
   { id: 'visa', name: 'Visa', closingDay: null, daysUntilDue: null },
@@ -114,36 +128,26 @@ const cardTypes = ref([
 ]);
 
 const findUserDocumentId = async (uid) => {
-  console.log("Buscando documento para UID:", uid);
   const q = query(collection(db, "users"), where("uid", "==", uid));
   const querySnapshot = await getDocs(q);
 
   if (!querySnapshot.empty) {
     const docSnap = querySnapshot.docs[0];
     userDocId.value = docSnap.id;
-    console.log("✅ Documento encontrado:", userDocId.value);
     return true;
   } else {
-    console.warn("⚠️ No se encontró documento del usuario con ese UID.");
     return false;
   }
 };
 
 const loadCardSettings = async () => {
-  if (!userDocId.value) {
-    console.log("❌ No hay userDocId para cargar configuración");
-    return;
-  }
+  if (!userDocId.value) return;
 
-  console.log("Cargando configuración para userDocId:", userDocId.value);
-  
   const settingsRef = doc(db, "users", userDocId.value, "settings", "tarjetaConfig");
   const settingsSnap = await getDoc(settingsRef);
 
   if (settingsSnap.exists()) {
     const data = settingsSnap.data();
-    console.log("✅ Configuración encontrada:", data);
-    
     if (data.cardTypes) {
       cardTypes.value.forEach(card => {
         const savedCard = data.cardTypes[card.id];
@@ -153,20 +157,14 @@ const loadCardSettings = async () => {
         }
       });
     }
-  } else {
-    console.log("❌ No se encontró configuración guardada");
   }
 };
 
 const saveCardSettings = async () => {
   if (!userDocId.value) {
-    console.log("❌ No hay userDocId para guardar");
     message.value = 'Error: No se pudo identificar el usuario';
     return;
   }
-
-  console.log("Guardando configuración para userDocId:", userDocId.value);
-  console.log("Datos a guardar:", cardTypes.value);
 
   const settingsRef = doc(db, "users", userDocId.value, "settings", "tarjetaConfig");
 
@@ -185,15 +183,24 @@ const saveCardSettings = async () => {
       updatedAt: new Date()
     });
 
-    console.log("✅ Configuración guardada exitosamente");
     message.value = 'Configuración guardada correctamente.';
     setTimeout(() => {
       message.value = '';
-    }, 3000);
+      router.push('/calendario-pagos'); // 👈 Redireccionar después de guardar
+    }, 1500);
+
   } catch (error) {
     console.error("❌ Error al guardar:", error);
     message.value = 'Error al guardar la configuración';
   }
+};
+
+// 🔄 Nueva función para limpiar todos los inputs
+const resetFormFields = () => {
+  cardTypes.value.forEach(card => {
+    card.closingDay = null;
+    card.daysUntilDue = null;
+  });
 };
 
 onMounted(() => {
@@ -201,13 +208,10 @@ onMounted(() => {
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       userId.value = user.uid;
-      console.log("Usuario autenticado:", user.uid);
       const found = await findUserDocumentId(user.uid);
       if (found) {
         await loadCardSettings();
       }
-    } else {
-      console.warn("⚠️ Usuario no autenticado");
     }
   });
 });

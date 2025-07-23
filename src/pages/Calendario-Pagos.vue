@@ -1,6 +1,7 @@
 <template>
-  <div class="payment-calendar bg-gray-900 min-h-screen text-white p-4">
+  <div class="payment-calendar bg-gray-900 min-h-screen text-white p-4 mt-8">
 
+    <!-- Mensaje flotante -->
     <div
       v-if="showFloatingMessage"
       class="fixed top-5 right-5 bg-blue-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 transition-all duration-300"
@@ -8,75 +9,49 @@
       {{ floatingMessage }}
     </div>
 
-   
-    <div
-      v-if="pendingPayment"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-    >
-      <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
+    <!-- Modal: Confirmar pago -->
+    <div v-if="pendingPayment" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white p-6 rounded-2xl shadow-xl max-w-md w-full">
         <h3 class="text-xl font-bold mb-4 text-gray-800">Confirmar pago</h3>
         <p class="mb-6 text-gray-600">
           ¿Estás seguro que querés completar la operación para la cuota
           {{ pendingPayment.installmentNumber }} de {{ pendingPayment.totalInstallments }} de "{{ pendingPayment.name }}"?
         </p>
         <div class="flex justify-end gap-3">
-          <button
-            @click="cancelTogglePayment"
-            class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400"
-          >
+          <button @click="cancelTogglePayment" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400">
             Cancelar
           </button>
-          <button
-            @click="confirmTogglePayment"
-            class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-          >
+          <button @click="confirmTogglePayment" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
             Confirmar
           </button>
         </div>
       </div>
     </div>
 
-    
-    <div
-      v-if="expenseToDelete"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-    >
-      <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
-        <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
-          <span class="text-red-500 text-2xl mr-3"></span>
-          Eliminar gasto completado
-        </h3>
+    <!-- Modal: Eliminar gasto -->
+    <div v-if="expenseToDelete" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white p-6 rounded-2xl shadow-xl max-w-md w-full">
+        <h3 class="text-xl font-bold mb-4 text-gray-800">Eliminar gasto completado</h3>
         <p class="mb-6 text-gray-600">
-          ¿Estás seguro que querés eliminar permanentemente el gasto 
-          "<strong>{{ expenseToDelete.name }}</strong>"?
+          ¿Estás seguro que querés eliminar permanentemente el gasto "<strong>{{ expenseToDelete.name }}</strong>"?
           <br /><br />
           <span class="text-sm text-red-600">Esta acción no se puede deshacer.</span>
         </p>
         <div class="flex justify-end gap-3">
-          <button
-            @click="cancelDeleteExpense"
-            class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400"
-          >
+          <button @click="cancelDeleteExpense" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400">
             Cancelar
           </button>
-          <button
-            @click="confirmDeleteExpense"
-            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-          >
-             Eliminar
+          <button @click="confirmDeleteExpense" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+            Eliminar
           </button>
         </div>
       </div>
     </div>
 
-    
-    <div
-      v-if="expenseToArchive"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-    >
-      <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
-        <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
-          <span class="text-blue-500 text-2xl mr-3"></span>
+    <!-- Modal: Archivar / Restaurar -->
+    <div v-if="expenseToArchive" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white p-6 rounded-2xl shadow-xl max-w-md w-full">
+        <h3 class="text-xl font-bold mb-4 text-gray-800">
           {{ expenseToArchive.archived ? 'Restaurar' : 'Archivar' }} gasto
         </h3>
         <p class="mb-6 text-gray-600">
@@ -84,60 +59,55 @@
           "<strong>{{ expenseToArchive.name }}</strong>"?
         </p>
         <div class="flex justify-end gap-3">
-          <button
-            @click="cancelArchiveExpense"
-            class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400"
-          >
+          <button @click="cancelArchiveExpense" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400">
             Cancelar
           </button>
-          <button
-            @click="confirmArchiveExpense"
-            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
-             {{ expenseToArchive.archived ? 'Restaurar' : 'Archivar' }}
+          <button @click="confirmArchiveExpense" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            {{ expenseToArchive.archived ? 'Restaurar' : 'Archivar' }}
           </button>
         </div>
       </div>
     </div>
 
-    <h2 class="text-2xl font-semibold mb-4 text-center">Calendario de pagos</h2>
-    
+    <!-- Header -->
+    <h2 class="text-3xl font-bold mb-6 text-center text-white">Calendario de pagos</h2>
+
+    <!-- Navegación entre meses -->
     <div class="flex justify-between items-center mb-6">
       <button @click="previousMonth" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-center">
         <span class="text-xl mr-1">&laquo;</span> Mes anterior
       </button>
-      <h3 class="text-xl font-medium">{{ currentMonthName }} {{ currentYear }}</h3>
+      <h3 class="text-xl font-semibold">{{ currentMonthName }} {{ currentYear }}</h3>
       <button @click="nextMonth" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-center">
         Mes siguiente <span class="text-xl ml-1">&raquo;</span>
       </button>
     </div>
 
-  
-    <div class="flex justify-center mb-4">
+    <!-- Botón de configuración -->
+    <div class="flex justify-center mb-6">
       <button 
         @click="$router.push('/Configuracion-Tarjeta')" 
-        class="px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm flex items-center"
+        class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm flex items-center shadow-md"
       >
-        <span class="mr-1"></span> Configurar fechas de cierre
+        Configurar fechas de cierre
       </button>
     </div>
-    
-   
-    <div class="grid grid-cols-7 gap-1 mb-4 text-center">
-      <div v-for="day in weekDays" :key="day" class="font-medium py-2 bg-gray-800">
+
+    <!-- Días de la semana -->
+    <div class="grid grid-cols-7 gap-1 text-center mb-2">
+      <div v-for="day in weekDays" :key="day" class="py-2 bg-gray-800 font-medium">
         {{ day }}
       </div>
     </div>
-    
+
+    <!-- Días del mes -->
     <div class="grid grid-cols-7 gap-1">
-     
-      <div v-for="n in firstDayOfMonth" :key="`empty-${n}`" class="h-24 p-2 bg-gray-800 opacity-50"></div>
-      
-    
+      <div v-for="n in firstDayOfMonth" :key="'empty-' + n" class="h-24 p-2 bg-gray-800 opacity-50"></div>
+
       <div 
         v-for="day in daysInMonth" 
         :key="day" 
-        class="min-h-24 p-2 bg-gray-800 relative flex flex-col cursor-pointer"
+        class="min-h-24 p-2 bg-gray-800 rounded-lg relative flex flex-col cursor-pointer hover:bg-gray-700 transition"
         :class="{
           'border-2 border-green-500': isToday(day),
           'border-2 border-blue-500': isSelectedDay(day)
@@ -145,14 +115,17 @@
         @click="selectDay(day)"
       >
         <div class="flex justify-between items-start">
-          <span class="font-medium">{{ day }}</span>
+          <span class="font-semibold">{{ day }}</span>
           <span v-if="hasPaymentsOnDay(day)" class="h-2 w-2 rounded-full bg-red-500"></span>
         </div>
-        
+
         <div class="mt-1 flex-grow overflow-y-auto max-h-20">
-          <div v-for="payment in getPaymentsForDay(day)" :key="payment.id"
-              class="text-xs p-1 mb-1 rounded flex items-center"
-              :class="payment.paid ? 'bg-green-900 line-through' : 'bg-red-900'">
+          <div
+            v-for="payment in getPaymentsForDay(day)"
+            :key="payment.id"
+            class="text-xs p-1 mb-1 rounded flex items-center"
+            :class="payment.paid ? 'bg-green-900 line-through' : 'bg-red-900'"
+          >
             <input 
               type="checkbox" 
               :checked="payment.paid" 
@@ -171,37 +144,30 @@
             </div>
           </div>
         </div>
-        
+
         <div v-if="hasPaymentsOnDay(day) && !allPaidOnDay(day)" class="mt-auto pt-1">
-          <button @click.stop="markDayAsPaid(day)" 
-                  class="w-full text-xs px-1 py-0.5 bg-green-600 hover:bg-green-500 rounded">
+          <button @click.stop="markDayAsPaid(day)" class="w-full text-xs px-1 py-0.5 bg-green-600 hover:bg-green-500 rounded">
             Pagar cuotas del día
           </button>
         </div>
       </div>
-      
-      
-      <div v-for="n in (42 - daysInMonth - firstDayOfMonth) % 7" :key="`end-empty-${n}`" 
-          class="h-24 p-2 bg-gray-800 opacity-50"></div>
+
+      <div v-for="n in (42 - daysInMonth - firstDayOfMonth) % 7" :key="'end-empty-' + n" class="h-24 p-2 bg-gray-800 opacity-50"></div>
     </div>
-    
-  
-    <div class="mt-6 flex gap-6 text-sm justify-center">
-      <div class="flex items-center">
-        <div class="h-3 w-3 bg-red-900 rounded mr-1"></div>
-        <span>Pago pendiente</span>
+
+    <!-- Leyenda -->
+    <div class="mt-6 flex flex-wrap gap-4 text-sm justify-center">
+      <div class="flex items-center gap-2">
+        <div class="h-3 w-3 bg-red-900 rounded"></div> <span>Pago pendiente</span>
       </div>
-      <div class="flex items-center">
-        <div class="h-3 w-3 bg-green-900 rounded mr-1"></div>
-        <span>Pago realizado</span>
+      <div class="flex items-center gap-2">
+        <div class="h-3 w-3 bg-green-900 rounded"></div> <span>Pago realizado</span>
       </div>
-      <div class="flex items-center">
-        <div class="h-3 w-3 border-2 border-green-500 rounded mr-1"></div>
-        <span>Hoy</span>
+      <div class="flex items-center gap-2">
+        <div class="h-3 w-3 border-2 border-green-500 rounded"></div> <span>Hoy</span>
       </div>
-      <div class="flex items-center">
-        <div class="h-3 w-3 border-2 border-blue-500 rounded mr-1"></div>
-        <span>Día seleccionado</span>
+      <div class="flex items-center gap-2">
+        <div class="h-3 w-3 border-2 border-blue-500 rounded"></div> <span>Día seleccionado</span>
       </div>
     </div>
     
@@ -378,7 +344,8 @@
       </div>
     </div>
     
-    <div class="bg-green-600 text-white py-2 text-center rounded-lg hover:bg-green-500 w-64 mx-auto flex justify-center items-center mt-4">
+    <!-- Botón volver -->
+    <div class="bg-green-600 text-white py-2 text-center rounded-lg hover:bg-green-500 w-64 mx-auto flex justify-center items-center mt-8 shadow-md">
       <button @click="$router.push('/Monto-Total')">
         Volver a monto total
       </button>

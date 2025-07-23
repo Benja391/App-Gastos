@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col items-center justify-center min-h-screen bg-gray-700 p-6">
-    <div class="bg-green-200 rounded-2xl shadow-2xl p-6 w-full max-w-md">
+  <div class="flex flex-col items-center justify-center min-h-screen bg-[#08a04b] py-10 px-4 mt-8">
+    <div class="bg-white rounded-2xl shadow-2xl p-10 grid gap-8 mt-1 w-full max-w-md">
       <BaseHeading>Mi Perfil</BaseHeading>
 
   
@@ -14,8 +14,8 @@
           class="w-32 h-32 rounded-full border-4 border-gray-300 object-cover mb-4"
         />
 
-        <p v-if="saveSuccess" class="text-green-600 text-sm mb-2">✅ Imagen guardada con éxito</p>
-        <p v-if="saveError" class="text-red-600 text-sm mb-2">❌ Error al guardar la imagen</p>
+        <p v-if="saveSuccess" class="text-green-600 text-sm mb-2"> Imagen guardada con éxito</p>
+        <p v-if="saveError" class="text-red-600 text-sm mb-2"> Error al guardar la imagen</p>
 
         <input  
           type="file" 
@@ -33,15 +33,14 @@
 
     
         <div class="text-left w-full mb-6">
-          <p class="text-black"><strong>Nombre:</strong> {{ nombre }}</p>
-          <p class="text-black"><strong>Apellido:</strong> {{ apellido }}</p>
+        
           <p class="text-black"><strong>Nombre de Usuario:</strong> {{ nombreDeUsuario }}</p>
           <p class="text-black"><strong>Email:</strong> {{ email }}</p>
         </div>
 
       
-        <div class="bg-gray-400 p-4 rounded-lg w-full text-center">
-          <h2 class="text-lg font-semibold text-gray-800">📊 Total Gastado</h2>
+        <div class="bg-green-300 p-4 rounded-lg w-full text-center">
+          <h2 class="text-lg font-semibold text-gray-800"> Total Gastado</h2>
           <p class="text-xl font-bold text-red-600">$ {{ totalGastado.toLocaleString('es-AR') }}</p>
         </div>
       </div>
@@ -63,8 +62,7 @@ export default {
       selectedImage: null,
       profileImageUrl: "",
       userId: null,
-      nombre: "",
-      apellido: "",
+ 
       email: "",
       nombreDeUsuario: "",
       totalGastado: 0, 
@@ -90,8 +88,7 @@ export default {
         if (!querySnapshot.empty) {
           const userData = querySnapshot.docs[0].data();
           this.profileImageUrl = userData.profileImageUrl || "";
-          this.nombre = userData.nombre || "";
-          this.apellido = userData.apellido || "";
+        
           this.email = userData.email || "";
           this.nombreDeUsuario = userData.nombreDeUsuario || "";
         }

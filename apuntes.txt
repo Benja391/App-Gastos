@@ -12,3 +12,37 @@ service cloud.firestore {
     }
   }
 }
+
+Ruta para mandar hoy:
+https://github.com/esporas123456789/App-Gastos/tree/main/src
+
+
+CODIGOS QUE QUEDARON
+<!-- 
+      <li v-if="userId" class="relative ml-2">
+        <button
+          ref="notificationButton"
+          @click="toggleNotifications"
+          aria-label="Mostrar notificaciones"
+          class="p-3 rounded-2xl hover:bg-green-600 hover:text-white transition-all duration-300 relative shadow-lg hover:shadow-xl hover:-translate-y-1"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
+            <path d="M14 14a2 2 0 11-4 0h4z"/>
+          </svg>
+          <span
+            v-if="badgeCount > 0"
+            class="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full min-w-[20px] shadow-lg"
+          >
+             badgeCount 
+          </span>
+        </button>
+        
+        <Notificaciones
+          v-if="showNotifications"
+          ref="notificationWrapper"
+          :userId="userId"
+          @close="showNotifications = false"
+          @badge-update="actualizarBadge"
+        />
+      </li> -->

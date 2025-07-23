@@ -1,264 +1,336 @@
-<template>
-  <main class=" bg-green-50 min-h-screen">
-   
-   <section class="py-16 px-8 bg-gradient-to-r from-green-800 via-green-700 to-green-800 rounded-3xl shadow-2xl flex flex-col md:flex-row items-center md:justify-between overflow-hidden relative">
+  <template>
+    <main class="bg-green-50 min-h-screen">
+      <!-- HERO SECTION -->
+  <section class="py-20 px-4 sm:px-8 bg-green-600 rounded-3xl shadow-2xl mx-4 mt-8 overflow-hidden">
+    <div class="container mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
+          <!-- Texto -->
+          <div class="text-center lg:text-left max-w-2xl mb-12 lg:mb-0">
+            <h1 class="text-5xl lg:text-7xl font-extrabold text-white leading-tight mb-6">
+              Bienvenido a 
+              <span class="text-4xl md:text-6xl font-bold text-black leading-tight whitespace-nowrap">GASTOS</span>
+            </h1>
 
+            <p class="text-green-100 text-xl lg:text-2xl leading-relaxed mb-8 max-w-xl">
+              Transforma la manera en que manejas tu dinero. <strong>Simple</strong>, <strong>inteligente</strong> y <strong>efectivo</strong>.
+            </p>
 
-<div class="absolute inset-0 bg-green-900 opacity-30 blur-sm"></div>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <router-link
+                to="/registrarse"
+                class="inline-flex items-center justify-center bg-white text-green-700 font-bold py-4 px-8 rounded-2xl shadow-xl transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:bg-green-50 group"
+              >
+                <span>Comenzar</span>
+              </router-link>
+            </div>
+          </div>
 
+          <!-- Mockup a la derecha -->
+          <div class="flex justify-start lg:justify-start">
+            <div
+              class="w-52 sm:w-56 transform rotate-6 rounded-[2.5rem] border-8 border-black shadow-[0_15px_45px_rgba(0,0,0,0.3)] bg-black overflow-hidden transition-transform duration-500 hover:scale-105 hover:rotate-3"
+            >
+              <img
+                src="/screenshot-page.png"
+                alt="Mockup app"
+                class="w-full h-full object-cover rounded-[2rem]"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
 
-<div class="relative z-10 text-center md:text-left max-w-xl">
-  <h1 class="text-4xl md:text-6xl font-robotobold text-white leading-tight  whitespace-nowrap">
-    Bienvenido a <span class="text-black">GASTOS</span>
-  </h1>
-  <p class="text-green-200 mt-6 text-lg md:text-xl leading-relaxed">
-    La forma más fácil, rápida y eficiente de gestionar tus finanzas personales.
-  </p>
-  <div class="mt-8">
-    <router-link
-      to="/registrarse"
-      class="inline-block bg-green-500 hover:bg-green-400 text-white font-bold py-3 px-8 rounded-full shadow-md transform transition-all duration-300 hover:scale-110 hover:shadow-lg"
-    >
-      Comienza Ahora
-    </router-link>
-  </div>
-</div>
+    <!-- CARACTERÍSTICAS - Con imágenes originales -->
+    <section class="py-20 px-4 sm:px-8">
+      <div class="container mx-auto">
+        <div class="text-center mb-16">
+          <div class="inline-flex items-center bg-green-100 text-green-700 rounded-full px-6 py-2 mb-4">
+            <span class="text-sm font-semibold"> Características principales</span>
+          </div>
+          <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+            Todo lo que necesitas para 
+            <span class="text-green-600">controlar tus finanzas</span>
+          </h2>
+          <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+            Herramientas diseñadas para simplificar tu vida financiera
+          </p>
+        </div>
 
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Registro Fácil -->
+          <div class="group bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
+            <div class="relative overflow-hidden rounded-2xl mb-6">
+              <img 
+                src="/registro-facil.png" 
+                alt="Registro Fácil" 
+                class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110" 
+              />
+              <div class="absolute inset-0 bg-green-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-3">Registro Fácil</h3>
+            <p class="text-gray-600 leading-relaxed">
+              Agrega tus gastos diarios de manera rápida y sencilla con categorización automática.
+            </p>
+          </div>
 
-<div class="relative mt-10 md:mt-0 md:w-1/2 flex justify-center z-10">
-  <img
-    src="/imagen-primera.jpg"
-    alt="Gestión de Finanzas"
-    class="w-4/5 md:w-full max-w-md rounded-2xl shadow-2xl transform transition-transform duration-500 hover:scale-105 hover:rotate-1"
-  />
-</div>
+          <!-- Reportes Visuales -->
+          <div class="group bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
+            <div class="relative overflow-hidden rounded-2xl mb-6">
+              <img 
+                src="/reportes.jpg" 
+                alt="Reportes Visuales" 
+                class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110" 
+              />
+              <div class="absolute inset-0 bg-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-3">Reportes Visuales</h3>
+            <p class="text-gray-600 leading-relaxed">
+              Obtén gráficos claros sobre tus hábitos de gasto y analiza tendencias.
+            </p>
+          </div>
 
-</section>
+          <!-- Presupuestos Personalizados -->
+          <div class="group bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
+            <div class="relative overflow-hidden rounded-2xl mb-6">
+              <img 
+                src="/presupuestos.jpeg" 
+                alt="Presupuestos Personalizados" 
+                class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110" 
+              />
+              <div class="absolute inset-0 bg-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-3">Presupuestos Personalizados</h3>
+            <p class="text-gray-600 leading-relaxed">
+              Define y controla tus presupuestos mensuales con alertas inteligentes.
+            </p>
+          </div>
 
+          <!-- Personalización -->
+          <div class="group bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
+            <div class="relative overflow-hidden rounded-2xl mb-6">
+              <img 
+                src="/personalizacion-personal.jpg" 
+                alt="Personalización" 
+                class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110" 
+              />
+              <div class="absolute inset-0 bg-orange-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-3">Personalización</h3>
+            <p class="text-gray-600 leading-relaxed">
+              Adapta las categorías de gastos según tus necesidades específicas.
+            </p>
+          </div>
 
-<section class="space-y-10">
-<h2 class="text-3xl font-bold text-green-800 text-center mt-5">Características</h2>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
- 
-  <div class="bg-white p-6 rounded-lg shadow-lg text-center transform transition-all duration-300 hover:scale-105 hover:shadow-green-400/50">
-    <img src="/registro-facil.png" alt="Registro Fácil" class="w-60 h-40 mx-auto mb-4 rounded-md shadow-md" />
-    <h3 class="text-xl font-semibold text-green-800">Registro Fácil</h3>
-    <p class="text-green-700 mt-2">
-      Agrega tus gastos diarios de manera rápida y sencilla.
-    </p>
-  </div>
+          <!-- Interfaz Amigable -->
+          <div class="group bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
+            <div class="relative overflow-hidden rounded-2xl mb-6">
+              <img 
+                src="/interfaz-amigable.jpg" 
+                alt="Interfaz Amigable" 
+                class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110" 
+              />
+              <div class="absolute inset-0 bg-teal-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-3">Interfaz Amigable</h3>
+            <p class="text-gray-600 leading-relaxed">
+              Disfruta de una experiencia intuitiva y sin complicaciones.
+            </p>
+          </div>
 
- 
-  <div class="bg-white p-6 rounded-lg shadow-lg text-center transform transition-all duration-300 hover:scale-105 hover:shadow-green-400/50">
-    <img src="/reportes.jpg" alt="Reportes Visuales" class="w-60 h-40 mx-auto mb-4 rounded-md shadow-md" />
-    <h3 class="text-xl font-semibold text-green-800">Reportes Visuales</h3>
-    <p class="text-green-700 mt-2">
-      Obtén gráficos claros sobre tus hábitos de gasto.
-    </p>
-  </div>
-
-  
-  <div class="bg-white p-6 rounded-lg shadow-lg text-center transform transition-all duration-300 hover:scale-105 hover:shadow-green-400/50">
-    <img src="/presupuestos.jpeg" alt="Presupuestos Personalizados" class="w-60 h-40 mx-auto mb-4 rounded-md shadow-md" />
-    <h3 class="text-xl font-semibold text-green-800">Presupuestos Personalizados</h3>
-    <p class="text-green-700 mt-2">
-      Define y controla tus presupuestos mensuales.
-    </p>
-  </div>
-
- 
-  <div class="bg-white p-6 rounded-lg shadow-lg text-center transform transition-all duration-300 hover:scale-105 hover:shadow-green-400/50">
-    <img src="/personalizacion-personal.jpg" alt="Personalización" class="w-60 h-40 mx-auto mb-4 rounded-md shadow-md" />
-    <h3 class="text-xl font-semibold text-green-800">Personalización</h3>
-    <p class="text-green-700 mt-2">
-      Adapta las categorías de gastos según tus necesidades.
-    </p>
-  </div>
-
-
-  <div class="bg-white p-6 rounded-lg shadow-lg text-center transform transition-all duration-300 hover:scale-105 hover:shadow-green-400/50">
-    <img src="/interfaz-amigable.jpg" alt="Interfaz Amigable" class="w-60 h-40 mx-auto mb-4 rounded-md shadow-md" />
-    <h3 class="text-xl font-semibold text-green-800">Interfaz Amigable</h3>
-    <p class="text-green-700 mt-2">
-      Disfruta de una experiencia intuitiva y sin complicaciones.
-    </p>
-  </div>
-
-  
-  <div class="bg-white p-6 rounded-lg shadow-lg text-center transform transition-all duration-300 hover:scale-105 hover:shadow-green-400/50">
-    <img src="/reportes-simples.jpg" alt="Reportes Simples" class="w-60 h-40 mx-auto mb-4 rounded-md shadow-md" />
-    <h3 class="text-xl font-semibold text-green-800">Reportes Simples</h3>
-    <p class="text-green-700 mt-2">
-      Revisa tus reportes de gastos con un solo clic.
-    </p>
-  </div>
-</div>
-</section>
-
-
-   
-<section class="space-y-10 bg-gray-50 py-12 px-6">
-<h2 class="text-3xl font-bold text-green-800 text-center">Testimonios de nuestros usuarios</h2>
-<div class="space-y-10">
-  
-  <div class="flex flex-col md:flex-row items-center md:items-start bg-white p-6 rounded-lg shadow-md">
-   
-    <div class="flex-shrink-0 w-full md:w-1/3 mb-6 md:mb-0">
-      <img
-        src="/testimonio-uno-uno.jpg"
-        alt="Usuario feliz"
-        class="rounded-lg shadow-md object-cover h-48 w-full"
-      />
-    </div>
-  
-    <div class="md:w-2/3 md:pl-6 text-center md:text-left">
-      <p class="text-green-700 text-lg italic leading-relaxed">
-        " <strong>GASTOS</strong>  me ayudó a cambiar completamente la forma en que manejo mi dinero. Antes solía perder el control fácilmente 
-        y nunca sabía exactamente en qué estaba gastando. Desde que uso la app, tengo un registro claro de mis ingresos 
-        y gastos, y eso me ha permitido ahorrar para cosas importantes como mis estudios y viajes. ¡Realmente la recomiendo!".
-      </p>
-      <h3 class="text-green-800 font-bold mt-4">Mariana López</h3>
-      <p class="text-sm text-green-600">Diseñadora Gráfica</p>
-    </div>
-  </div>
-
-
-  <div class="flex flex-col md:flex-row-reverse items-center md:items-start bg-green-50 p-6 rounded-lg shadow-md">
-  
-    <div class="flex-shrink-0 w-full md:w-1/3 mb-6 md:mb-0">
-      <img
-        src="/testimonio-tres-tres.jpg"
-        alt="Usuario sonriente"
-        class="rounded-lg shadow-md object-cover h-48 w-full"
-      />
-    </div>
- 
-    <div class="md:w-2/3 md:pr-6 text-center md:text-left">
-      <p class="text-green-700 text-lg italic leading-relaxed">
-        "Como analista financiero, siempre busco herramientas que sean prácticas y confiables. Con <strong>GASTOS</strong>, no solo 
-        puedo registrar mis gastos diarios, sino que también obtengo reportes visuales que me permiten analizar mis 
-        hábitos de consumo. Es una herramienta imprescindible para cualquier persona que quiera organizar sus finanzas 
-        de manera eficiente. Además, la interfaz es muy amigable y fácil de usar."
-      </p>
-      <h3 class="text-green-800 font-bold mt-4">Carlos García</h3>
-      <p class="text-sm text-green-600">Analista Financiero</p>
-    </div>
-  </div>
-
-  
-  <div class="flex flex-col md:flex-row items-center md:items-start bg-white p-6 rounded-lg shadow-md">
-   
-    <div class="flex-shrink-0 w-full md:w-1/3 mb-6 md:mb-0">
-      <img
-        src="/testimonio-dos-dos.jpg"
-        alt="Usuario satisfecho"
-        class="rounded-lg shadow-md object-cover h-48 w-full"
-      />
-    </div>
- 
-    <div class="md:w-2/3 md:pl-6 text-center md:text-left">
-      <p class="text-green-700 text-lg italic leading-relaxed">
-        "Para mí, <strong>GASTOS</strong>  es mucho más que una app. Es un sistema que me ha permitido llevar un control detallado 
-        de las finanzas de mi hogar. Antes solía olvidar en qué gastábamos y terminábamos con deudas. Ahora, con cada 
-        gasto registrado y las alertas de presupuesto, me siento mucho más tranquilo y organizado. ¡Definitivamente cambiará 
-        la forma en que manejas tu dinero!".
-      </p>
-      <h3 class="text-green-800 font-bold mt-4">Paola Mendoza</h3>
-      <p class="text-sm text-green-600">Madre y Emprendedora</p>
-    </div>
-  </div>
-</div>
-
-
-<section class="space-y-12 bg-gray-100 py-16 px-8">
-  <h2 class="text-4xl font-bold text-green-900 text-center mb-8">Consejos para tus finanzas</h2>
-  <div class="space-y-8">
-  
-    <div class="flex items-start bg-white p-8 rounded-xl shadow-lg transform transition-all hover:scale-105">
-      <div class="flex-shrink-0 w-14 h-14 bg-green-800 text-white rounded-full flex items-center justify-center text-xl font-bold">
-        1
+          <!-- Reportes Simples -->
+          <div class="group bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
+            <div class="relative overflow-hidden rounded-2xl mb-6">
+              <img 
+                src="/reportes-simples.jpg" 
+                alt="Reportes Simples" 
+                class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110" 
+              />
+              <div class="absolute inset-0 bg-indigo-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-3">Reportes Simples</h3>
+            <p class="text-gray-600 leading-relaxed">
+              Revisa tus reportes de gastos con un solo clic y obtén insights valiosos.
+            </p>
+          </div>
+        </div>
       </div>
-      <div class="ml-8">
-        <h3 class="text-2xl font-semibold text-green-800">Define un Presupuesto</h3>
-        <p class="text-green-700 mt-3">
-          Establece un presupuesto mensual para saber cuánto puedes gastar y cuánto necesitas ahorrar.
-        </p>
+    </section>
+
+    <!-- TESTIMONIOS - Simplificados -->
+    <section class="py-20 px-4 sm:px-8 bg-gray-50">
+      <div class="container mx-auto">
+        <div class="text-center mb-16">
+          <div class="inline-flex items-center bg-green-100 text-green-700 rounded-full px-6 py-2 mb-4">
+            <span class="text-sm font-semibold"> Testimonios</span>
+          </div>
+          <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+            Lo que dicen nuestros <span class="text-green-600">usuarios</span>
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Testimonio 1 -->
+          <div class="bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300">
+            <div class="flex items-center mb-6">
+              <div class="flex text-yellow-400">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+              </div>
+            </div>
+            <blockquote class="text-gray-700 text-lg leading-relaxed mb-6">
+              "GASTOS me ayudó a cambiar completamente la forma en que manejo mi dinero. Antes solía perder el control fácilmente y nunca sabía exactamente en qué estaba gastando."
+            </blockquote>
+            <div class="flex items-center">
+              <img src="/testimonio-uno-uno.jpg" alt="Mariana López" class="w-12 h-12 rounded-full object-cover mr-4">
+              <div>
+                <div class="font-semibold text-gray-900">Mariana López</div>
+                <div class="text-sm text-gray-500">Diseñadora Gráfica</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonio 2 -->
+          <div class="bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300">
+            <div class="flex items-center mb-6">
+              <div class="flex text-yellow-400">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+              </div>
+            </div>
+            <blockquote class="text-gray-700 text-lg leading-relaxed mb-6">
+              "Como analista financiero, siempre busco herramientas que sean prácticas y confiables. Los reportes visuales me permiten analizar mis hábitos de consumo."
+            </blockquote>
+            <div class="flex items-center">
+              <img src="/testimonio-tres-tres.jpg" alt="Carlos García" class="w-12 h-12 rounded-full object-cover mr-4">
+              <div>
+                <div class="font-semibold text-gray-900">Carlos García</div>
+                <div class="text-sm text-gray-500">Analista Financiero</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonio 3 -->
+          <div class="bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300">
+            <div class="flex items-center mb-6">
+              <div class="flex text-yellow-400">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+              </div>
+            </div>
+            <blockquote class="text-gray-700 text-lg leading-relaxed mb-6">
+              "Para mí, GASTOS es mucho más que una app. Es un sistema que me ha permitido llevar un control detallado de las finanzas de mi hogar."
+            </blockquote>
+            <div class="flex items-center">
+              <img src="/testimonio-dos-dos.jpg" alt="Paola Mendoza" class="w-12 h-12 rounded-full object-cover mr-4">
+              <div>
+                <div class="font-semibold text-gray-900">Paola Mendoza</div>
+                <div class="text-sm text-gray-500">Madre y Emprendedora</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
 
-   
-    <div class="flex items-start bg-green-50 p-8 rounded-xl shadow-lg transform transition-all hover:scale-105">
-      <div class="flex-shrink-0 w-14 h-14 bg-green-700 text-white rounded-full flex items-center justify-center text-xl font-bold">
-        2
+    <!-- CONSEJOS - Simplificados -->
+    <section class="py-20 px-4 sm:px-8 bg-green-800">
+      <div class="container mx-auto">
+        <div class="text-center mb-16">
+          <div class="inline-flex items-center bg-green-700 text-green-200 rounded-full px-6 py-2 mb-4">
+            <span class="text-sm font-semibold"> Tips financieros</span>
+          </div>
+          <h2 class="text-4xl lg:text-5xl font-bold text-white mb-4">
+            Consejos para <span class="text-green-300">maximizar tus ahorros</span>
+          </h2>
+          <p class="text-xl text-green-200 max-w-2xl mx-auto">
+            Estrategias simples que te ayudarán a construir un futuro financiero sólido
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="bg-white/10 backdrop-blur-sm p-8 rounded-3xl border border-white/20 hover:bg-white/20 transition-all duration-300">
+            <div class="flex items-center mb-6">
+              <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center mr-4">
+                <span class="text-white font-bold text-lg">1</span>
+              </div>
+              <h3 class="text-2xl font-bold text-white">Regla del 50/30/20</h3>
+            </div>
+            <p class="text-green-100 leading-relaxed">
+              Destina 50% a necesidades, 30% a gustos y 20% a ahorros. Esta fórmula simple te garantiza equilibrio financiero.
+            </p>
+          </div>
+
+          <div class="bg-white/10 backdrop-blur-sm p-8 rounded-3xl border border-white/20 hover:bg-white/20 transition-all duration-300">
+            <div class="flex items-center mb-6">
+              <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center mr-4">
+                <span class="text-white font-bold text-lg">2</span>
+              </div>
+              <h3 class="text-2xl font-bold text-white">Automatiza tus Ahorros</h3>
+            </div>
+            <p class="text-green-100 leading-relaxed">
+              Configura transferencias automáticas el día que cobras. Si no lo ves, no lo gastas.
+            </p>
+          </div>
+
+          <div class="bg-white/10 backdrop-blur-sm p-8 rounded-3xl border border-white/20 hover:bg-white/20 transition-all duration-300">
+            <div class="flex items-center mb-6">
+              <div class="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center mr-4">
+                <span class="text-white font-bold text-lg">3</span>
+              </div>
+              <h3 class="text-2xl font-bold text-white">Revisa y Ajusta</h3>
+            </div>
+            <p class="text-green-100 leading-relaxed">
+              Dedica 15 minutos semanales a revisar tus gastos. Los pequeños ajustes generan grandes resultados.
+            </p>
+          </div>
+
+          <div class="bg-white/10 backdrop-blur-sm p-8 rounded-3xl border border-white/20 hover:bg-white/20 transition-all duration-300">
+            <div class="flex items-center mb-6">
+              <div class="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center mr-4">
+                <span class="text-white font-bold text-lg">4</span>
+              </div>
+              <h3 class="text-2xl font-bold text-white">Fondo de Emergencia</h3>
+            </div>
+            <p class="text-green-100 leading-relaxed">
+              Construye un fondo que cubra 3-6 meses de gastos. Tu tranquilidad mental no tiene precio.
+            </p>
+          </div>
+        </div>
       </div>
-      <div class="ml-8">
-        <h3 class="text-2xl font-semibold text-green-800">Ahorra Consistentemente</h3>
-        <p class="text-green-700 mt-3">
-          Reserva una parte de tus ingresos para el ahorro, aunque sea un porcentaje pequeño.
-        </p>
+    </section>
+
+    <!-- CTA FINAL - Simplificado -->
+    <section class="py-20 px-4 sm:px-8 bg-green-600 mx-4 mb-4 rounded-3xl mt-8">
+      <div class="container mx-auto text-center">
+        <div class="max-w-3xl mx-auto">
+          <h2 class="text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
+            Comienza a controlar
+            <span class="text-green-800">tus finanzas hoy</span>
+          </h2>
+          <p class="text-xl lg:text-2xl text-green-100 mb-8 leading-relaxed">
+            Transforma tu relación con el dinero y construye el futuro que deseas
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <router-link
+              to="/registrarse"
+              class="inline-flex items-center justify-center bg-white text-green-700 font-bold py-4 px-10 rounded-2xl shadow-xl transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:bg-green-50 text-lg"
+            >
+          
+              Empezar Ahora
+            </router-link>
+          </div>
+        </div>
       </div>
-    </div>
-
-  
-    <div class="flex items-start bg-white p-8 rounded-xl shadow-lg transform transition-all hover:scale-105">
-      <div class="flex-shrink-0 w-14 h-14 bg-green-800 text-white rounded-full flex items-center justify-center text-xl font-bold">
-        3
-      </div>
-      <div class="ml-8">
-        <h3 class="text-2xl font-semibold text-green-800">Evita Gastos Innecesarios</h3>
-        <p class="text-green-700 mt-3">
-          Piensa dos veces antes de hacer compras impulsivas y prioriza lo esencial.
-        </p>
-      </div>
-    </div>
-
-    
-    <div class="flex items-start bg-green-50 p-8 rounded-xl shadow-lg transform transition-all hover:scale-105">
-      <div class="flex-shrink-0 w-14 h-14 bg-green-700 text-white rounded-full flex items-center justify-center text-xl font-bold">
-        4
-      </div>
-      <div class="ml-8">
-        <h3 class="text-2xl font-semibold text-green-800">Invierte en tu Futuro</h3>
-        <p class="text-green-700 mt-3">
-          Considera invertir en fondos o activos para hacer crecer tu dinero con el tiempo.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-
-<section class="relative py-16 px-6 bg-green-800 overflow-hidden rounded-2xl shadow-2xl flex flex-col items-center justify-center text-center">
-  
-  
-  <div class="absolute inset-0 bg-green-900 opacity-20 blur-md"></div>
-
-
-  <div class="relative max-w-2xl">
-    <h2 class="text-4xl md:text-5xl font-extrabold text-white leading-tight">
-      Comienza a <span class="text-green-300">Controlar tus Finanzas</span> Hoy
-    </h2>
-    <p class="text-green-100 mt-6 text-lg md:text-xl">
-      Únete a miles de usuarios satisfechos. ¡Es gratis, fácil de usar y pensado para vos!
-    </p>
-    <div class="mt-8">
-      <router-link
-        to="/registrarse"
-        class="inline-block bg-white text-green-800 font-bold py-3 px-8 rounded-full shadow-lg transform transition-all duration-300 hover:scale-110 hover:bg-green-100"
-      >
-        Regístrate Ahora
-      </router-link>
-    </div>
-  </div>
-
-</section>
-
-</section>
-
+    </section>
 
   </main>
 </template>
-
-
-

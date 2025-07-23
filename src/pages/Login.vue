@@ -1,6 +1,6 @@
 <template>
-  <section class="flex items-center justify-center min-h-screen bg-[#08a04b] text-white">
-    <div class="relative bg-gray-900 rounded-lg shadow-[0_15px_30px_rgba(0,0,0,0.6)] w-full max-w-md p-8">
+  <section class="flex items-center justify-center min-h-screen bg-[#08a04b] text-white mt-8">
+    <div class="relative bg-gray-900 rounded-lg shadow-[0_15px_30px_rgba(0,0,0,0.6)] w-full max-w-md p-8 ">
       <h1 class="text-2xl md:text-3xl font-bold text-white mb-6 text-center">
         Inicia Sesión
       </h1>

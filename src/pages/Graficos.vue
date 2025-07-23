@@ -1,49 +1,56 @@
 <template>
-    <div class="min-h-screen bg-gray-700 flex flex-col items-center py-10 px-4">
-      <div class="w-full max-w-4xl bg-green-200 shadow-lg rounded-xl p-6 mx-auto">
-        <h2 class="text-2xl font-semibold mb-4 text-center">Tus finanzas en gráficos</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-green-200">
-         
-            <div>
-              <h2 class="font-semibold text-xl mb-1">Gastos mensuales</h2>
-              <p class="text-sm text-gray-600 mb-4">Compara cuánto gastaste en cada mes.</p>
-              <BarChart :data="barChartData" :options="barChartOptions" />
-            </div>
+<div class="min-h-screen bg-[#08a04b] flex flex-col items-center py-10 px-4 text-gray-900 mt-8">
+  <div class="w-full max-w-6xl bg-white shadow-2xl rounded-2xl p-10 grid gap-8 mt-2">
 
-          
-            <div>
-              <h2 class="font-semibold text-xl mb-1">Ahorro acumulado</h2>
-              <p class="text-sm text-gray-600 mb-4">Observa cómo crecen tus ahorros mes a mes.</p>
-              <LineChart :data="lineChartData" :options="lineChartOptions" />
-            </div>
+      <!-- Encabezado -->
+      <BaseHeading>
+        Tus finanzas en gráficos
+      </BaseHeading>
 
-           
-            <div>
-              <h2 class="font-semibold text-xl mb-1">Distribución por categoría</h2>
-              <p class="text-sm text-gray-600 mb-4">Visualiza el porcentaje de gasto en cada categoría.</p>
-              <DoughnutChart :data="doughnutChartData" :options="doughnutChartOptions" />
-            </div>
-
-          
-            <div>
-              <h2 class="font-semibold text-xl mb-1">Porcentaje de gasto</h2>
-              <p class="text-sm text-gray-600 mb-4">Desglose de tu presupuesto en porciones porcentuales.</p>
-              <PieChart :data="pieChartData" :options="pieChartOptions" />
-            </div>
+      <!-- Gráficos -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        <!-- Gráfico de barras -->
+        <div class="bg-green-50 border border-green-100 rounded-xl p-6 shadow-sm">
+          <h2 class="text-xl font-semibold mb-2 text-gray-800">Gastos mensuales</h2>
+          <p class="text-sm text-gray-600 mb-4">Compara cuánto gastaste en cada mes.</p>
+          <BarChart :data="barChartData" :options="barChartOptions" />
         </div>
-  
-       
-        <div class="mt-8 bg-white rounded-lg p-4">
-          <h3 class="text-lg font-semibold mb-2">Recomendaciones</h3>
-          <ul class="list-disc list-inside space-y-1">
-            <li v-for="(rec, i) in recommendations" :key="i" class="text-gray-800">
-              {{ rec }}
-            </li>
-          </ul>
+
+        <!-- Gráfico de línea -->
+        <div class="bg-green-50 border border-green-100 rounded-xl p-6 shadow-sm">
+          <h2 class="text-xl font-semibold mb-2 text-gray-800">Ahorro acumulado</h2>
+          <p class="text-sm text-gray-600 mb-4">Observa cómo crecen tus ahorros mes a mes.</p>
+          <LineChart :data="lineChartData" :options="lineChartOptions" />
+        </div>
+
+        <!-- Gráfico de doughnut -->
+        <div class="bg-green-50 border border-green-100 rounded-xl p-6 shadow-sm">
+          <h2 class="text-xl font-semibold mb-2 text-gray-800">Distribución por categoría</h2>
+          <p class="text-sm text-gray-600 mb-4">Visualiza el porcentaje de gasto en cada categoría.</p>
+          <DoughnutChart :data="doughnutChartData" :options="doughnutChartOptions" />
+        </div>
+
+        <!-- Gráfico de pie -->
+        <div class="bg-green-50 border border-green-100 rounded-xl p-6 shadow-sm">
+          <h2 class="text-xl font-semibold mb-2 text-gray-800">Porcentaje de gasto</h2>
+          <p class="text-sm text-gray-600 mb-4">Desglose de tu presupuesto en porciones porcentuales.</p>
+          <PieChart :data="pieChartData" :options="pieChartOptions" />
         </div>
       </div>
+
+      <!-- Recomendaciones -->
+      <div class="bg-green-50 border border-green-100 rounded-xl p-6 shadow-sm">
+        <h3 class="text-lg font-bold mb-3 text-gray-800">Recomendaciones</h3>
+        <ul class="list-disc list-inside space-y-1 text-sm text-gray-800">
+          <li v-for="(rec, i) in recommendations" :key="i">
+            {{ rec }}
+          </li>
+        </ul>
+      </div>
     </div>
-  </template>
+  </div>
+</template>
+
   
   <script>
   
@@ -54,6 +61,7 @@
   import { getAuth } from 'firebase/auth';
   import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
   import { db } from '../services/firebase';
+  import BaseHeading from '../components/BaseHeading.vue';
   
   export default {
     name: 'Graficos',
@@ -61,7 +69,8 @@
       BarChart: Bar,
       LineChart: Line,
       DoughnutChart: Doughnut,
-      PieChart: Pie
+      PieChart: Pie,
+      BaseHeading
     },
     data() {
       return {

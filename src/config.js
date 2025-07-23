@@ -1,1 +1,1 @@
-// export const IMGBB_API_KEY = "4c4d5dc8fecf320734905dcae8dba8c7";
+ export const IMGBB_API_KEY = "4c4d5dc8fecf320734905dcae8dba8c7";
