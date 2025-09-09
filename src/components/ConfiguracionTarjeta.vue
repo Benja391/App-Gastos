@@ -1,218 +1,471 @@
 <template>
-  <div class="bg-[#08a04b] min-h-screen py-10 px-4 flex justify-center mt-8">
-    <div class="p-10 w-full max-w-3xl bg-white rounded-2xl shadow-2xl space-y-10">
-      <BaseHeading>
-        Configuración de tarjetas
+  <!-- CONTENEDOR PRINCIPAL -->
+  <section class="flex items-center justify-center min-h-screen bg-[#08a04b] text-white px-4 py-10 mt-8">
+    <!-- CAJA GLASSMORPHISM -->
+    <div class="relative bg-white/95 backdrop-blur-sm text-gray-900 rounded-3xl  border border-white/20 w-full max-w-4xl p-8 grid gap-10 overflow-hidden  shadow-[0_8px_30px_rgba(0,0,0,0.35)]
+         hover:shadow-[0_12px_45px_rgba(0,0,0,0.45)]
+         transition-shadow duration-500">
+
+      <!-- Encabezado -->
+      <BaseHeading >
+        {{ editingCardId ? 'Editá tarjeta' : 'Agregá tarjeta' }}
       </BaseHeading>
 
-      <div
-        v-for="card in cardTypes"
-        :key="card.id"
-        class="space-y-6 border-b border-gray-200 pb-8"
-      >
-        <h2 class="text-xl font-semibold text-gray-800">{{ card.name }}</h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-              Día de cierre (1-31)
-            </label>
-            <input
-              v-model.number="card.closingDay"
-              type="number"
-              min="1"
-              max="31"
-              placeholder="Introduzca su día de cierre"
-              class="w-full px-4 py-2 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
-            />
-            <p class="text-xs text-gray-500 mt-1">El día del mes en que cierra tu tarjeta</p>
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-              Días hasta vencimiento
-            </label>
-            <input
-              v-model.number="card.daysUntilDue"
-              type="number"
-              min="1"
-              max="60"
-              placeholder="Introduzca sus días de vencimiento"
-              class="w-full px-4 py-2 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
-            />
-            <p class="text-xs text-gray-500 mt-1">Días después del cierre que vence el pago</p>
-          </div>
+      <!-- FORMULARIO -->
+      <form @submit.prevent="onSubmit" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Tipo -->
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-gray-700">Tipo de tarjeta</label>
+          <select
+            v-model="newCard.cardType"
+            @change="validateField('cardType')"
+            :class="[
+              'w-full px-4 py-3 rounded-xl bg-white border-2 focus:outline-none focus:ring-4 transition-all duration-300 shadow-sm',
+              errors.cardType 
+                ? 'border-red-400 focus:ring-red-100 focus:border-red-500' 
+                : 'border-gray-200 focus:ring-green-100 focus:border-green-500 hover:border-gray-300'
+            ]"
+          >
+            <option disabled value="">Seleccioná el tipo</option>
+            <option value="visa">Visa</option>
+            <option value="mastercard">MasterCard</option>
+            <option value="amex">American Express</option>
+            <option value="otra">Otra</option>
+          </select>
+          <p v-if="errors.cardType" class="text-sm text-red-500">{{ errors.cardType }}</p>
         </div>
 
-        <div
-          v-if="card.closingDay && card.daysUntilDue"
-          class="bg-blue-50 p-3 rounded-lg border border-blue-100"
-        >
-          <p class="text-sm text-blue-800">
-            <strong>Vista previa:</strong> Cierra el día {{ card.closingDay }} de cada mes,
-            vence {{ card.daysUntilDue }} días después
-          </p>
+        <!-- Nombre -->
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-gray-700">Nombre en la tarjeta</label>
+          <input
+            v-model="newCard.cardholder"
+            @input="validateField('cardholder')"
+            type="text"
+            placeholder="Nombre y apellido"
+            :class="[
+              'w-full px-4 py-3 rounded-xl bg-white border-2 focus:outline-none focus:ring-4 transition-all duration-300 shadow-sm',
+              errors.cardholder 
+                ? 'border-red-400 focus:ring-red-100 focus:border-red-500' 
+                : 'border-gray-200 focus:ring-green-100 focus:border-green-500 hover:border-gray-300'
+            ]"
+          />
+          <p v-if="errors.cardholder" class="text-sm text-red-500">{{ errors.cardholder }}</p>
         </div>
+
+        <!-- Número -->
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-gray-700">Número de tarjeta</label>
+          <input
+            :value="newCard.number"
+            @input="formatCardNumber"
+            @blur="validateField('number')"
+            type="text"
+            maxlength="19"
+            placeholder="0000 0000 0000 0000"
+            :class="[
+              'w-full px-4 py-3 rounded-xl bg-white border-2 focus:outline-none focus:ring-4 transition-all duration-300 shadow-sm',
+              errors.number 
+                ? 'border-red-400 focus:ring-red-100 focus:border-red-500' 
+                : 'border-gray-200 focus:ring-green-100 focus:border-green-500 hover:border-gray-300'
+            ]"
+          />
+          <p v-if="errors.number" class="text-sm text-red-500">{{ errors.number }}</p>
+        </div>
+
+        <!-- CVV -->
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-gray-700">Código de seguridad</label>
+          <input
+            v-model="newCard.securityCode"
+            @input="validateField('securityCode')"
+            type="text"
+            maxlength="4"
+            placeholder="CVV"
+            :class="[
+              'w-full px-4 py-3 rounded-xl bg-white border-2 focus:outline-none focus:ring-4 transition-all duration-300 shadow-sm',
+              errors.securityCode 
+                ? 'border-red-400 focus:ring-red-100 focus:border-red-500' 
+                : 'border-gray-200 focus:ring-green-100 focus:border-green-500 hover:border-gray-300'
+            ]"
+          />
+          <p v-if="errors.securityCode" class="text-sm text-red-500">{{ errors.securityCode }}</p>
+        </div>
+
+        <!-- Vencimiento -->
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-gray-700">Fecha de vencimiento (MM/AA)</label>
+          <input
+            :value="newCard.expirationDate"
+            @input="formatExpirationDate"
+            @blur="validateField('expirationDate')"
+            type="text"
+            maxlength="5"
+            placeholder="MM/AA"
+            :class="[
+              'w-full px-4 py-3 rounded-xl bg-white border-2 focus:outline-none focus:ring-4 transition-all duration-300 shadow-sm',
+              errors.expirationDate 
+                ? 'border-red-400 focus:ring-red-100 focus:border-red-500' 
+                : 'border-gray-200 focus:ring-green-100 focus:border-green-500 hover:border-gray-300'
+            ]"
+          />
+          <p v-if="errors.expirationDate" class="text-sm text-red-500">{{ errors.expirationDate }}</p>
+        </div>
+
+        <!-- Fecha de cierre -->
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-gray-700">Fecha de cierre</label>
+          <input
+            v-model="newCard.closingDate"
+            @change="validateField('closingDate')"
+            type="date"
+            :class="[
+              'w-full px-4 py-3 rounded-xl bg-white border-2 focus:outline-none focus:ring-4 transition-all duration-300 shadow-sm',
+              errors.closingDate 
+                ? 'border-red-400 focus:ring-red-100 focus:border-red-500' 
+                : 'border-gray-200 focus:ring-green-100 focus:border-green-500 hover:border-gray-300'
+            ]"
+          />
+          <p v-if="errors.closingDate" class="text-sm text-red-500">{{ errors.closingDate }}</p>
+        </div>
+
+        <!-- Días hasta vencimiento -->
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-gray-700">Días hasta vencimiento</label>
+          <input
+            v-model.number="newCard.daysUntilDue"
+            @input="validateField('daysUntilDue')"
+            type="number"
+            min="1"
+            placeholder="Ej.: 4"
+            :class="[
+              'w-full px-4 py-3 rounded-xl bg-white border-2 focus:outline-none focus:ring-4 transition-all duration-300 shadow-sm',
+              errors.daysUntilDue 
+                ? 'border-red-400 focus:ring-red-100 focus:border-red-500' 
+                : 'border-gray-200 focus:ring-green-100 focus:border-green-500 hover:border-gray-300'
+            ]"
+          />
+          <p class="text-xs text-gray-500">Se calculará la fecha exacta de vencimiento.</p>
+          <p v-if="errors.daysUntilDue" class="text-sm text-red-500">{{ errors.daysUntilDue }}</p>
+        </div>
+        <!-- BOTONES -->
+<div class="md:col-span-2 flex gap-3 justify-center">
+  <button
+    type="submit"
+    class="px-8 py-3 bg-green-600 text-white rounded-2xl font-semibold shadow hover:bg-green-700 transition"
+  >
+    {{ editingCardId ? 'Guardar cambios' : 'Agregar tarjeta' }}
+  </button>
+  <button
+    v-if="editingCardId"
+    type="button"
+    @click="cancelEdit"
+    class="px-8 py-3 bg-gray-200 text-gray-700 rounded-2xl font-semibold shadow hover:bg-gray-300 transition"
+  >
+    Cancelar
+  </button>
+</div>
+      </form>
+
+      <!-- Vista previa -->
+      <div v-if="newCard.closingDate && newCard.daysUntilDue" class="bg-blue-50 p-4 rounded-xl border border-blue-100 text-sm text-blue-800">
+        <strong>Vista previa:</strong>
+        Cierra el día {{ formatDate(newCard.closingDate) }}, vence el día {{ formatDate(computeDueDate) }}
       </div>
 
-      <!-- Botón guardar -->
+    
+
+      <!-- MENSAJE -->
+      <p v-if="message" class="text-green-600 font-medium text-center mt-2">{{ message }}</p>
+
+      <!-- RESUMEN -->
+<div
+  v-for="card in cards"
+  :key="card.id"
+   class="relative rounded-2xl shadow-xl overflow-hidden text-white w-full max-w-md mx-auto p-6"
+  :class="{
+    'bg-gradient-to-br from-gray-800 to-gray-700': card.cardType === 'visa',
+    'bg-gradient-to-br from-gray-900 to-black': card.cardType === 'mastercard',
+    'bg-gradient-to-br from-sky-400 to-sky-600': card.cardType === 'amex',
+    'bg-gradient-to-br from-gray-400 to-gray-600': card.cardType === 'otra'
+  }"
+>
+  <!-- Logo y tipo -->
+  <div class="flex justify-between items-center mb-6">
+    <img
+      :src="getCardLogo(card.cardType)"
+      alt="Logo tarjeta"
+      class="h-10"
+    />
+    
+  </div>
+
+  <!-- Número -->
+  <div class="text-xl font-mono tracking-widest mb-4">
+    **** **** **** {{ card.number.slice(-4) }}
+  </div>
+
+ <!-- Titular y vencimiento -->
+<div class="flex justify-between text-sm uppercase tracking-wide mt-6">
+  <div>
+    <p class="text-gray-200 text-xs">Titular</p>
+    <p class="font-semibold">{{ card.cardholder }}</p>
+  </div>
+  <div class="text-right">
+    <p class="text-gray-200 text-xs">Vence</p>
+    <p class="font-semibold">{{ card.expirationDate }}</p>
+  </div>
+</div>
+
+ <!-- Fechas adicionales -->
+<div class="mt-3 text-xs text-gray-300">
+  <p>Cierre: {{ formatDate(card.closingDate) }}</p>
+  <p>Vencimiento: {{ formatDate(card.dueDate) }}</p>
+</div>
+
+  <!-- Acciones -->
+  <div class="absolute top-3 right-4 flex space-x-3 text-sm">
+    <button @click="editCard(card)" class="text-blue-300 hover:text-blue-500">Editar</button>
+    <button @click="cardToDelete = card" class="text-red-300 hover:text-red-500">Eliminar</button>
+
+  </div>
+</div>
+    </div>
+  </section>
+  <!-- MODAL ELIMINAR TARJETA -->
+<div
+  v-if="cardToDelete"
+  class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"
+>
+  <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 border border-gray-200">
+    <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center gap-2">
+      <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+      Eliminar tarjeta
+    </h3>
+
+    <p class="mb-6 text-gray-600 leading-relaxed">
+      ¿Estás seguro que querés eliminar la tarjeta
+      "<strong>{{ cardToDelete.cardType.toUpperCase() }} terminada en {{ cardToDelete.number.slice(-4) }}</strong>"?
+      <br /><br />
+      <span class="text-sm text-red-500">Esta acción no se puede deshacer.</span>
+    </p>
+
+    <div class="flex justify-end gap-3">
       <button
-        @click="saveCardSettings"
-        class="w-55 px-6 py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-all duration-300 shadow-md mx-auto block"
+        @click="cardToDelete = null"
+        class="px-4 py-2 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition"
       >
-        Guardar configuración
+        Cancelar
       </button>
-
-      <!-- Botón limpiar campos -->
       <button
-        @click="resetFormFields"
-        class="mt-2 w-55 px-6 py-2 border border-green-600 text-green-700 font-semibold rounded-xl hover:bg-green-100 transition-all duration-300 shadow-md mx-auto block"
+        @click="confirmDeleteCard"
+        class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-semibold shadow"
       >
-        Restablecer campos
+        Eliminar
       </button>
-
-      <transition name="fade">
-        <p v-if="message" class="text-green-600 font-medium text-center mt-4">
-          {{ message }}
-        </p>
-      </transition>
-
-      <!-- Resumen -->
-      <transition name="fade">
-        <div class="bg-gray-50 p-6 rounded-xl shadow-md space-y-6">
-          <h2 class="text-2xl font-semibold text-gray-800 text-center mb-6">
-            Resumen de tu configuración
-          </h2>
-
-          <div
-            v-for="card in cardTypes"
-            :key="'summary-' + card.id"
-            class="border-b pb-4 last:border-none"
-          >
-            <h3 class="text-lg font-bold text-green-700 mb-2">{{ card.name }}</h3>
-            <ul class="text-gray-700 space-y-1 text-sm">
-              <li>
-                <span class="font-medium">Día de cierre:</span>
-                {{ card.closingDay || 'No definido' }}
-              </li>
-              <li>
-                <span class="font-medium">Días hasta vencimiento:</span>
-                {{ card.daysUntilDue || 'No definido' }}
-              </li>
-            </ul>
-          </div>
-        </div>
-      </transition>
     </div>
   </div>
+</div>
+  
 </template>
 
+
+
 <script setup>
-import { ref, onMounted } from 'vue';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import { useRouter } from 'vue-router';
-import BaseHeading from './BaseHeading.vue';
+import { ref, computed, onMounted, watch } from 'vue'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc
+} from 'firebase/firestore'
+import BaseHeading from './BaseHeading.vue'
 
-const db = getFirestore();
-const userId = ref(null);
-const userDocId = ref(null);
-const message = ref('');
-const router = useRouter();
+const db = getFirestore()
+const userId = ref(null)
+const userDocId = ref(null)
+const editingCardId = ref(null)
+const newCard = ref({
+  cardType: '',
+  cardholder: '',
+  number: '',
+  securityCode: '',
+  expirationDate: '',
+  closingDate: '',   // 'YYYY-MM-DD'
+  daysUntilDue: null,
+  dueDate: ''        // 'YYYY-MM-DD'
+})
+const cards = ref([])
+const message = ref('')
+const errors = ref({})
+const cardToDelete = ref(null)
 
-const cardTypes = ref([
-  { id: 'visa', name: 'Visa', closingDay: null, daysUntilDue: null },
-  { id: 'mastercard', name: 'MasterCard', closingDay: null, daysUntilDue: null },
-  { id: 'amex', name: 'American Express', closingDay: null, daysUntilDue: null },
-  { id: 'otra', name: 'Otra', closingDay: null, daysUntilDue: null }
-]);
+/* ====== FIX FECHAS (sin +1/-1) ====== */
+// 'YYYY-MM-DD' -> Date local al MEDIODÍA (neutraliza TZ)
+function fromYMD(s) {
+  if (!s) return null
+  const [y, m, d] = s.split('-').map(Number)
+  return new Date(y, m - 1, d, 12, 0, 0, 0)
+}
 
-const findUserDocumentId = async (uid) => {
-  const q = query(collection(db, "users"), where("uid", "==", uid));
-  const querySnapshot = await getDocs(q);
-
-  if (!querySnapshot.empty) {
-    const docSnap = querySnapshot.docs[0];
-    userDocId.value = docSnap.id;
-    return true;
-  } else {
-    return false;
+function getCardLogo(type) {
+  switch (type?.toLowerCase()) {
+    case "visa":
+      return "/visa.png"
+    case "mastercard":
+      return "/mastercard.png"
+    case "amex":
+      return "/amex.png"
+    default:
+      return "/generic.png" // para "Otra"
   }
-};
+}
+// Date -> 'YYYY-MM-DD' (string plano, sin Z)
+function toYMD(date) {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+/* ===================================== */
 
-const loadCardSettings = async () => {
-  if (!userDocId.value) return;
+// Formatea número con espacios
+function formatCardNumber(e) {
+  let val = e.target.value.replace(/\D/g, '').slice(0,16)
+  newCard.value.number = val.replace(/(.{4})/g, '$1 ').trim()
+  if (errors.value.number) validateField('number')
+}
 
-  const settingsRef = doc(db, "users", userDocId.value, "settings", "tarjetaConfig");
-  const settingsSnap = await getDoc(settingsRef);
-
-  if (settingsSnap.exists()) {
-    const data = settingsSnap.data();
-    if (data.cardTypes) {
-      cardTypes.value.forEach(card => {
-        const savedCard = data.cardTypes[card.id];
-        if (savedCard) {
-          card.closingDay = savedCard.closingDay || null;
-          card.daysUntilDue = savedCard.daysUntilDue || null;
-        }
-      });
+// Recalcula dueDate cada vez que cambia cierre/días (SIN toISOString)
+watch(
+  () => [newCard.value.closingDate, newCard.value.daysUntilDue],
+  ([close, days]) => {
+    const n = Number(days)
+    if (close && n > 0) {
+      const d = fromYMD(close)     // <- local, mediodía
+      d.setDate(d.getDate() + n)
+      newCard.value.dueDate = toYMD(d)  // <- string 'YYYY-MM-DD'
+    } else {
+      newCard.value.dueDate = ''
     }
   }
-};
+)
 
-const saveCardSettings = async () => {
-  if (!userDocId.value) {
-    message.value = 'Error: No se pudo identificar el usuario';
-    return;
+// Formatea MM/AA
+function formatExpirationDate(e) {
+  let val = e.target.value.replace(/\D/g, '').slice(0,4)
+  if (val.length > 2) val = val.slice(0,2) + '/' + val.slice(2)
+  newCard.value.expirationDate = val
+  if (errors.value.expirationDate) validateField('expirationDate')
+}
+
+// (lo dejamos por si lo usás en el submit / preview)
+const computeDueDate = computed(() => {
+  const close = newCard.value.closingDate
+  const days  = Number(newCard.value.daysUntilDue)
+  if (!close || !days) return ''
+  const dt = fromYMD(close)
+  dt.setDate(dt.getDate() + days)
+  return toYMD(dt)
+})
+
+// Mostrar fechas en UI sin corrimiento
+function formatDate(s) {
+  if (!s) return ''
+  // si viene como 'YYYY-MM-DD', parseo con fromYMD
+  if (typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s)) {
+    const d = fromYMD(s)
+    return d.toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric' })
+  }
+  const d = new Date(s)
+  return d.toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric' })
+}
+
+async function confirmDeleteCard() {
+  if (!cardToDelete.value) return
+  await deleteDoc(doc(db, 'users', userDocId.value, 'cards', cardToDelete.value.id))
+  cards.value = cards.value.filter(c => c.id !== cardToDelete.value.id)
+  cardToDelete.value = null
+}
+
+async function findUserDocumentId(uid) {
+  const snap = await getDocs(collection(db,'users'))
+  snap.forEach(d=> { if(d.data().uid===uid) userDocId.value=d.id })
+}
+
+async function loadCards() {
+  if (!userDocId.value) return
+  const snap = await getDocs(collection(db,'users',userDocId.value,'cards'))
+  cards.value = snap.docs.map(d=>({id:d.id,...d.data()}))
+}
+
+function validateField(field) {
+  switch(field) {
+    case 'cardType':        if (!newCard.value.cardType)        errors.value.cardType='Obligatorio'; else delete errors.value.cardType; break
+    case 'cardholder':      if (!newCard.value.cardholder)      errors.value.cardholder='Obligatorio'; else delete errors.value.cardholder; break
+    case 'number':          if (!/^\d{4} \d{4} \d{4} \d{4}$/.test(newCard.value.number)) errors.value.number='Formato inválido'; else delete errors.value.number; break
+    case 'securityCode':    if (!/^\d{3,4}$/.test(newCard.value.securityCode)) errors.value.securityCode='CVV inválido'; else delete errors.value.securityCode; break
+    case 'expirationDate':  if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(newCard.value.expirationDate)) errors.value.expirationDate='Formato MM/AA'; else delete errors.value.expirationDate; break
+    case 'closingDate':     if (!newCard.value.closingDate)     errors.value.closingDate='Obligatorio'; else delete errors.value.closingDate; break
+    case 'daysUntilDue':    if (!(Number(newCard.value.daysUntilDue)>0)) errors.value.daysUntilDue='Debe ser mayor 0'; else delete errors.value.daysUntilDue; break
+  }
+}
+
+function validate() {
+  ['cardType','cardholder','number','securityCode','expirationDate','closingDate','daysUntilDue'].forEach(f=>validateField(f))
+  return Object.keys(errors.value).length===0
+}
+
+async function onSubmit() {
+  if (!validate()) return
+  // guardo dueDate calculado sin TZ
+  const cardData = { ...newCard.value, dueDate: computeDueDate.value }
+  const colRef = collection(db,'users',userDocId.value,'cards')
+
+  if (editingCardId.value) {
+    const docRef = doc(db,'users',userDocId.value,'cards',editingCardId.value)
+    await updateDoc(docRef,cardData)
+    const idx = cards.value.findIndex(c=>c.id===editingCardId.value)
+    cards.value[idx] = { id:editingCardId.value, ...cardData }
+    message.value='Cambios guardados'
+  } else {
+    const docRef = await addDoc(colRef,cardData)
+    cards.value.push({id:docRef.id,...cardData})
+    message.value='Tarjeta agregada'
   }
 
-  const settingsRef = doc(db, "users", userDocId.value, "settings", "tarjetaConfig");
-
-  const cardTypesObj = {};
-  cardTypes.value.forEach(card => {
-    cardTypesObj[card.id] = {
-      name: card.name,
-      closingDay: card.closingDay,
-      daysUntilDue: card.daysUntilDue
-    };
-  });
-
-  try {
-    await setDoc(settingsRef, {
-      cardTypes: cardTypesObj,
-      updatedAt: new Date()
-    });
-
-    message.value = 'Configuración guardada correctamente.';
-    setTimeout(() => {
-      message.value = '';
-      router.push('/calendario-pagos'); // 👈 Redireccionar después de guardar
-    }, 1500);
-
-  } catch (error) {
-    console.error("❌ Error al guardar:", error);
-    message.value = 'Error al guardar la configuración';
+  setTimeout(()=>message.value='',2000)
+  newCard.value = {
+    cardType:'', cardholder:'', number:'', securityCode:'',
+    expirationDate:'', closingDate:'', daysUntilDue:null, dueDate:''
   }
-};
+  editingCardId.value=null
+  errors.value={}
+}
 
-// 🔄 Nueva función para limpiar todos los inputs
-const resetFormFields = () => {
-  cardTypes.value.forEach(card => {
-    card.closingDay = null;
-    card.daysUntilDue = null;
-  });
-};
+function editCard(card) {
+  editingCardId.value = card.id
+  newCard.value = { ...card }
+}
+
+async function deleteCard(id) {
+  await deleteDoc(doc(db,'users',userDocId.value,'cards',id))
+  cards.value = cards.value.filter(c=>c.id!==id)
+}
+
+function cancelEdit() {
+  editingCardId.value=null
+  newCard.value={ cardType:'',cardholder:'',number:'',securityCode:'',expirationDate:'',closingDate:'',daysUntilDue:null, dueDate:'' }
+  errors.value={}
+}
 
 onMounted(() => {
-  const auth = getAuth();
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      userId.value = user.uid;
-      const found = await findUserDocumentId(user.uid);
-      if (found) {
-        await loadCardSettings();
-      }
-    }
-  });
-});
+  onAuthStateChanged(getAuth(), async user=>{
+    if (user) { await findUserDocumentId(user.uid); await loadCards() }
+  })
+})
 </script>

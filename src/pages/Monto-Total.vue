@@ -1,500 +1,478 @@
 <template>
-<!-- CONTENEDOR VERDE -->
-<div class="min-h-screen bg-[#08a04b] flex flex-col items-center py-10 px-4 mt-8 text-gray-900">
-  <!-- CAJA BLANCA -->
-  <div class="w-full max-w-4xl bg-white shadow-2xl rounded-2xl p-10 grid gap-8 mt-1">
+  <!-- CONTENEDOR PRINCIPAL -->
+  <section class="flex items-center justify-center min-h-screen bg-[#08a04b] text-white px-4 py-10 mt-8">
+    <!-- CAJA PRINCIPAL GLASSMORPHISM -->
+    <div class="relative bg-white/95 backdrop-blur-sm text-gray-900 rounded-3xl  border border-white/20 w-full max-w-5xl p-8 grid gap-10 mt-1 overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.35)]
+         hover:shadow-[0_12px_45px_rgba(0,0,0,0.45)]
+         transition-shadow duration-500">
+      
+      <!-- Decoraciones de fondo -->
+      <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-green-200/20 to-transparent rounded-full -mr-32 -mt-32"></div>
+      <div class="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-emerald-200/20 to-transparent rounded-full -ml-24 -mb-24"></div>
 
-      <!-- Mensaje flotante -->
-      <div
-        v-if="showFloatingMessage"
-        class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 transition-all duration-300"
-      >
-        {{ floatingMessage }}
-      </div>
+      <div class="relative z-10">
+        <!-- Encabezado -->
+        <BaseHeading>
+          Ingresos Totales
+        </BaseHeading>
+        <p class="text-center text-gray-600 mb-6">Gestioná tu saldo y registros de manera clara</p>
 
-      <!-- Encabezado -->
-      <BaseHeading>
-        Ingresos totales
-      </BaseHeading>
-
-      <!-- Saldo inicial + otros saldos -->
-      <div v-if="userId" class="grid gap-6 bg-gray-50 p-6 rounded-xl shadow-inner border border-gray-200">
-        <!-- Saldo inicial -->
-        <div class="grid gap-3">
-          <label class="block text-sm font-semibold text-gray-700">Saldo inicial</label>
-          <input
-            v-model.number="tempInitialAmount"
-            type="number"
-            placeholder="Ingrese su saldo inicial"
-            class="w-full px-4 py-2 rounded-lg bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
-          />
-          <p v-if="initialAmountError" class="text-red-600 text-sm mt-1">
-  El monto inicial debe ser cero o un número positivo.
-</p>
-          <button
-            @click="setInitialAmount"
-            class="w-max px-5 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-all shadow mx-auto"
-          >
-            Guardar saldo inicial
-          </button>
+        <!-- Mensaje flotante -->
+        <div
+          v-if="showFloatingMessage"
+          class="mb-6 p-4 rounded-2xl text-black font-medium border-l-4 shadow-sm bg-green-50 border-green-200 text-green-800"
+        >
+          {{ floatingMessage }}
         </div>
 
-        <!-- Línea divisoria sutil -->
-        <div class="border-t border-gray-200 my-2"></div>
-
-        <!-- Otros saldos adicionales -->
-        <div class="grid gap-3">
-          <label class="block text-sm font-semibold text-gray-700">Agregar otro saldo</label>
-
-          <!-- Descripción -->
-          <input
-            v-model="tempAdditionalDescription"
-            type="text"
-            placeholder="Ej: Sueldo, Alquiler, Regalo..."
-            class="w-full px-4 py-2 rounded-lg bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
-          />
-          <p v-if="additionalDescriptionError" class="text-red-600 text-sm mt-1">
-  La descripción es obligatoria.
-</p>
-
-          <!-- Monto -->
-          <input
-            v-model.number="tempAdditionalAmount"
-            type="number"
-            placeholder="Ingrese otro saldo"
-            class="w-full px-4 py-2 rounded-lg bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
-          />
-          <p v-if="additionalAmountError" class="text-red-600 text-sm mt-1">
-  Ingresá un monto válido para el saldo adicional.
-</p>
-
-          <button
-            @click="addAdditionalAmount"
-            class="w-max px-5 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-all shadow mx-auto"
-          >
-            Agregar saldo
-          </button>
-        </div>
-      </div>
-
-      <!-- Monto disponible -->
-      <div v-if="userId" class="bg-green-50 border border-green-200 p-6 rounded-xl text-center shadow-sm">
-        <p class="text-sm text-gray-500 mb-1">Monto Disponible</p>
-        <p class="text-3xl font-bold text-green-700">{{ formatCurrency(remainingAmount) }}</p>
-      </div>
-
-      <!-- Listados de gastos y saldos -->
-      <div v-if="userId" class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
-
-        <!-- Lista de gastos -->
-        <div>
-          <h2 class="text-xl font-semibold text-red-600 border-b border-red-200 pb-2 mb-4">Gastos</h2>
-
-          <ul v-if="gastos.length > 0" class="space-y-4 max-h-64 overflow-y-auto pr-2">
-            <li
-              v-for="gasto in gastos"
-              :key="gasto.id"
-              class="bg-gray-50 border border-gray-200 p-4 rounded-lg shadow-sm text-sm"
+        <!-- Sección de saldos -->
+        <div v-if="userId" class="bg-gradient-to-r from-gray-50 to-green-50/30 p-8 rounded-2xl shadow-lg border border-gray-100 mb-8 space-y-6">
+          <!-- Saldo inicial -->
+          <div class="space-y-3">
+            <label class="block text-sm font-semibold text-gray-700">Saldo inicial</label>
+            <input
+              v-model.number="tempInitialAmount"
+              type="number"
+              placeholder="Ingresá tu saldo inicial"
+              class="w-full px-4 py-3 rounded-xl bg-white border-2 border-gray-200 shadow-sm focus:outline-none focus:ring-4 focus:ring-green-100 focus:border-green-500 transition"
+            />
+            <p v-if="initialAmountError" class="text-red-600 text-sm">El monto inicial debe ser cero o un número positivo.</p>
+            <button
+              @click="setInitialAmount"
+              class="px-6 py-3 bg-green-600 text-white font-bold rounded-2xl shadow-md hover:bg-green-700 transition mx-auto block"
             >
-              <div class="flex justify-between items-start">
-                <div>
-                  <p class="font-medium text-gray-800">
-                    {{ gasto.name }} - {{ formatCurrency(gasto.amount) }}
-                  </p>
-                  <p class="text-gray-600 italic">{{ gasto.category }}</p>
+              Guardá saldo inicial
+            </button>
+          </div>
 
-                  <div v-if="gasto.paymentMethod === 'Tarjeta de Crédito'" class="mt-1 text-blue-600 text-xs">
-                    [{{ gasto.creditCard.type }} -
-                    {{ gasto.creditCard.installmentsPaid }}/{{ gasto.creditCard.installments }} cuotas]
+          <!-- Separador -->
+          <div class="border-t border-gray-200"></div>
 
-                    <span
-                      v-if="gasto.creditCard.installments > 1"
-                      class="ml-2 inline-block px-2 py-1 bg-green-500 text-white rounded-full font-semibold cursor-pointer hover:bg-black transition"
-                      title="Las cuotas se reflejan en el Calendario de pagos"
-                      @click="irACalendarioPagos"
-                    >
-                      Ver en Calendario de pagos
-                    </span>
-                  </div>
+          <!-- Otros saldos -->
+          <div class="space-y-3">
+            <label class="block text-sm font-semibold text-gray-700">Agregá otro saldo</label>
+            <input
+              v-model="tempAdditionalDescription"
+              type="text"
+              placeholder="Ej.: Sueldo, Alquiler, Regalo..."
+              class="w-full px-4 py-3 rounded-xl bg-white border-2 border-gray-200 shadow-sm focus:outline-none focus:ring-4 focus:ring-green-100 focus:border-green-500 transition"
+            />
+            <p v-if="additionalDescriptionError" class="text-red-600 text-sm">La descripción es obligatoria.</p>
 
-                  <p class="text-gray-500 text-xs mt-1">{{ formatDate(gasto.createdAt) }}</p>
+            <input
+              v-model.number="tempAdditionalAmount"
+              type="number"
+              placeholder="Ingresá otro saldo"
+              class="w-full px-4 py-3 rounded-xl bg-white border-2 border-gray-200 shadow-sm focus:outline-none focus:ring-4 focus:ring-green-100 focus:border-green-500 transition"
+            />
+            <p v-if="additionalAmountError" class="text-red-600 text-sm">Ingresá un monto válido para el saldo adicional.</p>
+
+            <button
+              @click="addAdditionalAmount"
+              class="px-6 py-3 bg-green-600 text-white font-bold rounded-2xl shadow-md hover:bg-green-700 transition mx-auto block"
+            >
+              Agregá saldo
+            </button>
+          </div>
+        </div>
+
+        <!-- Monto disponible -->
+        <div v-if="userId" class="bg-gradient-to-r from-green-50 to-emerald-50/50 border border-green-100 p-8 rounded-2xl text-center shadow-md mb-8">
+          <p class="text-sm text-gray-500 mb-1">Monto disponible</p>
+          <p class="text-4xl font-extrabold bg-gradient-to-r from-green-700 to-emerald-600 bg-clip-text text-transparent">
+            {{ formatCurrency(remainingAmount) }}
+          </p>
+        </div>
+
+        <!-- Listados -->
+        <div v-if="userId" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Lista de gastos -->
+          <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+            <h2 class="text-xl font-bold text-red-600 mb-4">Gastos</h2>
+            <ul v-if="gastos.length > 0" class="space-y-4 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
+              <li
+                v-for="gasto in gastos"
+                :key="gasto.id"
+                class="bg-gray-50 border border-gray-200 p-4 rounded-xl shadow-sm text-sm"
+              >
+                <p class="font-medium text-gray-800">{{ gasto.name }} - {{ formatCurrency(gasto.amount) }}</p>
+                <p class="text-gray-600 italic">{{ gasto.category }}</p>
+
+                <div v-if="gasto.paymentMethod === 'Tarjeta de Crédito'" class="mt-1 text-blue-600 text-xs">
+                  [{{ gasto.creditCard.type }} - {{ gasto.creditCard.installmentsPaid }}/{{ gasto.creditCard.installments }} cuotas]
+                  <span
+                    v-if="gasto.creditCard.installments > 1"
+                    class="ml-2 inline-block px-2 py-1 bg-green-500 text-white rounded-full font-semibold cursor-pointer hover:bg-green-700 transition"
+                    title="Las cuotas se reflejan en el calendario de pagos"
+                    @click="irACalendarioPagos"
+                  >
+                    Ver en calendario de pagos
+                  </span>
                 </div>
+
+                <p class="text-gray-500 text-xs mt-1">{{ formatDate(gasto.createdAt) }}</p>
+              </li>
+            </ul>
+            <p v-else class="text-gray-500 text-center text-sm">No hay gastos registrados aún.</p>
+          </div>
+
+          <!-- Lista de saldos -->
+          <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+            <h2 class="text-xl font-bold text-green-600 mb-4">Saldos ingresados</h2>
+            <div class="space-y-3 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
+              <div class="bg-green-50 border border-green-200 p-3 rounded-xl shadow-sm text-sm">
+                <p class="font-medium text-gray-800">Saldo inicial</p>
+                <p class="text-green-700 font-bold">{{ formatCurrency(initialAmount) }}</p>
               </div>
-            </li>
-          </ul>
 
-          <p v-else class="text-gray-500 text-center text-sm mt-4">No hay gastos registrados aún.</p>
-        </div>
-
-        <!-- Lista de saldos -->
-        <div>
-          <h2 class="text-xl font-semibold text-green-600 border-b border-green-200 pb-2 mb-4">Saldos ingresados</h2>
-
-          <div class="space-y-3 max-h-64 overflow-y-auto pr-2">
-            <div class="bg-green-50 border border-green-200 p-3 rounded-lg shadow-sm text-sm">
-              <p class="font-medium text-gray-800">Saldo inicial</p>
-              <p class="text-green-700 font-semibold">{{ formatCurrency(initialAmount) }}</p>
-            </div>
-
-            <div
-              v-for="(saldo, index) in additionalAmounts"
-              :key="index"
-              class="bg-green-50 border border-green-200 p-3 rounded-lg shadow-sm text-sm"
-            >
-              <p class="text-gray-800 font-medium">Adicional {{ index + 1 }}</p>
-              <p class="text-gray-600 text-sm italic" v-if="saldo.description">{{ saldo.description }}</p>
-              <p class="text-gray-500 text-xs">{{ formatDate(saldo.date) }}</p>
-              <p class="text-green-700 font-semibold">{{ formatCurrency(saldo.amount) }}</p>
+              <div
+                v-for="(saldo, index) in additionalAmounts"
+                :key="index"
+                class="bg-green-50 border border-green-200 p-3 rounded-xl shadow-sm text-sm"
+              >
+                <p class="text-gray-800 font-medium">Adicional {{ index + 1 }}</p>
+                <p v-if="saldo.description" class="text-gray-600 italic text-sm">{{ saldo.description }}</p>
+                <p class="text-gray-500 text-xs">{{ formatDate(saldo.date) }}</p>
+                <p class="text-green-700 font-bold">{{ formatCurrency(saldo.amount) }}</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Modal de confirmación -->
-      <div
-        v-if="mostrarConfirmacion"
-        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-      >
-        <div class="bg-white p-6 rounded-xl shadow-2xl max-w-md w-full">
-          <h3 class="text-xl font-bold mb-4 text-gray-800">Confirmar eliminación</h3>
-          <p class="mb-6 text-gray-600">
-            ¿Estás seguro de que deseas eliminar todos los gastos? Esta acción no se puede deshacer.
-          </p>
-          <div class="flex justify-end gap-3">
-            <button
-              @click="mostrarConfirmacion = false"
-              class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
-            >
-              Cancelar
-            </button>
-            <button
-              @click="eliminarTodosLosGastos"
-              class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
-            >
-              Eliminar
-            </button>
+        <!-- Modal confirmación -->
+        <div v-if="mostrarConfirmacion" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full">
+            <h3 class="text-xl font-bold mb-4 text-gray-800">Confirmar eliminación</h3>
+            <p class="mb-6 text-gray-600">¿Estás seguro de que querés eliminar todos los gastos? Esta acción no se puede deshacer.</p>
+            <div class="flex justify-end gap-3">
+              <button @click="mostrarConfirmacion = false" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition">
+                Cancelar
+              </button>
+              <button @click="eliminarTodosLosGastos" class="px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition">
+                Eliminar
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
+
+
 
 
 
 
 <script>
 import { db } from "../services/firebase";
-import { doc, setDoc, getDoc, onSnapshot, collection, query, where, orderBy, deleteDoc, getDocs } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import {
+  doc,
+  setDoc,
+  getDoc,
+  onSnapshot,
+  collection,
+  query,
+  where,
+  orderBy,
+  deleteDoc,
+  getDocs,
+} from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import BaseHeading from "../components/BaseHeading.vue";
 import BaseButtonSecondary from "../components/BaseButtonSecondary.vue";
-
-
 
 export default {
   components: { BaseHeading, BaseButtonSecondary },
   data() {
     return {
-      tempInitialAmount: null,
-       tempAdditionalDescription: "", // NUEVO
-      initialAmount: 0,
-      additionalAmounts: [],     
-      initialAmountError: false,
-      additionalAmountError: false, // array para guardar otros saldos
-      additionalDescriptionError: false,
-    tempAdditionalAmount: null, // campo temporal para ingresar nuevo saldo adicional
-      remainingAmount: 0,
-      userId: null,
-      gastos: [],
-      mostrarConfirmacion: false,
+      // UI
       floatingMessage: null,
-     showFloatingMessage: false,
+      showFloatingMessage: false,
+      mostrarConfirmacion: false,
+
+      // Usuario / datos
+      userId: null,
+
+      // Saldos
+      tempInitialAmount: null,
+      initialAmount: 0,
+      remainingAmount: 0,
+      additionalAmounts: [], // [{amount, description, date}]
+
+      tempAdditionalAmount: null,
+      tempAdditionalDescription: "",
+
+      // Errores
+      initialAmountError: false,
+      additionalAmountError: false,
+      additionalDescriptionError: false,
+
+      // Gastos
+      gastos: [],
     };
   },
+
   methods: {
+    /* ===== Utilidades ===== */
     formatCurrency(value) {
-  
-  const amount = parseFloat(value);
-
-  if (isNaN(amount)) {
-    return 'Monto inválido'; 
-  }
-
-  return new Intl.NumberFormat('es-AR', { 
-    style: 'currency', 
-    currency: 'ARS',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0  
-  }).format(amount);
-},
-    
-    formatDate(timestamp) {
-      if (!timestamp) return "Fecha desconocida";
-      if (timestamp.toDate) {
-        return timestamp.toDate().toLocaleDateString();
-      }
-      return new Date(timestamp).toLocaleDateString();
+      const amount = parseFloat(value);
+      if (isNaN(amount)) return "Monto inválido";
+      return new Intl.NumberFormat("es-AR", {
+        style: "currency",
+        currency: "ARS",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(amount);
     },
 
-      sumAdditionalAmounts() {
-      return this.additionalAmounts.reduce((total, val) => total + val, 0);
+    formatDate(tsOrIso) {
+      if (!tsOrIso) return "Fecha desconocida";
+      // Firestore Timestamp
+      if (tsOrIso?.toDate) return tsOrIso.toDate().toLocaleDateString("es-AR");
+      // ISO/string/date
+      return new Date(tsOrIso).toLocaleDateString("es-AR");
     },
 
- async addAdditionalAmount() {
-  // Validación de campos
-  this.additionalAmountError = this.tempAdditionalAmount === null || this.tempAdditionalAmount <= 0;
-  this.additionalDescriptionError = !this.tempAdditionalDescription.trim();
+    sumAdditionalAmounts() {
+      return this.additionalAmounts.reduce((sum, s) => sum + Number(s.amount || 0), 0);
+    },
 
-  if (this.additionalAmountError || this.additionalDescriptionError) {
-    setTimeout(() => {
-      this.additionalAmountError = false;
-      this.additionalDescriptionError = false;
-    }, 2000);
-    return;
-  }
+    mostrarMensajeTemporal(mensaje) {
+      this.floatingMessage = mensaje;
+      this.showFloatingMessage = true;
+      setTimeout(() => {
+        this.showFloatingMessage = false;
+        this.floatingMessage = null;
+      }, 2000);
+    },
 
-  const nuevoSaldo = {
-    amount: this.tempAdditionalAmount,
-    description: this.tempAdditionalDescription || null,
-    date: new Date().toISOString(),
-  };
-
-  this.additionalAmounts.push(nuevoSaldo);
-
-  const totalGastos = this.gastos.reduce((acc, gasto) => {
-    if (gasto.paymentMethod === 'Tarjeta de Crédito' && gasto.creditCard) {
-      const cuotasPagadas = gasto.creditCard.installmentsPaid || 0;
-      const montoPorCuota = gasto.creditCard.installmentAmount || 0;
-      return acc + cuotasPagadas * montoPorCuota;
-    }
-    return acc + gasto.amount;
-  }, 0);
-
-  const totalSaldos = this.initialAmount + this.additionalAmounts.reduce((sum, s) => sum + s.amount, 0);
-  const newRemaining = totalSaldos - totalGastos;
-
-  const userDocId = await this.getUserDocIdByUID();
-  const docRef = doc(db, "users", userDocId, "settings", "montoTotal");
-
-  await setDoc(docRef, {
-    additionalAmounts: this.additionalAmounts,
-    remainingAmount: newRemaining,
-  }, { merge: true });
-
-  this.remainingAmount = newRemaining;
-  this.tempAdditionalAmount = null;
-  this.tempAdditionalDescription = "";
-
-  this.mostrarMensajeTemporal("Saldo adicional agregado correctamente");
-},
-
-
-  // Modificar listenForChanges para traer additionalAmounts:
-  async listenForChanges() {
-    const userDocId = await this.getUserDocIdByUID();
-    const docRef = doc(db, "users", userDocId, "settings", "montoTotal");
-    onSnapshot(docRef, (docSnap) => {
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        this.initialAmount = data.initialAmount || 0; // no cambiar saldo inicial
-        this.additionalAmounts = data.additionalAmounts || [];
-        this.remainingAmount = data.remainingAmount || 0;
-      }
-    });
-  },
-
-  // Modificar updateRemainingAmount para que calcule con adicionales sin cambiar saldo inicial
-  async updateRemainingAmount() {
-    const totalGastos = this.gastos.reduce((acc, gasto) => {
-      if (gasto.paymentMethod === 'Tarjeta de Crédito' && gasto.creditCard) {
-        const cuotasPagadas = gasto.creditCard.installmentsPaid || 0;
-        const montoPorCuota = gasto.creditCard.installmentAmount || 0;
-        return acc + cuotasPagadas * montoPorCuota;
-      }
-      return acc + gasto.amount;
-    }, 0);
-
-    const totalSaldos = this.initialAmount + this.sumAdditionalAmounts();
-
-    this.remainingAmount = totalSaldos - totalGastos;
-
-    if (this.userId) {
-      const userDocId = await this.getUserDocIdByUID();
-      const docRef = doc(db, "users", userDocId, "settings", "montoTotal");
-      setDoc(docRef, {
-        additionalAmounts: this.additionalAmounts,
-        remainingAmount: this.remainingAmount,
-      }, { merge: true }).catch(error => {
-        console.error("Error al actualizar monto:", error);
-      });
-    }
-  },
-
-  mostrarMensajeTemporal(mensaje) {
-    this.floatingMessage = mensaje;
-    this.showFloatingMessage = true;
-    setTimeout(() => {
-      this.showFloatingMessage = false;
-      this.floatingMessage = null;
-    }, 2000); // 1 segundo
-  },
     async getUserDocIdByUID() {
-      const q = query(collection(db, "users"), where("uid", "==", this.userId));
-      const querySnapshot = await getDocs(q);
-      if (!querySnapshot.empty) {
-        return querySnapshot.docs[0].id;
-      } else {
-        throw new Error("No se encontró el documento del usuario.");
-      }
+      const qUsers = query(collection(db, "users"), where("uid", "==", this.userId));
+      const snap = await getDocs(qUsers);
+      if (snap.empty) throw new Error("No se encontró el documento del usuario.");
+      return snap.docs[0].id;
     },
 
-   async setInitialAmount() {
-  if (this.tempInitialAmount === null || this.tempInitialAmount < 0) {
-    this.initialAmountError = true;
-    setTimeout(() => {
-      this.initialAmountError = false;
-    }, 2000);
-    return;
-  }
-
-  const userDocId = await this.getUserDocIdByUID();
-  const docRef = doc(db, "users", userDocId, "settings", "montoTotal");
-  await setDoc(docRef, {
-    initialAmount: this.tempInitialAmount,
-    remainingAmount: this.tempInitialAmount,
-  });
-
-  this.initialAmount = this.tempInitialAmount;
-  this.tempInitialAmount = null;
-  this.updateRemainingAmount();
-  this.mostrarMensajeTemporal("Saldo inicial agregado correctamente");
-},
-
-    async fetchAmounts() {
-      const userDocId = await this.getUserDocIdByUID();
-      const docRef = doc(db, "users", userDocId, "settings", "montoTotal");
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        this.initialAmount = docSnap.data().initialAmount;
-        this.remainingAmount = docSnap.data().remainingAmount;
-      }
-    },
-
+    /* ===== Lectura reactiva de saldos ===== */
     async listenForChanges() {
       const userDocId = await this.getUserDocIdByUID();
-      const docRef = doc(db, "users", userDocId, "settings", "montoTotal");
-      onSnapshot(docRef, (docSnap) => {
-        if (docSnap.exists()) {
-          this.initialAmount = docSnap.data().initialAmount;
-          this.remainingAmount = docSnap.data().remainingAmount;
-        }
-      });
-    },
+      const montoRef = doc(db, "users", userDocId, "settings", "montoTotal");
 
-    listenForGastos() {
-      const gastosRef = query(collection(db, "gastos"), 
-        where("uid", "==", this.userId), 
-        orderBy("createdAt", "desc")
-      );
-      
-      onSnapshot(gastosRef, (querySnapshot) => {
-        this.gastos = querySnapshot.docs.map((doc) => {
-          return { id: doc.id, ...doc.data() };
-        });
+      onSnapshot(montoRef, (docSnap) => {
+        if (!docSnap.exists()) return;
+
+        const data = docSnap.data();
+        this.initialAmount = Number(data.initialAmount || 0);
+        this.remainingAmount = Number(data.remainingAmount || 0);
+        this.additionalAmounts = Array.isArray(data.additionalAmounts) ? data.additionalAmounts : [];
+
+        // Cada vez que cambien saldos desde fuera, recalculo el restante con gastos actuales
         this.updateRemainingAmount();
       });
     },
 
-    async updateRemainingAmount() {
-      let totalGastos = 0;
-      
-      this.gastos.forEach(gasto => {
-        if (gasto.paymentMethod === 'Tarjeta de Crédito' && gasto.creditCard) {
-          if (gasto.creditCard.installments > 0) {
-            const cuotasPagadas = gasto.creditCard.installmentsPaid || 0;
-            const montoPorCuota = gasto.creditCard.installmentAmount;
-            totalGastos += cuotasPagadas * montoPorCuota;
-            console.log(`Gasto en cuotas: ${gasto.name}, Cuotas pagadas: ${cuotasPagadas}/${gasto.creditCard.installments}, Monto: ${cuotasPagadas * montoPorCuota}`);
-          } else {
-            if (gasto.budgetUpdated) {
-              totalGastos += gasto.amount;
-              console.log(`Gasto con tarjeta (1 pago): ${gasto.name}, Monto: ${gasto.amount}`);
-            }
-          }
-        } else {
-          totalGastos += gasto.amount;
-          console.log(`Otros métodos: ${gasto.name}, Monto: ${gasto.amount}`);
-        }
+    /* ===== Gastos en vivo ===== */
+    listenForGastos() {
+      const gastosRef = query(
+        collection(db, "gastos"),
+        where("uid", "==", this.userId),
+        orderBy("createdAt", "desc")
+      );
+
+      onSnapshot(gastosRef, (querySnapshot) => {
+        this.gastos = querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+        this.updateRemainingAmount();
       });
-      
-      console.log(`Monto inicial: ${this.initialAmount}, Total gastos: ${totalGastos}, Restante: ${this.initialAmount - totalGastos}`);
-      
-      this.remainingAmount = this.initialAmount - totalGastos;
-      
-      if (this.userId) {
+    },
+
+    /* ===== Cálculo central del disponible ===== */
+    async updateRemainingAmount() {
+      // Total de gastos **pagados** (maneja tarjeta en cuotas)
+      const totalGastos = this.gastos.reduce((acc, gasto) => {
+        if (gasto.paymentMethod === "Tarjeta de Crédito" && gasto.creditCard) {
+          const cuotasPagadas = Number(gasto.creditCard.installmentsPaid || 0);
+          const montoPorCuota = Number(gasto.creditCard.installmentAmount || 0);
+          return acc + cuotasPagadas * montoPorCuota;
+        }
+        return acc + Number(gasto.amount || 0);
+      }, 0);
+
+      const totalSaldos = Number(this.initialAmount || 0) + this.sumAdditionalAmounts();
+      this.remainingAmount = totalSaldos;
+
+      if (!this.userId) return;
+      try {
         const userDocId = await this.getUserDocIdByUID();
-        const docRef = doc(db, "users", userDocId, "settings", "montoTotal");
-        setDoc(docRef, {
-          initialAmount: this.initialAmount,
-          remainingAmount: this.remainingAmount,
-        }, { merge: true }).then(() => {
-          console.log("Monto actualizado en Firestore:", this.remainingAmount);
-        }).catch(error => {
-          console.error("Error al actualizar monto:", error);
-        });
+        const montoRef = doc(db, "users", userDocId, "settings", "montoTotal");
+        await setDoc(
+          montoRef,
+          {
+            // No pisamos additionalAmounts acá
+            initialAmount: this.initialAmount,
+            remainingAmount: this.remainingAmount,
+          },
+          { merge: true }
+        );
+      } catch (e) {
+        console.error("Error al actualizar remainingAmount:", e);
       }
     },
 
-    getUserId() {
-      const auth = getAuth();
-      const user = auth.currentUser;
-      this.userId = user ? user.uid : null;
+    /* ===== Agregar saldo adicional ===== */
+    async addAdditionalAmount() {
+      // Validación
+      this.additionalAmountError =
+        this.tempAdditionalAmount === null || Number(this.tempAdditionalAmount) <= 0;
+      this.additionalDescriptionError = !this.tempAdditionalDescription.trim();
+
+      if (this.additionalAmountError || this.additionalDescriptionError) {
+        setTimeout(() => {
+          this.additionalAmountError = false;
+          this.additionalDescriptionError = false;
+        }, 2000);
+        return;
+      }
+
+      // Agrego local
+      const nuevoSaldo = {
+        amount: Number(this.tempAdditionalAmount),
+        description: this.tempAdditionalDescription || null,
+        date: new Date().toISOString(),
+      };
+      this.additionalAmounts = [...this.additionalAmounts, nuevoSaldo];
+
+      // Persisto y recalculo disponible
+      try {
+        const userDocId = await this.getUserDocIdByUID();
+        const montoRef = doc(db, "users", userDocId, "settings", "montoTotal");
+
+        // totalGastos actual
+        const totalGastos = this.gastos.reduce((acc, gasto) => {
+          if (gasto.paymentMethod === "Tarjeta de Crédito" && gasto.creditCard) {
+            const cuotasPagadas = Number(gasto.creditCard.installmentsPaid || 0);
+            const montoPorCuota = Number(gasto.creditCard.installmentAmount || 0);
+            return acc + cuotasPagadas * montoPorCuota;
+          }
+          return acc + Number(gasto.amount || 0);
+        }, 0);
+
+        const totalSaldos = Number(this.initialAmount || 0) + this.sumAdditionalAmounts();
+        const newRemaining = totalSaldos - totalGastos;
+
+        await setDoc(
+          montoRef,
+          {
+            additionalAmounts: this.additionalAmounts,
+            remainingAmount: newRemaining,
+          },
+          { merge: true }
+        );
+
+        this.remainingAmount = newRemaining;
+        this.tempAdditionalAmount = null;
+        this.tempAdditionalDescription = "";
+        this.mostrarMensajeTemporal("Saldo adicional agregado correctamente");
+      } catch (e) {
+        console.error("Error al agregar saldo adicional:", e);
+      }
     },
 
-  
-    
-    irACalendarioPagos() {
-      this.$router.push("/calendario-pagos");
+    /* ===== Saldo inicial ===== */
+    async setInitialAmount() {
+      if (this.tempInitialAmount === null || Number(this.tempInitialAmount) < 0) {
+        this.initialAmountError = true;
+        setTimeout(() => (this.initialAmountError = false), 2000);
+        return;
+      }
+
+      this.initialAmount = Number(this.tempInitialAmount);
+
+      try {
+        const userDocId = await this.getUserDocIdByUID();
+        const montoRef = doc(db, "users", userDocId, "settings", "montoTotal");
+
+        // Recalculo con adicionales + gastos
+        const totalGastos = this.gastos.reduce((acc, gasto) => {
+          if (gasto.paymentMethod === "Tarjeta de Crédito" && gasto.creditCard) {
+            const cuotasPagadas = Number(gasto.creditCard.installmentsPaid || 0);
+            const montoPorCuota = Number(gasto.creditCard.installmentAmount || 0);
+            return acc + cuotasPagadas * montoPorCuota;
+          }
+          return acc + Number(gasto.amount || 0);
+        }, 0);
+
+        const totalSaldos = this.initialAmount + this.sumAdditionalAmounts();
+        const newRemaining = totalSaldos - totalGastos;
+
+        await setDoc(
+          montoRef,
+          {
+            initialAmount: this.initialAmount,
+            remainingAmount: newRemaining,
+          },
+          { merge: true }
+        );
+
+        this.remainingAmount = newRemaining;
+        this.tempInitialAmount = null;
+        this.mostrarMensajeTemporal("Saldo inicial agregado correctamente");
+      } catch (e) {
+        console.error("Error al guardar saldo inicial:", e);
+      }
     },
-    
-    confirmarEliminarGastos() {
-      this.mostrarConfirmacion = true;
-    },
-    
+
+    /* ===== Eliminar todos los gastos ===== */
     async eliminarTodosLosGastos() {
       try {
         const gastosRef = collection(db, "gastos");
-        const q = query(gastosRef, where("uid", "==", this.userId));
-        const querySnapshot = await getDocs(q);
-        
-        const eliminaciones = querySnapshot.docs.map(doc => deleteDoc(doc.ref));
-        await Promise.all(eliminaciones);
-        
+        const qG = query(gastosRef, where("uid", "==", this.userId));
+        const snap = await getDocs(qG);
+        await Promise.all(snap.docs.map((d) => deleteDoc(d.ref)));
+
+        // Restante = initial + sum(adicionales) (sin gastos)
         const userDocId = await this.getUserDocIdByUID();
-        const docRef = doc(db, "users", userDocId, "settings", "montoTotal");
-        await setDoc(docRef, {
-          initialAmount: this.initialAmount,
-          remainingAmount: this.initialAmount,
-        });
-        
+        const montoRef = doc(db, "users", userDocId, "settings", "montoTotal");
+        const newRemaining = Number(this.initialAmount || 0) + this.sumAdditionalAmounts();
+
+        await setDoc(
+          montoRef,
+          {
+            initialAmount: this.initialAmount,
+            additionalAmounts: this.additionalAmounts,
+            remainingAmount: newRemaining,
+          },
+          { merge: true }
+        );
+
         this.mostrarConfirmacion = false;
-        
-        alert("Todos los gastos han sido eliminados correctamente.");
+        this.mostrarMensajeTemporal("Se eliminaron todos los gastos.");
       } catch (error) {
         console.error("Error al eliminar gastos:", error);
-        alert("Ocurrió un error al eliminar los gastos. Intenta nuevamente.");
+        alert("Ocurrió un error al eliminar los gastos. Intentá nuevamente.");
       }
-    }
+    },
+
+    /* ===== Navegación ===== */
+    irACalendarioPagos() {
+      this.$router.push("/calendario-pagos");
+    },
+
+    confirmarEliminarGastos() {
+      this.mostrarConfirmacion = true;
+    },
   },
+
   async mounted() {
-    this.getUserId();
-    if (this.userId) {
-      await this.fetchAmounts();
-      this.listenForChanges();
-      this.listenForGastos();
-    }
+    // Aseguramos UID antes de enganchar listeners
+    onAuthStateChanged(getAuth(), async (user) => {
+      if (!user) return;
+      this.userId = user.uid;
+
+      // Engancho listeners reactivos
+      await this.listenForChanges(); // saldo inicial, adicionales, remaining
+      this.listenForGastos();        // gastos en vivo
+    });
   },
 };
 </script>

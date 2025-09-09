@@ -1,6 +1,8 @@
 <template>
   <div class="flex flex-col items-center justify-center min-h-screen bg-[#08a04b] py-10 px-4 mt-8">
-    <div class="bg-white rounded-2xl shadow-2xl p-10 grid gap-8 mt-1 w-full max-w-md">
+    <div class="bg-white rounded-2xl  p-10 grid gap-8 mt-1 w-full max-w-md shadow-[0_8px_30px_rgba(0,0,0,0.35)]
+         hover:shadow-[0_12px_45px_rgba(0,0,0,0.45)]
+         transition-shadow duration-500">
       <BaseHeading>Mi Perfil</BaseHeading>
 
   

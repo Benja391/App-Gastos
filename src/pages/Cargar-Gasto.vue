@@ -1,202 +1,169 @@
-  <template>
-  <section class="flex items-center justify-center min-h-screen bg-[#08a04b] text-white py-10 px-4 mt-8">
-    <div class="w-full max-w-3xl bg-white text-gray-900 rounded-2xl shadow-2xl p-10 grid gap-8">
+<template>
+  <section class="flex items-center justify-center min-h-screen bg-[#08a04b] text-white px-4 py-10 mt-8">
+    <div class="relative bg-white/95 backdrop-blur-sm text-gray-900 rounded-3xl  border border-white/20 w-full max-w-4xl p-10 grid gap-8 mt-1 overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.35)]
+         hover:shadow-[0_12px_45px_rgba(0,0,0,0.45)]
+         transition-shadow duration-500">
 
-      <!-- Mensaje -->
-      <div v-if="message" class="p-4 rounded-lg text-black text-sm font-medium" :class="messageClass">
-        {{ message }}
-      </div>
-
-      <!-- Loading spinner -->
+      <!-- Loader -->
       <div v-if="loading" class="flex justify-center items-center">
-        <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+        <div class="relative">
+          <div class="animate-spin rounded-full h-10 w-10 border-4 border-green-200"></div>
+          <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-green-600 absolute top-0 left-0"></div>
+        </div>
       </div>
 
-      <!-- Formulario -->
-      <form @submit.prevent="handleSubmit" class="grid gap-6">
-
+      <!-- FORMULARIO -->
+      <form @submit.prevent="handleSubmit" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Nombre del gasto -->
-        <div>
-          <label for="name" class="block text-sm font-semibold mb-1">Nombre del gasto</label>
-          <BaseInputs 
+        <div class="space-y-2">
+          <label for="name" class="block text-sm font-semibold text-gray-700">Nombre del gasto</label>
+          <BaseInputs
             type="text"
             id="name"
             v-model="expense.name"
-            placeholder="Ingrese el nombre del gasto"
-          
+            placeholder="Ingresá el nombre del gasto"
             required
-            :class="[
-    'w-full px-4 py-3 rounded-lg border shadow-sm focus:outline-none focus:ring-2',
-    errors.name ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-green-600'
-  ]"
-/>
-<p v-if="errors.name" class="text-sm text-red-600 mt-1">{{ errors.name }}</p>
+            class="w-full px-4 py-3 rounded-xl bg-white border-2 border-gray-200 shadow-sm focus:outline-none focus:ring-4 focus:ring-green-100 focus:border-green-500 transition"
+          />
         </div>
 
         <!-- Monto del gasto -->
-        <div>
-          <label for="amount" class="block text-sm font-semibold mb-1">Monto del gasto</label>
-          <BaseInputs 
+        <div class="space-y-2">
+          <label for="amount" class="block text-sm font-semibold text-gray-700">Monto del gasto</label>
+          <BaseInputs
             type="number"
             id="amount"
             v-model="expense.amount"
             step="0.01"
-            placeholder="Ingrese monto del gasto"
+            placeholder="Ingresá el monto del gasto"
             required
-            :class="[
-    'w-full px-4 py-3 rounded-lg border shadow-sm focus:outline-none focus:ring-2',
-    errors.name ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-green-600'
-  ]"
-/>
-<p v-if="errors.name" class="text-sm text-red-600 mt-1">{{ errors.name }}</p>
+            min="0.01"
+            class="w-full px-4 py-3 rounded-xl bg-white border-2 border-gray-200 shadow-sm focus:outline-none focus:ring-4 focus:ring-green-100 focus:border-green-500 transition"
+          />
         </div>
 
-        <!-- Presupuesto -->
-        <div>
-          <label for="budget" class="block text-sm font-semibold mb-1">Presupuesto asignado</label>
-          <select 
-            v-model="expense.budget" 
-            id="budget" 
-      :class="[
-      'w-full px-4 py-3 rounded-lg border shadow-sm focus:outline-none focus:ring-2',
-      errors.budget ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-green-600'
-    ]"
-  >
-            <option value="" disabled>Seleccione un presupuesto</option>
+        <!-- Presupuesto asignado -->
+        <div class="space-y-2">
+          <label for="budget" class="block text-sm font-semibold text-gray-700">Presupuesto asignado</label>
+          <select
+            v-model="expense.budget"
+            id="budget"
+            class="w-full px-4 py-3 rounded-xl bg-white border-2 border-gray-200 shadow-sm focus:outline-none focus:ring-4 focus:ring-green-100 focus:border-green-500 transition"
+          >
+            <option value="" disabled>Seleccioná un presupuesto</option>
             <option v-for="budget in budgets" :key="budget.id" :value="budget.id">
               {{ budget.name }}
             </option>
             <option value="none">No asignar a presupuesto</option>
           </select>
-            <!-- Mensaje de error -->
-  <p v-if="errors.budget" class="text-sm text-red-600 mt-1">{{ errors.budget }}</p>
         </div>
 
         <!-- Categoría -->
-        <div>
-          <label for="category" class="block text-sm font-semibold mb-1">Categoría</label>
-          <div>
+        <div class="space-y-2">
+          <label for="category" class="block text-sm font-semibold text-gray-700">Categoría</label>
+          <div class="relative">
             <select
               v-if="!isOtherCategorySelected"
               v-model="expense.category"
               id="category"
+              required
               @change="handleCategoryChange"
-          :class="[
-      'w-full px-4 py-3 rounded-lg border shadow-sm focus:outline-none focus:ring-2',
-      errors.category ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-green-600'
-    ]"
-  >
-
-              <option value="" disabled>Seleccione una categoría</option>
+              class="w-full px-4 py-3 rounded-xl bg-white border-2 border-gray-200 shadow-sm focus:outline-none focus:ring-4 focus:ring-green-100 focus:border-green-500 transition"
+            >
+              <option value="" disabled>Seleccioná una categoría</option>
               <option v-for="category in categories" :key="category" :value="category">
                 {{ category }}
               </option>
               <option value="Otra">Otra</option>
             </select>
-             <!-- ⚠️ Aquí está el mensaje -->
-  <p v-if="errors.category" class="text-sm text-red-600 mt-1">{{ errors.category }}</p>
 
-            <div v-else class="mt-3">
-              <BaseInputs
-                type="text"
-                id="customCategory"
-                v-model="customCategory"
-                placeholder="Escribe tu categoría"
-                required
-                :class="[
-    'w-full px-4 py-3 rounded-lg border shadow-sm focus:outline-none focus:ring-2',
-    errors.name ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-green-600'
-  ]"
-/>
-<p v-if="errors.name" class="text-sm text-red-600 mt-1">{{ errors.name }}</p>
-            </div>
+            <BaseInputs
+              v-else
+              type="text"
+              id="customCategory"
+              v-model="customCategory"
+              placeholder="Escribí tu categoría"
+              required
+              class="w-full px-4 py-3 rounded-xl bg-white border-2 border-gray-200 shadow-sm focus:outline-none focus:ring-4 focus:ring-green-100 focus:border-green-500 transition"
+            />
           </div>
         </div>
 
         <!-- Descripción -->
-        <div>
-          <label for="description" class="block text-sm font-semibold mb-1">Descripción del gasto</label>
-          <BaseInputs 
+        <div class="lg:col-span-2 space-y-2">
+          <label for="description" class="block text-sm font-semibold text-gray-700">Descripción del gasto</label>
+          <BaseInputs
             type="text"
             id="description"
             v-model="expense.description"
-            placeholder="Describe brevemente el gasto"
-           :class="[
-    'w-full px-4 py-3 rounded-lg border shadow-sm focus:outline-none focus:ring-2',
-    errors.name ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-green-600'
-  ]"
-/>
-<p v-if="errors.name" class="text-sm text-red-600 mt-1">{{ errors.name }}</p>
+            placeholder="Describí brevemente el gasto"
+            class="w-full px-4 py-3 rounded-xl bg-white border-2 border-gray-200 shadow-sm focus:outline-none focus:ring-4 focus:ring-green-100 focus:border-green-500 transition"
+          />
         </div>
 
         <!-- Método de pago -->
-        <div>
-          <label for="paymentMethod" class="block text-sm font-semibold mb-1">Método de pago</label>
-          <select 
-            v-model="expense.paymentMethod" 
-            id="paymentMethod" 
+        <div class="space-y-2">
+          <label for="paymentMethod" class="block text-sm font-semibold text-gray-700">Método de pago</label>
+          <select
+            v-model="expense.paymentMethod"
+            id="paymentMethod"
             @change="handlePaymentMethodChange"
-        :class="[
-      'w-full px-4 py-3 rounded-lg border shadow-sm focus:outline-none focus:ring-2',
-      errors.paymentMethod ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-green-600'
-    ]"
-  >
-            <option value="" disabled>Seleccione un método de pago</option>
+            class="w-full px-4 py-3 rounded-xl bg-white border-2 border-gray-200 shadow-sm focus:outline-none focus:ring-4 focus:ring-green-100 focus:border-green-500 transition"
+          >
+            <option value="" disabled>Seleccioná un método de pago</option>
             <option v-for="method in paymentMethods" :key="method" :value="method">
               {{ method }}
             </option>
           </select>
-           <!-- ⚠️ Mensaje debajo -->
-  <p v-if="errors.paymentMethod" class="text-sm text-red-600 mt-1">{{ errors.paymentMethod }}</p>
         </div>
 
         <!-- Detalles tarjeta -->
-        <CreditCardDetails 
-          v-if="showCreditCardDetails"
-          v-model:cardType="expense.creditCard.type"
-          v-model:installments="expense.creditCard.installments"
-          @calculate-installments="calculateInstallments"
-        />
-
-        <!-- Desglose de cuotas -->
-        <div
-          v-if="showInstallmentBreakdown"
-          class="p-5 bg-green-50 border border-green-200 rounded-xl text-sm text-gray-800"
-        >
-          <h3 class="text-base font-semibold mb-2">Desglose de cuotas</h3>
-          <p>Monto total: {{ formatCurrency(expense.amount) }}</p>
-          <p>Número de cuotas: {{ expense.creditCard.installments }}</p>
-          <p>Monto por cuota: {{ formatCurrency(installmentAmount) }}</p>
+        <div class="lg:col-span-2">
+          <CreditCardDetails
+            v-if="showCreditCardDetails"
+            v-model:cardType="expense.creditCard.type"
+            v-model:installments="expense.creditCard.installments"
+            @calculate-installments="calculateInstallments"
+          />
         </div>
 
-        <!-- Botón principal -->
-        <button 
-          type="submit"
-          class="w-55 px-6 py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-all duration-300 shadow-md mx-auto block"
-        >
-          {{ editing ? 'Actualizar Gasto' : 'Agregar gasto' }}
-        </button>
+        <!-- Desglose cuotas -->
+        <div v-if="showInstallmentBreakdown" class="lg:col-span-2 p-6 bg-gradient-to-r from-gray-50 to-green-50/30 rounded-2xl border border-green-100">
+          <h3 class="text-lg font-bold text-green-800 mb-2">Desglose de cuotas</h3>
+          <div class="text-sm text-gray-600 space-y-1">
+            <p>Monto total: {{ formatCurrency(expense.amount) }}</p>
+            <p>Número de cuotas: {{ expense.creditCard.installments }}</p>
+            <p>Monto por cuota: {{ formatCurrency(installmentAmount) }}</p>
+          </div>
+        </div>
+
+        <!-- Mensaje -->
+        <div v-if="message" class="lg:col-span-2 mt-4 p-4 rounded-2xl font-medium border-l-4 shadow-sm text-center" :class="messageClass">
+          {{ message }}
+        </div>
+
+        <!-- Botón -->
+        <div class="lg:col-span-2 flex justify-center pt-6">
+          <button
+            type="submit"
+            class="group relative px-8 py-4 bg-green-600 text-white font-bold rounded-2xl hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-green-200"
+          >
+            <span class="relative z-10">{{ editing ? 'Actualizá gasto' : 'Agregá gasto' }}</span>
+            <div class="absolute inset-0 bg-green-600 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </button>
+        </div>
       </form>
     </div>
   </section>
 </template>
 
- <script>
+<script>
 import { getAuth } from "firebase/auth";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  doc,
-  getDoc,
-  updateDoc,
-  getDocs
-} from "firebase/firestore";
+import { getFirestore, collection, addDoc, doc, getDoc, updateDoc, getDocs, query, where } from "firebase/firestore";
 import BaseHeading from '../components/BaseHeading.vue';
 import BaseButton from '../components/BaseButton.vue';
 import BaseInputs from '../components/BaseInputs.vue';
 import CreditCardDetails from '../components/DetallesCredito.vue';
-import { watch } from "vue";
 
 export default {
   name: "CargarGasto",
@@ -217,88 +184,41 @@ export default {
           installments: 1
         }
       },
-      errors: {
-        name: '',
-        amount: '',
-        category: '',
-        paymentMethod: '',
-        creditCardType: '',
-        budget: ''
-      },
       loading: false,
+      message: '',
+      messageClass: 'bg-red-100 border border-red-400 text-red-600 font-semibold',
       editing: false,
       categories: ["Alimentos", "Transporte", "Hogar", "Entretenimiento", "Educación", "Salud"],
       isOtherCategorySelected: false,
       customCategory: '',
       budgets: [],
+      tarjetasConfiguradas: [], // 🔹 tarjetas desde Firestore
       paymentMethods: ["Efectivo", "Tarjeta de Débito", "Tarjeta de Crédito", "Transferencia Bancaria", "Billetera Virtual"],
       showCreditCardDetails: false,
       installmentAmount: 0,
-      message: '',
-      messageClass: ''
     };
   },
 
   computed: {
     showInstallmentBreakdown() {
-      return this.expense.paymentMethod === 'Tarjeta de Crédito' &&
-        this.expense.creditCard.installments > 1 &&
-        this.expense.amount > 0;
+      return this.expense.paymentMethod === 'Tarjeta de Crédito' && 
+            this.expense.creditCard.installments > 1 && 
+            this.expense.amount > 0;
     }
   },
 
   mounted() {
     this.fetchBudgets();
-
-      watch(() => this.expense.name, (val) => {
-      if (val.trim()) this.errors.name = '';
-    });
-
-      watch(() => this.expense.amount, (val) => {
-      if (val > 0) this.errors.amount = '';
-    });
-
-      watch(() => this.expense.category, (val) => {
-        if (val) this.errors.category = '';
-    });
-
-      watch(() => this.customCategory, (val) => {
-        if (val.trim()) this.errors.category = '';
-    });
-
-      watch(() => this.expense.budget, (val) => {
-        if (val || val === 'none') this.errors.budget = '';
-    });
-
-      watch(() => this.expense.paymentMethod, (val) => {
-        if (val) this.errors.paymentMethod = '';
-    });
-
-      watch(() => this.expense.creditCard.type, (val) => {
-        if (val) this.errors.creditCardType = '';
-    });
+    this.fetchTarjetas(); // 🔹 cargar tarjetas al inicio
   },
 
- methods: {
-  validarCampos() {
-    if (!valid) {
-      this.message = 'Por favor completá todos los campos obligatorios.';
-      this.messageClass = 'bg-red-100 border border-red-400 text-red-600 font-semibold';
-      this.clearMessageAfterDelay();
-      return;
-    }
-    // Aquí iría el resto de la lógica si el formulario es válido
-  },
-
- 
-
+  methods: {
     async fetchBudgets() {
       try {
         const auth = getAuth();
         const user = auth.currentUser;
-
         if (!user) return;
-
+        
         const db = getFirestore();
         const budgetsSnapshot = await getDocs(collection(db, "Presupuestos"));
         this.budgets = [];
@@ -318,6 +238,40 @@ export default {
       }
     },
 
+
+async fetchTarjetas() {
+  try {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const db = getFirestore();
+    // Buscar doc en "users" cuyo campo uid == user.uid
+    const q = query(collection(db, "users"), where("uid", "==", user.uid));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      console.log("DEBUG - No se encontró documento de usuario con uid:", user.uid);
+      this.tarjetasConfiguradas = [];
+      return;
+    }
+
+    // Como puede haber uno solo:
+    const userDoc = querySnapshot.docs[0];
+    console.log("DEBUG - Usuario encontrado con id:", userDoc.id);
+
+    // Ahora sí traemos las tarjetas
+    const cardsRef = collection(db, "users", userDoc.id, "cards");
+    const cardsSnapshot = await getDocs(cardsRef);
+
+    this.tarjetasConfiguradas = cardsSnapshot.docs.map(doc => doc.data());
+    console.log("DEBUG - tarjetas configuradas final:", this.tarjetasConfiguradas);
+
+  } catch (error) {
+    console.error("Error al cargar tarjetas configuradas:", error);
+  }
+},
+
     handleCategoryChange(event) {
       if (event.target.value === 'Otra') {
         this.isOtherCategorySelected = true;
@@ -329,7 +283,7 @@ export default {
 
     handlePaymentMethodChange() {
       this.showCreditCardDetails = this.expense.paymentMethod === 'Tarjeta de Crédito';
-
+      
       if (!this.showCreditCardDetails) {
         this.expense.creditCard = {
           type: '',
@@ -348,124 +302,104 @@ export default {
     },
 
     formatCurrency(value) {
-      return new Intl.NumberFormat('es-AR', {
-        style: 'currency',
-        currency: 'ARS'
+      return new Intl.NumberFormat('es-AR', { 
+        style: 'currency', 
+        currency: 'ARS' 
       }).format(value);
     },
 
-    async updateBudgetAmount(budgetId, expenseAmount) {
-      try {
-        const db = getFirestore();
-        const budgetRef = doc(db, "Presupuestos", budgetId);
-        const budgetSnap = await getDoc(budgetRef);
-
-        if (budgetSnap.exists()) {
-          const budgetData = budgetSnap.data();
-          const newRemainingAmount = budgetData.amount - expenseAmount;
-
-          await updateDoc(budgetRef, {
-            amount: newRemainingAmount
-          });
-        }
-      } catch (error) {
-        console.error("Error al actualizar presupuesto:", error);
-        throw error;
-      }
-    },
+    // async updateBudgetAmount(budgetId, expenseAmount) {
+    //   try {
+    //     const db = getFirestore();
+    //     const budgetRef = doc(db, "Presupuestos", budgetId);
+    //     const budgetSnap = await getDoc(budgetRef);
+        
+    //     if (budgetSnap.exists()) {
+    //       const budgetData = budgetSnap.data();
+    //       const newRemainingAmount = budgetData.amount - expenseAmount;
+          
+    //       await updateDoc(budgetRef, {
+    //         amount: newRemainingAmount
+    //       });
+    //     }
+    //   } catch (error) {
+    //     console.error("Error al actualizar presupuesto:", error);
+    //     throw error;
+    //   }
+    // },
 
     async handleSubmit() {
-      // Limpiar errores
-      this.errors = {
-        name: '',
-        amount: '',
-        category: '',
-        paymentMethod: '',
-        creditCardType: '',
-        budget: ''
-      };
-
-      let valid = true;
-
-      if (!this.expense.name.trim()) {
-        this.errors.name = 'El nombre del gasto es obligatorio.';
-        valid = false;
-      }
-
-      if (!this.expense.amount || this.expense.amount <= 0) {
-        this.errors.amount = 'El monto debe ser mayor a 0.';
-        valid = false;
-      }
-
-      if (!this.expense.category && !this.customCategory) {
-        this.errors.category = 'Seleccioná o escribí una categoría.';
-        valid = false;
-      }
-
-      if (!this.expense.budget && this.expense.budget !== 'none') {
-        this.errors.budget = 'Seleccioná un presupuesto o no asignes.';
-        valid = false;
-      }
-
-      if (!this.expense.paymentMethod) {
-        this.errors.paymentMethod = 'El método de pago es obligatorio.';
-        valid = false;
-      }
-
-      if (
-        this.expense.paymentMethod === 'Tarjeta de Crédito' &&
-        !this.expense.creditCard.type
-      ) {
-        this.errors.creditCardType = 'Seleccioná el tipo de tarjeta.';
-        valid = false;
-      }
-
-      if (!valid) {
-        this.message = 'Por favor completá todos los campos obligatorios.';
-        this.messageClass = 'bg-red-100 border border-red-400 text-red-600 font-semibold';
-        this.clearErrorsAfterDelay();
-        this.clearMessageAfterDelay();
+      if (!this.expense.name || !this.expense.amount || !this.expense.category || !this.expense.paymentMethod) {
+        this.message = "Por favor, completa todos los campos obligatorios.";
+        this.messageClass = "bg-red-100 border border-red-400 text-red-600 font-semibold";
         return;
       }
 
+    // 🔹 Validar tarjeta configurada
+if (this.expense.paymentMethod === "Tarjeta de Crédito") {
+  if (this.tarjetasConfiguradas.length === 0) {
+    console.log("DEBUG - tarjetas vacías, forzando fetchTarjetas...");
+    await this.fetchTarjetas();
+  }
+
+  const tarjetaSeleccionada = this.expense.creditCard.type?.trim().toLowerCase();
+
+  console.log("DEBUG - tarjeta seleccionada en form:", tarjetaSeleccionada);
+  console.log("DEBUG - tarjetas configuradas Firestore:", this.tarjetasConfiguradas);
+
+  const tarjetaExiste = this.tarjetasConfiguradas.some((t) => {
+    console.log("Comparando con tarjeta Firestore:", t.cardType?.trim().toLowerCase());
+    return t.cardType?.trim().toLowerCase() === tarjetaSeleccionada;
+  });
+
+  console.log("DEBUG - resultado tarjetaExiste:", tarjetaExiste);
+
+  if (!tarjetaExiste) {
+    this.message = `No tenés configurada ninguna tarjeta de tipo ${tarjetaSeleccionada}.`;
+    this.messageClass = "bg-yellow-100 border border-yellow-400 text-yellow-800 font-semibold";
+    this.loading = false;
+    return;
+  }
+}
+
+      if (this.expense.paymentMethod === 'Tarjeta de Crédito') {
+        if (!this.expense.creditCard.type) {
+          this.message = "Por favor, selecciona el tipo de tarjeta de crédito.";
+          this.messageClass = "bg-red-100 border border-red-400 text-red-600 font-semibold";
+          return;
+        }
+      }
+
       this.loading = true;
-      this.message = '';
+      this.message = "";
 
       try {
         const auth = getAuth();
         const user = auth.currentUser;
 
         if (!user) {
-          this.message = 'Debes estar autenticado para registrar un gasto.';
-          this.messageClass = 'bg-red-100 border border-red-400 text-red-600 font-semibold';
+          this.message = "Debes estar autenticado para registrar un gasto.";
+          this.messageClass = "bg-red-100 border border-red-400 text-red-600 font-semibold";
           this.loading = false;
-          this.clearMessageAfterDelay();
           return;
         }
 
         const db = getFirestore();
-        const categoryToSave = this.isOtherCategorySelected
-          ? this.customCategory
-          : this.expense.category;
-
-        const isCreditCard = this.expense.paymentMethod === 'Tarjeta de Crédito';
-        const shouldUpdateBudgetNow = !isCreditCard;
-
-        if (
-          shouldUpdateBudgetNow &&
-          this.expense.budget !== 'none' &&
-          this.expense.budget !== ''
-        ) {
-          const budget = this.budgets.find((b) => b.id === this.expense.budget);
-          if (budget) {
-            const newAmount = Number(this.expense.amount);
-            if (newAmount > budget.amount) {
-              this.messageClass =
-                'bg-yellow-100 border border-yellow-400 text-yellow-800 font-semibold';
-            }
-            await this.updateBudgetAmount(this.expense.budget, newAmount);
-          }
-        }
+        const categoryToSave = this.isOtherCategorySelected ? this.customCategory : this.expense.category;
+        
+         const isCreditCard = this.expense.paymentMethod === 'Tarjeta de Crédito';
+        // const shouldUpdateBudgetNow = !isCreditCard;
+        
+        // if (shouldUpdateBudgetNow && this.expense.budget !== 'none' && this.expense.budget !== '') {
+        //   const budget = this.budgets.find(b => b.id === this.expense.budget);
+        //   if (budget) {
+        //     const newAmount = Number(this.expense.amount);
+        //     if (newAmount > budget.amount) {
+        //       this.messageClass = "bg-yellow-100 border border-yellow-400 text-yellow-800 font-semibold";
+        //     }
+        //     await this.updateBudgetAmount(this.expense.budget, newAmount);
+        //   }
+        // }
 
         const expenseData = {
           uid: user.uid,
@@ -477,7 +411,6 @@ export default {
           budget: this.expense.budget,
           paymentMethod: this.expense.paymentMethod,
           createdAt: new Date(),
-          budgetUpdated: shouldUpdateBudgetNow
         };
 
         if (isCreditCard) {
@@ -489,18 +422,10 @@ export default {
             type: this.expense.creditCard.type,
             installments: installments,
             installmentAmount: this.installmentAmount,
-            firstPaymentDate: new Date(
-              currentDate.getFullYear(),
-              currentDate.getMonth() + 1,
-              currentDay
-            ),
+            firstPaymentDate: new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDay),
             installmentsPaid: 0,
             paymentDates: Array.from({ length: installments }, (_, i) => {
-              const tentativeDate = new Date(
-                currentDate.getFullYear(),
-                currentDate.getMonth() + i + 1,
-                currentDay
-              );
+              const tentativeDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + i + 1, currentDay);
               const expectedMonth = (currentDate.getMonth() + i + 1) % 12;
               if (tentativeDate.getMonth() !== expectedMonth) {
                 tentativeDate.setDate(0);
@@ -510,24 +435,22 @@ export default {
           };
         }
 
-        await addDoc(collection(db, 'gastos'), expenseData);
+        await addDoc(collection(db, "gastos"), expenseData);
 
-        this.message = 'Gasto registrado correctamente';
-        this.messageClass =
-          'bg-green-100 border border-green-400 text-green-600 font-semibold';
-        this.clearMessageAfterDelay();
-
+        this.message = "Gasto registrado correctamente";
+        this.messageClass = "bg-green-100 border border-green-400 text-green-600 font-semibold";
         setTimeout(() => {
+          this.message = '';
           this.$router.push({ path: '/Monto-Total' });
-        }, 1000);
+        }, 1500);
 
-        this.expense = {
-          name: '',
-          amount: '',
-          category: '',
-          date: new Date().toISOString().split('T')[0],
-          description: '',
-          budget: '',
+        this.expense = { 
+          name: '', 
+          amount: '', 
+          category: '', 
+          date: new Date().toISOString().split('T')[0], 
+          description: '', 
+          budget: '', 
           paymentMethod: '',
           creditCard: {
             type: '',
@@ -540,17 +463,13 @@ export default {
         this.installmentAmount = 0;
 
       } catch (error) {
-        console.error('Error al guardar el gasto:', error);
-        this.message =
-          'Error al registrar el gasto. Intenta nuevamente.';
-        this.messageClass =
-          'bg-red-100 border border-red-400 text-red-600 font-semibold';
-        this.clearMessageAfterDelay();
+        console.error("Error al guardar el gasto:", error);
+        this.message = "Error al registrar el gasto. Intenta nuevamente.";
+        this.messageClass = "bg-red-100 border border-red-400 text-red-600 font-semibold";
       } finally {
         this.loading = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
-

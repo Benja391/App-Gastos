@@ -1,57 +1,51 @@
 <template>
   <section class="flex items-center justify-center min-h-screen bg-[#08a04b] text-white mt-8">
-    
-    <div class="relative bg-gray-900 rounded-lg shadow-[0_15px_30px_rgba(0,0,0,0.6)] w-full max-w-lg p-8 mx-4 mt-12  mb-12">
-    
+    <div class="relative bg-gray-900 rounded-lg shadow-[0_15px_30px_rgba(0,0,0,0.6)] w-full max-w-lg p-8 mx-4 mt-12 mb-12">
       <h1 class="text-2xl md:text-3xl font-bold text-white mb-6 text-center">
-        Crea una cuenta
+        Creá una cuenta
       </h1>
 
-    
       <form @submit.prevent="handleSubmit" class="mt-6 space-y-6">
         <div class="space-y-4">
-
-            <div>
+          <div>
             <label for="email" class="block text-sm font-medium text-gray-300">Email</label>
             <BaseInputs 
               type="email"
-              placeholder="Ingrese su email"
+              placeholder="Ingresá tu email"
               id="email"
               v-model="user.email"
-              class="w-full px-4 py-3 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              class="w-full px-4 py-3 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <p v-if="emailError" class="text-red-500 text-sm mt-2">{{ emailError }}</p>
           </div>
- 
+
           <div>
             <label for="password" class="block text-sm font-medium text-gray-300">Contraseña</label>
             <BaseInputs 
               type="password"
-              placeholder="Crea una contraseña"
+              placeholder="Creá una contraseña"
               id="password"
               v-model="user.password"
-              class="w-full px-4 py-3 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              class="w-full px-4 py-3 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <p v-if="passwordError" class="text-red-500 text-sm mt-2">{{ passwordError }}</p>
           </div>
         
           <div>
-            <label for="nombreDeUsuario" class="block text-sm font-medium text-gray-300">Nombre de usuario <span class="text-gray-400">(opcional)</span></label>
+            <label for="nombreDeUsuario" class="block text-sm font-medium text-gray-300">
+              Nombre de usuario <span class="text-gray-400">(opcional)</span>
+            </label>
             <BaseInputs 
               type="text"
               id="nombreDeUsuario"
-              placeholder="Ingrese su nombre de usuario"
+              placeholder="Ingresá tu nombre de usuario"
               v-model="user.nombreDeUsuario"
-              class="w-full px-4 py-3 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              class="w-full px-4 py-3 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <p v-if="nombreDeUsuarioError" class="text-red-500 text-sm mt-2">{{ nombreDeUsuarioError }}</p>
           </div>
-
-        
-
         </div>
 
-        
         <button 
           type="submit"
           :disabled="loading || cuentaCreada"
@@ -59,21 +53,23 @@
         >
           <span v-if="loading">Cargando...</span>
           <span v-else-if="cuentaCreada">¡Cuenta creada con éxito!</span>
-          <span v-else>¡Crea tu cuenta!</span>
+          <span v-else>¡Creá tu cuenta!</span>
         </button>
+
         <p class="text-center text-sm text-gray-300 mt-6">
-          ¿Ya tenes una cuenta  ?
+          ¿Ya tenés una cuenta?
           <router-link to="/Iniciar-sesion" class="text-green-400 hover:underline hover:text-green-300">
-            Iniciar sesión
+            Iniciá sesión
           </router-link>
         </p>
       </form>
 
       <p v-if="errorMessage" class="text-red-500 mt-4 text-center">{{ errorMessage }}</p>
-     
     </div>
   </section>
 </template>
+
+
 
 <script>
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';

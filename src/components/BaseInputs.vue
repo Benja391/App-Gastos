@@ -32,7 +32,7 @@ export default {
   <label
     v-if="label"
     :for="id"
-    class="mb-1 text-black"
+    class="mb-1 text-red-800 font-semibold"
   >
     {{ label }}
   </label>
@@ -43,7 +43,7 @@ export default {
     :placeholder="placeholder"
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)"
-    class="w-full px-4 py-3 rounded-lg border shadow-sm focus:outline-none focus:ring-2"
+    class="w-full px-4 py-3 rounded-lg shadow-sm bg-white text-gray-900 placeholder-gray-500"
   />
 </div>
 </template>

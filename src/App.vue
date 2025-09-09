@@ -38,7 +38,7 @@
           class="block py-2 px-4 rounded-2xl font-medium hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
           to="/"
           @click="closeMenu"
-          >Home</router-link
+          >Inicio</router-link
         >
       </li>
       <li>
@@ -135,7 +135,7 @@
             @click="closeMenu"
             class="block py-2 px-4 rounded-2xl hover:bg-green-600 hover:text-white transition-all duration-300 font-medium"
             to="/"
-            >Home</router-link
+            >Inicio</router-link
           >
         </li>
         <li class="w-full text-right">

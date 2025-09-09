@@ -1,67 +1,79 @@
 <template>
-<div class="min-h-screen bg-[#08a04b] flex flex-col items-center py-10 px-4 text-gray-900 mt-8">
-  <div class="w-full max-w-6xl bg-white shadow-2xl rounded-2xl p-10 grid gap-8 mt-2">
+  <!-- CONTENEDOR PRINCIPAL -->
+  <section class="flex items-center justify-center min-h-screen bg-[#08a04b] text-white px-4 py-10 mt-8">
+    <!-- CAJA PRINCIPAL GLASSMORPHISM -->
+    <div class="relative bg-white/95 backdrop-blur-sm text-gray-900 rounded-3xl  border border-white/20 w-full max-w-6xl p-10 grid gap-10 mt-1 overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.35)]
+         hover:shadow-[0_12px_45px_rgba(0,0,0,0.45)]
+         transition-shadow duration-500">
+      
+      <!-- Decoraciones -->
+      <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-green-200/20 to-transparent rounded-full -mr-32 -mt-32"></div>
+      <div class="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-emerald-200/20 to-transparent rounded-full -ml-24 -mb-24"></div>
 
-      <!-- Encabezado -->
-      <BaseHeading>
-        Tus finanzas en gráficos
-      </BaseHeading>
+      <div class="relative z-10">
+        <!-- Encabezado -->
+        <BaseHeading >
+          Tus finanzas en gráficos
+        </BaseHeading>
+        <p class="text-center text-gray-600 mb-8">Analizá y visualizá tus datos de manera clara</p>
 
-      <!-- Gráficos -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-        <!-- Gráfico de barras -->
-        <div class="bg-green-50 border border-green-100 rounded-xl p-6 shadow-sm">
-          <h2 class="text-xl font-semibold mb-2 text-gray-800">Gastos mensuales</h2>
-          <p class="text-sm text-gray-600 mb-4">Compara cuánto gastaste en cada mes.</p>
-          <BarChart :data="barChartData" :options="barChartOptions" />
+        <!-- Grillas de gráficos -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+          <!-- Barras -->
+          <div class="bg-gradient-to-r from-gray-50 to-green-50/30 border border-green-100 rounded-2xl p-8 shadow-md hover:shadow-lg transition">
+            <h2 class="text-xl font-bold mb-2 text-gray-800">Gastos mensuales</h2>
+            <p class="text-sm text-gray-600 mb-4">Compará cuánto gastaste en cada mes.</p>
+            <BarChart :data="barChartData" :options="barChartOptions" />
+          </div>
+
+          <!-- Línea -->
+          <div class="bg-gradient-to-r from-gray-50 to-green-50/30 border border-green-100 rounded-2xl p-8 shadow-md hover:shadow-lg transition">
+            <h2 class="text-xl font-bold mb-2 text-gray-800">Ahorro acumulado</h2>
+            <p class="text-sm text-gray-600 mb-4">Observá cómo crecen tus ahorros mes a mes.</p>
+            <LineChart :data="lineChartData" :options="lineChartOptions" />
+          </div>
+
+          <!-- Doughnut -->
+          <div class="bg-gradient-to-r from-gray-50 to-green-50/30 border border-green-100 rounded-2xl p-8 shadow-md hover:shadow-lg transition">
+            <h2 class="text-xl font-bold mb-2 text-gray-800">Distribución por categoría</h2>
+            <p class="text-sm text-gray-600 mb-4">Visualizá el porcentaje de gasto en cada categoría.</p>
+            <DoughnutChart :data="doughnutChartData" :options="doughnutChartOptions" />
+          </div>
+
+          <!-- Pie -->
+          <div class="bg-gradient-to-r from-gray-50 to-green-50/30 border border-green-100 rounded-2xl p-8 shadow-md hover:shadow-lg transition">
+            <h2 class="text-xl font-bold mb-2 text-gray-800">Porcentaje de gasto</h2>
+            <p class="text-sm text-gray-600 mb-4">Desglosá tu presupuesto en porciones porcentuales.</p>
+            <PieChart :data="pieChartData" :options="pieChartOptions" />
+          </div>
         </div>
 
-        <!-- Gráfico de línea -->
-        <div class="bg-green-50 border border-green-100 rounded-xl p-6 shadow-sm">
-          <h2 class="text-xl font-semibold mb-2 text-gray-800">Ahorro acumulado</h2>
-          <p class="text-sm text-gray-600 mb-4">Observa cómo crecen tus ahorros mes a mes.</p>
-          <LineChart :data="lineChartData" :options="lineChartOptions" />
+        <!-- Recomendaciones -->
+        <div class="bg-gradient-to-r from-gray-50 to-green-50/30 border border-green-100 rounded-2xl p-8 shadow-md mt-8">
+          <h3 class="text-2xl font-bold text-gray-800 mb-4">Recomendaciones</h3>
+          <ul class="list-disc list-inside space-y-2 text-gray-700 text-sm">
+            <li v-for="(rec, i) in recommendations" :key="i" class="hover:text-green-700 transition">
+              {{ rec }}
+            </li>
+          </ul>
         </div>
-
-        <!-- Gráfico de doughnut -->
-        <div class="bg-green-50 border border-green-100 rounded-xl p-6 shadow-sm">
-          <h2 class="text-xl font-semibold mb-2 text-gray-800">Distribución por categoría</h2>
-          <p class="text-sm text-gray-600 mb-4">Visualiza el porcentaje de gasto en cada categoría.</p>
-          <DoughnutChart :data="doughnutChartData" :options="doughnutChartOptions" />
-        </div>
-
-        <!-- Gráfico de pie -->
-        <div class="bg-green-50 border border-green-100 rounded-xl p-6 shadow-sm">
-          <h2 class="text-xl font-semibold mb-2 text-gray-800">Porcentaje de gasto</h2>
-          <p class="text-sm text-gray-600 mb-4">Desglose de tu presupuesto en porciones porcentuales.</p>
-          <PieChart :data="pieChartData" :options="pieChartOptions" />
-        </div>
-      </div>
-
-      <!-- Recomendaciones -->
-      <div class="bg-green-50 border border-green-100 rounded-xl p-6 shadow-sm">
-        <h3 class="text-lg font-bold mb-3 text-gray-800">Recomendaciones</h3>
-        <ul class="list-disc list-inside space-y-1 text-sm text-gray-800">
-          <li v-for="(rec, i) in recommendations" :key="i">
-            {{ rec }}
-          </li>
-        </ul>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
+
   
-  <script>
+<script>
   
-  import 'chart.js/auto';
+import 'chart.js/auto';
  
-  import { Bar, Line, Doughnut, Pie } from 'vue-chartjs';
+import { Bar, Line, Doughnut, Pie } from 'vue-chartjs';
   
-  import { getAuth } from 'firebase/auth';
-  import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
-  import { db } from '../services/firebase';
-  import BaseHeading from '../components/BaseHeading.vue';
+import { getAuth } from 'firebase/auth';
+import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
+import { db } from '../services/firebase';
+import BaseHeading from '../components/BaseHeading.vue';
   
   export default {
     name: 'Graficos',
@@ -223,39 +235,38 @@
         this.recommendations.push(`Has gastado más en "${ maxCat[0] }": considerá reducir esos gastos.`);
   
        
-const byMonth = {};
-this.gastos.forEach(g => {
-  const key = `${g.date.getFullYear()}-${String(g.date.getMonth()+1).padStart(2,'0')}`;
-  byMonth[key] = (byMonth[key] || 0) + g.amount;
-});
-const maxMonth = Object.entries(byMonth).sort((a,b)=> b[1]-a[1])[0];
-const mesFormateadoMax = formatearMesClave(maxMonth[0]);
+  const byMonth = {};
+  this.gastos.forEach(g => {
+    const key = `${g.date.getFullYear()}-${String(g.date.getMonth()+1).padStart(2,'0')}`;
+    byMonth[key] = (byMonth[key] || 0) + g.amount;
+  });
+  const maxMonth = Object.entries(byMonth).sort((a,b)=> b[1]-a[1])[0];
+  const mesFormateadoMax = formatearMesClave(maxMonth[0]);
 
-this.recommendations.push(`El mes ${ mesFormateadoMax } fue el más caro con $ ${ maxMonth[1].toLocaleString('es-AR') }.`);
+  this.recommendations.push(`El mes ${ mesFormateadoMax } fue el más caro con $ ${ maxMonth[1].toLocaleString('es-AR') }.`);
 
 
-const months = Object.keys(byMonth).sort();
-let cum = 0, minSave = Infinity, minMonth = months[0];
-months.forEach(m => {
-  cum += byMonth[m];
-  const save = this.initialMonthlyBudget - cum;
-  if (save < minSave) {
-    minSave = save;
-    minMonth = m;
-  }
-});
-const mesFormateadoMin = formatearMesClave(minMonth);
-
-this.recommendations.push(`Revisá tus finanzas de ${ mesFormateadoMin }: tu ahorro fue de $ ${ minSave.toLocaleString('es-AR') }.`);
-        
-        this.recommendations.push('Intenta destinar al menos un 10% de tus ingresos al ahorro cada mes.');
-      }
+  const months = Object.keys(byMonth).sort();
+  let cum = 0, minSave = Infinity, minMonth = months[0];
+  months.forEach(m => {
+    cum += byMonth[m];
+    const save = this.initialMonthlyBudget - cum;
+    if (save < minSave) {
+      minSave = save;
+      minMonth = m;
     }
-  };
-  </script>
+  });
+  const mesFormateadoMin = formatearMesClave(minMonth);
+
+  this.recommendations.push(`Revisá tus finanzas de ${ mesFormateadoMin }: tu ahorro fue de $ ${ minSave.toLocaleString('es-AR') }.`);
+          this.recommendations.push('Intenta destinar al menos un 10% de tus ingresos al ahorro cada mes.');
+        }
+      }
+    };
+</script>
   
-  <style scoped>
+<style scoped>
   .grid { margin: 20px; }
   h2 { color: #444; margin-bottom: .5rem; }
-  </style>
+</style>
   
