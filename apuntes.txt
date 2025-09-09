@@ -1,7 +1,10 @@
 cd "C:/Users/Pato/Documents/App-Gastos/Gastos"
 Cuenta para entrar:
-Email: benjibbosch@gmail.com
-Contraseña: benjita12345
+Email: benjabbosch@gmail.com
+Contraseña: Gretelyolaf123!
+
+git checkout v1.0-pre-reportes
+para el chekpoint de reportes
 
 rules_version = '2';
 

@@ -12,6 +12,7 @@ import CalendarioPagos from "../pages/Calendario-Pagos.vue";
 import ConfiguracionTarjeta from "../components/ConfiguracionTarjeta.vue";
 import HistorialGastos from "../pages/Historial-Gastos.vue";
 import Graficos from "../pages/Graficos.vue";
+import ReportesDocu from "../pages/ReportesDocu.vue";
 
 
 const routes = [ 
@@ -26,7 +27,7 @@ const routes = [
     { path: '/Configuracion-Tarjeta', component: ConfiguracionTarjeta, meta:{ requiresAuth: true }},
     { path: '/Historial-Gastos', component: HistorialGastos, meta:{ requiresAuth: true }},
     { path: '/Graficos', component: Graficos, meta:{ requiresAuth: true }},
-   
+    { path: '/Reportes-docu', component: ReportesDocu, meta:{ requiresAuth: true }},
 ];
 
 const router = createRouter({

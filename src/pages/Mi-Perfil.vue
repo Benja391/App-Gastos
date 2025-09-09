@@ -1,54 +1,74 @@
 <template>
-  <div class="flex flex-col items-center justify-center min-h-screen bg-[#08a04b] py-10 px-4 mt-8">
-    <div class="bg-white rounded-2xl  p-10 grid gap-8 mt-1 w-full max-w-md shadow-[0_8px_30px_rgba(0,0,0,0.35)]
-         hover:shadow-[0_12px_45px_rgba(0,0,0,0.45)]
-         transition-shadow duration-500">
-      <BaseHeading>Mi Perfil</BaseHeading>
+  <div class="flex flex-col items-center justify-center min-h-screen bg-[#08a04b]  py-12 px-6 mt-8">
+    <!-- Card principal -->
+    <div
+      class="bg-white/95 backdrop-blur-sm rounded-3xl p-10 grid gap-8 w-full max-w-lg shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:shadow-[0_12px_45px_rgba(0,0,0,0.45)] transition-shadow duration-500 border border-white/20"
+    >
+      <!-- Encabezado -->
+      <BaseHeading class="text-center text-gray-800">Mi Perfil</BaseHeading>
 
-  
-      
-
+      <!-- Sección foto -->
       <div class="flex flex-col items-center">
- 
         <img
           :src="profileImageUrl || 'https://placehold.co/150'"
           alt="Foto de perfil"
-          class="w-32 h-32 rounded-full border-4 border-gray-300 object-cover mb-4"
+          class="w-32 h-32 rounded-full border-4 border-gray-200 object-cover shadow-md mb-4"
         />
 
-        <p v-if="saveSuccess" class="text-green-600 text-sm mb-2"> Imagen guardada con éxito</p>
-        <p v-if="saveError" class="text-red-600 text-sm mb-2"> Error al guardar la imagen</p>
+        <!-- Mensajes de feedback -->
+        <transition name="fade">
+          <p v-if="saveSuccess" class="text-green-600 text-sm mb-2 font-medium">
+            Imagen guardada con éxito
+          </p>
+        </transition>
+        <transition name="fade">
+          <p v-if="saveError" class="text-red-600 text-sm mb-2 font-medium">
+            Error al guardar la imagen
+          </p>
+        </transition>
 
-        <input  
-          type="file" 
-          @change="uploadImage" 
-          class="mb-6 w-full rounded-xl border border-gray-500 bg-gray-800 text-white cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-teal-600 file:text-white hover:file:bg-teal-700 transition"       
+        <!-- Subir imagen -->
+        <input
+          type="file"
+          @change="uploadImage"
+          class="mb-6 w-full rounded-xl border border-gray-300 bg-gray-50 text-gray-700 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-600 file:text-white hover:file:bg-emerald-700 transition"
         />
 
+        <!-- Botón guardar -->
         <BaseButtonSecondary
           @click="saveImageUrl"
           :disabled="!selectedImage"
-          class="cursor-pointer mb-6"
+          class="cursor-pointer mb-6 px-6 py-2 rounded-xl shadow-sm hover:shadow-md transition font-semibold"
         >
-          Guardar Imagen
+          Guardar imagen
         </BaseButtonSecondary>
+      </div>
 
-    
-        <div class="text-left w-full mb-6">
-        
-          <p class="text-black"><strong>Nombre de Usuario:</strong> {{ nombreDeUsuario }}</p>
-          <p class="text-black"><strong>Email:</strong> {{ email }}</p>
-        </div>
+      <!-- Info usuario -->
+      <div class="text-left w-full mb-6 bg-gray-50 border border-gray-200 rounded-2xl p-5 shadow-sm">
+        <p class="text-gray-700">
+          <strong>Nombre de Usuario:</strong>
+          <span class="font-medium">{{ nombreDeUsuario }}</span>
+        </p>
+        <p class="text-gray-700 mt-2">
+          <strong>Email:</strong>
+          <span class="font-medium">{{ email }}</span>
+        </p>
+      </div>
 
-      
-        <div class="bg-green-300 p-4 rounded-lg w-full text-center">
-          <h2 class="text-lg font-semibold text-gray-800"> Total Gastado</h2>
-          <p class="text-xl font-bold text-red-600">$ {{ totalGastado.toLocaleString('es-AR') }}</p>
-        </div>
+      <!-- Total gastado -->
+      <div class="bg-gradient-to-r from-rose-50 to-red-50 p-6 rounded-2xl w-full text-center border border-red-100 shadow-inner">
+        <h2 class="text-lg font-semibold text-gray-700 mb-2">Total gastado</h2>
+        <p class="text-3xl font-extrabold text-red-600">
+          $ {{ totalGastado.toLocaleString('es-AR') }}
+        </p>
       </div>
     </div>
   </div>
 </template>
+
+
+
 
 <script>
 import { collection, query, where, getDocs, doc, getDoc, updateDoc } from "firebase/firestore";
@@ -169,3 +189,14 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

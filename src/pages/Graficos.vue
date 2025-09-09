@@ -17,6 +17,8 @@
         </BaseHeading>
         <p class="text-center text-gray-600 mb-8">Analizá y visualizá tus datos de manera clara</p>
 
+       
+
         <!-- Grillas de gráficos -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
           <!-- Barras -->
@@ -57,7 +59,16 @@
             </li>
           </ul>
         </div>
-      </div>
+          <!-- Botón para descargar reportes -->
+          <div class="flex justify-center mt-10">
+            <button
+              @click="$router.push('/Reportes-Docu')"
+              class="px-8 py-4 bg-green-600 text-white font-bold rounded-2xl shadow-md hover:bg-green-700 transition text-lg"
+            >
+              Descargá reportes
+            </button>
+          </div>
+        </div>
     </div>
   </section>
 </template>

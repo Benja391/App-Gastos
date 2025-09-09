@@ -1,11 +1,14 @@
 <template>
   <section class="flex items-center justify-center min-h-screen bg-[#08a04b] text-white px-4 py-10 mt-8">
-    <div class="relative bg-white text-gray-900 rounded-2xl  w-full max-w-6xl p-10 grid gap-8 mt-1 shadow-[0_8px_30px_rgba(0,0,0,0.35)]
+    <div class="relative bg-white/95 backdrop-blur-sm text-gray-900 rounded-3xl  border border-white/20 w-full max-w-5xl p-8 mt-1 overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.35)]
          hover:shadow-[0_12px_45px_rgba(0,0,0,0.45)]
          transition-shadow duration-500">
-      <BaseHeading>
+      <BaseHeading >
         Historial
       </BaseHeading>
+      <p class="text-center text-gray-600 mb-6">
+        Gestioná tu saldo y registros de manera clara
+      </p>
 
       <!-- Dos columnas: izquierda gastos, derecha saldos -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
