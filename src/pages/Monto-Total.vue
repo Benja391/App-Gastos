@@ -287,140 +287,109 @@ export default {
     },
 
     /* ===== Cálculo central del disponible ===== */
-    async updateRemainingAmount() {
-      // Total de gastos **pagados** (maneja tarjeta en cuotas)
-      const totalGastos = this.gastos.reduce((acc, gasto) => {
-        if (gasto.paymentMethod === "Tarjeta de Crédito" && gasto.creditCard) {
-          const cuotasPagadas = Number(gasto.creditCard.installmentsPaid || 0);
-          const montoPorCuota = Number(gasto.creditCard.installmentAmount || 0);
-          return acc + cuotasPagadas * montoPorCuota;
-        }
-        return acc + Number(gasto.amount || 0);
-      }, 0);
+ async updateRemainingAmount() {
+  const totalGastos = this.gastos.reduce((acc, gasto) => {
+    if (gasto.paymentMethod === "Tarjeta de Crédito" && gasto.creditCard) {
+      const cuotasPagadas = Number(gasto.creditCard.installmentsPaid || 0);
+      const montoPorCuota = Number(gasto.creditCard.installmentAmount || 0);
+      return acc + cuotasPagadas * montoPorCuota;
+    }
+    return acc + Number(gasto.amount || 0);
+  }, 0);
 
-      const totalSaldos = Number(this.initialAmount || 0) + this.sumAdditionalAmounts();
-      this.remainingAmount = totalSaldos;
+  const totalSaldos = Number(this.initialAmount || 0) + this.sumAdditionalAmounts();
+  this.remainingAmount = totalSaldos - totalGastos;
 
-      if (!this.userId) return;
-      try {
-        const userDocId = await this.getUserDocIdByUID();
-        const montoRef = doc(db, "users", userDocId, "settings", "montoTotal");
-        await setDoc(
-          montoRef,
-          {
-            // No pisamos additionalAmounts acá
-            initialAmount: this.initialAmount,
-            remainingAmount: this.remainingAmount,
-          },
-          { merge: true }
-        );
-      } catch (e) {
-        console.error("Error al actualizar remainingAmount:", e);
-      }
-    },
+  if (!this.userId) return;
+
+  try {
+    const userDocId = await this.getUserDocIdByUID();
+    const montoRef = doc(db, "users", userDocId, "settings", "montoTotal");
+
+    await setDoc(
+      montoRef,
+      {
+        initialAmount: this.initialAmount,
+        additionalAmounts: this.additionalAmounts,
+        remainingAmount: this.remainingAmount, // 👈 ya calculado acá
+      },
+      { merge: true }
+    );
+  } catch (e) {
+    console.error("Error al actualizar remainingAmount:", e);
+  }
+},
 
     /* ===== Agregar saldo adicional ===== */
-    async addAdditionalAmount() {
-      // Validación
-      this.additionalAmountError =
-        this.tempAdditionalAmount === null || Number(this.tempAdditionalAmount) <= 0;
-      this.additionalDescriptionError = !this.tempAdditionalDescription.trim();
+   async addAdditionalAmount() {
+  // Validación
+  this.additionalAmountError =
+    this.tempAdditionalAmount === null || Number(this.tempAdditionalAmount) <= 0;
+  this.additionalDescriptionError = !this.tempAdditionalDescription.trim();
 
-      if (this.additionalAmountError || this.additionalDescriptionError) {
-        setTimeout(() => {
-          this.additionalAmountError = false;
-          this.additionalDescriptionError = false;
-        }, 2000);
-        return;
-      }
+  if (this.additionalAmountError || this.additionalDescriptionError) {
+    setTimeout(() => {
+      this.additionalAmountError = false;
+      this.additionalDescriptionError = false;
+    }, 2000);
+    return;
+  }
 
-      // Agrego local
-      const nuevoSaldo = {
-        amount: Number(this.tempAdditionalAmount),
-        description: this.tempAdditionalDescription || null,
-        date: new Date().toISOString(),
-      };
-      this.additionalAmounts = [...this.additionalAmounts, nuevoSaldo];
+  // Agrego local
+  const nuevoSaldo = {
+    amount: Number(this.tempAdditionalAmount),
+    description: this.tempAdditionalDescription || null,
+    date: new Date().toISOString(),
+  };
+  this.additionalAmounts = [...this.additionalAmounts, nuevoSaldo];
 
-      // Persisto y recalculo disponible
-      try {
-        const userDocId = await this.getUserDocIdByUID();
-        const montoRef = doc(db, "users", userDocId, "settings", "montoTotal");
+  try {
+    const userDocId = await this.getUserDocIdByUID();
+    const montoRef = doc(db, "users", userDocId, "settings", "montoTotal");
 
-        // totalGastos actual
-        const totalGastos = this.gastos.reduce((acc, gasto) => {
-          if (gasto.paymentMethod === "Tarjeta de Crédito" && gasto.creditCard) {
-            const cuotasPagadas = Number(gasto.creditCard.installmentsPaid || 0);
-            const montoPorCuota = Number(gasto.creditCard.installmentAmount || 0);
-            return acc + cuotasPagadas * montoPorCuota;
-          }
-          return acc + Number(gasto.amount || 0);
-        }, 0);
+    // 👇 guardo el array, sin calcular acá el remaining
+    await setDoc(
+      montoRef,
+      { additionalAmounts: this.additionalAmounts },
+      { merge: true }
+    );
 
-        const totalSaldos = Number(this.initialAmount || 0) + this.sumAdditionalAmounts();
-        const newRemaining = totalSaldos - totalGastos;
-
-        await setDoc(
-          montoRef,
-          {
-            additionalAmounts: this.additionalAmounts,
-            remainingAmount: newRemaining,
-          },
-          { merge: true }
-        );
-
-        this.remainingAmount = newRemaining;
-        this.tempAdditionalAmount = null;
-        this.tempAdditionalDescription = "";
-        this.mostrarMensajeTemporal("Saldo adicional agregado correctamente");
-      } catch (e) {
-        console.error("Error al agregar saldo adicional:", e);
-      }
-    },
+    await this.updateRemainingAmount(); // 👈 recalculo disponible
+    this.tempAdditionalAmount = null;
+    this.tempAdditionalDescription = "";
+    this.mostrarMensajeTemporal("Saldo adicional agregado correctamente");
+  } catch (e) {
+    console.error("Error al agregar saldo adicional:", e);
+  }
+},
 
     /* ===== Saldo inicial ===== */
-    async setInitialAmount() {
-      if (this.tempInitialAmount === null || Number(this.tempInitialAmount) < 0) {
-        this.initialAmountError = true;
-        setTimeout(() => (this.initialAmountError = false), 2000);
-        return;
-      }
+   async setInitialAmount() {
+  if (this.tempInitialAmount === null || Number(this.tempInitialAmount) < 0) {
+    this.initialAmountError = true;
+    setTimeout(() => (this.initialAmountError = false), 2000);
+    return;
+  }
 
-      this.initialAmount = Number(this.tempInitialAmount);
+  this.initialAmount = Number(this.tempInitialAmount);
 
-      try {
-        const userDocId = await this.getUserDocIdByUID();
-        const montoRef = doc(db, "users", userDocId, "settings", "montoTotal");
+  try {
+    const userDocId = await this.getUserDocIdByUID();
+    const montoRef = doc(db, "users", userDocId, "settings", "montoTotal");
 
-        // Recalculo con adicionales + gastos
-        const totalGastos = this.gastos.reduce((acc, gasto) => {
-          if (gasto.paymentMethod === "Tarjeta de Crédito" && gasto.creditCard) {
-            const cuotasPagadas = Number(gasto.creditCard.installmentsPaid || 0);
-            const montoPorCuota = Number(gasto.creditCard.installmentAmount || 0);
-            return acc + cuotasPagadas * montoPorCuota;
-          }
-          return acc + Number(gasto.amount || 0);
-        }, 0);
+    await setDoc(
+      montoRef,
+      { initialAmount: this.initialAmount },
+      { merge: true }
+    );
 
-        const totalSaldos = this.initialAmount + this.sumAdditionalAmounts();
-        const newRemaining = totalSaldos - totalGastos;
-
-        await setDoc(
-          montoRef,
-          {
-            initialAmount: this.initialAmount,
-            remainingAmount: newRemaining,
-          },
-          { merge: true }
-        );
-
-        this.remainingAmount = newRemaining;
-        this.tempInitialAmount = null;
-        this.mostrarMensajeTemporal("Saldo inicial agregado correctamente");
-      } catch (e) {
-        console.error("Error al guardar saldo inicial:", e);
-      }
-    },
+    await this.updateRemainingAmount(); // 👈 recalculo acá
+    this.tempInitialAmount = null;
+    this.mostrarMensajeTemporal("Saldo inicial agregado correctamente");
+  } catch (e) {
+    console.error("Error al guardar saldo inicial:", e);
+  }
+},
 
     /* ===== Eliminar todos los gastos ===== */
     async eliminarTodosLosGastos() {
