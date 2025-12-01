@@ -11,10 +11,10 @@
       </p>
 
       <!-- Dos columnas: izquierda gastos, derecha saldos -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+     <div class="grid grid-cols-1 lg:grid-cols-6 gap-8">
 
         <!-- ========== IZQUIERDA: HISTORIAL DE GASTOS ========== -->
-        <div>
+        <div class="lg:col-span-4">
           <h2 class="text-2xl font-bold text-gray-900 mb-2">Gastos</h2>
 
           <!-- Filtros -->
@@ -147,7 +147,7 @@
         </div>
 
         <!-- ========== DERECHA: HISTORIAL DE SALDOS ========== -->
-        <div>
+      <div class="lg:col-span-2">
           <h2 class="text-2xl font-bold text-gray-900 mb-2">Saldos</h2>
 
           <!-- Resumen -->
