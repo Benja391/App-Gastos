@@ -12,7 +12,7 @@ import CalendarioPagos from "../pages/Calendario-Pagos.vue";
 import ConfiguracionTarjeta from "../components/ConfiguracionTarjeta.vue";
 import HistorialGastos from "../pages/Historial-Gastos.vue";
 import Graficos from "../pages/Graficos.vue";
-import ReportesDocu from "../pages/ReportesDocu.vue";
+import ReportesDocu from "../pages/Reportesdocu.vue";
 
 
 const routes = [ 
