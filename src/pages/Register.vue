@@ -20,17 +20,35 @@
           </div>
 
           <div>
-            <label for="password" class="block text-sm font-medium text-gray-300">Contraseña</label>
-            <BaseInputs 
-              type="password"
-              placeholder="Creá una contraseña"
-              id="password"
-              v-model="user.password"
-              class="w-full px-4 py-3 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
-            <p v-if="passwordError" class="text-red-500 text-sm mt-2">{{ passwordError }}</p>
-          </div>
-        
+  <label for="password" class="block text-sm font-medium text-gray-300">Contraseña</label>
+  <BaseInputs 
+    type="password"
+    placeholder="Creá una contraseña"
+    id="password"
+    v-model="user.password"
+    class="w-full px-4 py-3 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+  />
+
+  <!-- Bloque de requisitos siempre visible -->
+  <ul class="mt-2 text-sm">
+    <li :class="{'text-green-500': user.password.length >= 8, 'text-red-500': user.password.length < 8}">
+       Mínimo 8 caracteres
+    </li>
+    <li :class="{'text-green-500': /[A-Z]/.test(user.password), 'text-red-500': !/[A-Z]/.test(user.password)}">
+       Al menos una letra mayúscula
+    </li>
+    <li :class="{'text-green-500': /[0-9]/.test(user.password), 'text-red-500': !/[0-9]/.test(user.password)}">
+       Al menos un número
+    </li>
+   <li :class="{
+  'text-green-500': /[!@#$%^&*(),.?':{}|<>]/.test(user.password),
+  'text-red-500': !/[!@#$%^&*(),.?':{}|<>]/.test(user.password)
+}">
+   Al menos un carácter especial
+</li>
+  
+  </ul>
+</div>
           <div>
             <label for="nombreDeUsuario" class="block text-sm font-medium text-gray-300">
               Nombre de usuario <span class="text-gray-400">(opcional)</span>
@@ -101,41 +119,49 @@ export default {
   },
   methods: {
     validateForm() {
-     
-     
+  this.emailError = '';
+  this.passwordError = '';
+
+  let valid = true;
+
+  // Validación de email
+  if (!this.user.email) {
+    this.emailError = 'El correo electrónico es obligatorio.';
+    valid = false;
+  } else if (!/\S+@\S+\.\S+/.test(this.user.email)) {
+    this.emailError = 'Por favor ingresa un correo electrónico válido.';
+    valid = false;
+  }
+
+  // Validación de contraseña
+  const password = this.user.password;
+  if (!password) {
+    this.passwordError = 'La contraseña es obligatoria.';
+    valid = false;
+  } else {
+    if (password.length < 8) {
+      this.passwordError = 'La contraseña debe tener al menos 8 caracteres.';
+      valid = false;
+    } else if (!/[A-Z]/.test(password)) {
+      this.passwordError = 'La contraseña debe contener al menos una letra mayúscula.';
+      valid = false;
+    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      this.passwordError = 'La contraseña debe contener al menos un carácter especial.';
+      valid = false;
+    }
+  }
+
+  if (!valid) {
+    setTimeout(() => {
+      this.nombreDeUsuarioError = '';
       this.emailError = '';
       this.passwordError = '';
+    }, 2000);
+  }
 
-      let valid = true;
+  return valid;
+},
 
-     
-      
-      if (!this.user.email) {
-        this.emailError = 'El correo electrónico es obligatorio.';
-        valid = false;
-      } else if (!/\S+@\S+\.\S+/.test(this.user.email)) {
-        this.emailError = 'Por favor ingresa un correo electrónico válido.';
-        valid = false;
-      }
-      if (!this.user.password) {
-        this.passwordError = 'La contraseña es obligatoria.';
-        valid = false;
-      } else if (this.user.password.length < 6) {
-        this.passwordError = 'La contraseña debe tener al menos 6 caracteres.';
-        valid = false;
-      }
-
-      if (!valid) {
-        setTimeout(() => {
-          
-          this.nombreDeUsuarioError = '';
-          this.emailError = '';
-          this.passwordError = '';
-        }, 2000);
-      }
-
-      return valid;
-    },
 
     async handleSubmit() {
       this.loading = true;

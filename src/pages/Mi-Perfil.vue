@@ -45,16 +45,22 @@
       </div>
 
       <!-- Info usuario -->
-      <div class="text-left w-full mb-6 bg-gray-50 border border-gray-200 rounded-2xl p-5 shadow-sm">
-        <p class="text-gray-700">
-          <strong>Nombre de Usuario:</strong>
-          <span class="font-medium">{{ nombreDeUsuario }}</span>
-        </p>
-        <p class="text-gray-700 mt-2">
-          <strong>Email:</strong>
-          <span class="font-medium">{{ email }}</span>
-        </p>
-      </div>
+<div class="text-left w-full mb-6 bg-gray-50 border border-gray-200 rounded-2xl p-5 shadow-sm">
+  <div class="flex flex-col gap-2 text-gray-700">
+    <div class="flex gap-1">
+      <strong>Nombre de Usuario:</strong>
+      <span class="font-medium">
+        {{ nombreDeUsuario || 'Sin completar' }}
+      </span>
+    </div>
+    <div class="flex gap-1">
+      <strong>Email:</strong>
+      <span class="font-medium">
+        {{ email }}
+      </span>
+    </div>
+  </div>
+</div>
 
       <!-- Total gastado -->
       <div class="bg-gradient-to-r from-rose-50 to-red-50 p-6 rounded-2xl w-full text-center border border-red-100 shadow-inner">
