@@ -114,9 +114,9 @@
           >Iniciar sesión</router-link
         >
       </li>
-      <li v-if="!userId && !loading">
+      <li v-if="!userId && !loading" class="ml-2">
         <router-link
-          class="block py-3 px-4 rounded-2xl font-medium bg-green-600 text-white hover:bg-green-700 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ml-2"
+          class="block py-3 px-4 rounded-2xl font-medium bg-green-600 text-white hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
           to="/registrarse"
           @click="closeMenu"
           >Registrarse</router-link
@@ -223,7 +223,7 @@
         <li v-if="!userName && !loading" class="w-full text-right">
           <router-link
             @click="closeMenu"
-            class="block py-3 px-4 rounded-2xl font-medium bg-green-600 text-white hover:bg-green-700 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ml-2"
+            class="block py-3 px-4 rounded-2xl font-medium bg-green-600 text-white hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             to="/registrarse"
             >Registrarse</router-link
           >
