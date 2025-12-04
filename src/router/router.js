@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import Home from '../pages/Home.vue';
@@ -31,8 +31,8 @@ const routes = [
 ];
 
 const router = createRouter({
-    routes,
-    history: createWebHashHistory(),
+  history: createWebHistory(),
+  routes
 });
 
 
