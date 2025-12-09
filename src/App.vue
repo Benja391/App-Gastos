@@ -1,4 +1,4 @@
-  <template>
+ <template>
     <nav
       class="flex justify-between items-center px-2 py-9 bg-green-200  text-gray-900 mb-4 relative rounded-3xl mx-1 mt-3 border border-green-500 "
     >
@@ -106,23 +106,32 @@
             Cerrar sesión
           </button>
         </li>
-        <li v-if="!userId && !loading" class="ml-2">
-          <router-link
-            class="block py-3 px-4 rounded-2xl font-medium bg-green-600 text-white hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-            to="/iniciar-sesion"
-            @click="closeMenu"
-            >Iniciar sesión</router-link
-          >
+
+        <!-- 🔥 AQUI AGREGADO EL MENSAJE DE LOGOUT -->
+        <li v-if="logoutMessage" class="ml-2 text-red-600 font-semibold">
+           {{ logoutMessage }}
         </li>
-        <li v-if="!userId && !loading" class="ml-2">
-          <router-link
-            class="block py-3 px-4 rounded-2xl font-medium bg-green-600 text-white hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-            to="/registrarse"
-            @click="closeMenu"
-            >Registrarse</router-link
-          >
-        </li>
-      </ul>
+
+        <!-- 🔥 SI NO HAY MENSAJE → BOTONES NORMALES -->
+        <template v-else>
+          <li v-if="!userId && !loading" class="ml-2">
+            <router-link
+              class="block py-3 px-4 rounded-2xl font-medium bg-green-600 text-white hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+              to="/iniciar-sesion"
+              @click="closeMenu"
+              >Iniciar sesión</router-link
+            >
+          </li>
+          <li v-if="!userId && !loading" class="ml-2">
+            <router-link
+              class="block py-3 px-4 rounded-2xl font-medium bg-green-600 text-white hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+              to="/registrarse"
+              @click="closeMenu"
+              >Registrarse</router-link
+            >
+          </li>
+        </template>
+    </ul>
 
       <transition name="fade-slide">
         <ul
@@ -354,6 +363,7 @@
     </footer>
   </template>
 
+
 <script>
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { db } from "./services/firebase";
@@ -374,6 +384,7 @@ export default {
       badgeCount: 0, // 👈 Solo el contador del badge
       showNotifications: false, // 👈 Solo el estado del modal
       intervaloVerificacion: null, // 👈 NUEVO
+      logoutMessage: null,
     };
   },
 
@@ -501,13 +512,24 @@ export default {
       }).format(value);
     },
 
-    async logout() {
-      const auth = getAuth();
-      await signOut(auth);
-      this.userName = null;
-      this.$router.push("/");
-      this.isMenuOpen = false;
-    },
+   async logout() {
+  const auth = getAuth();
+  await signOut(auth);
+
+  this.userName = null;
+  this.isMenuOpen = false;
+
+  // Mostrar mensaje en el navbar
+  this.logoutMessage = "¡Sesión cerrada con éxito!";
+
+  // Ocultar mensaje y restaurar botones en 3 segundos
+  setTimeout(() => {
+    this.logoutMessage = null;
+  }, 2000);
+
+  this.$router.push("/");
+},
+
 
     irACargarGasto() {
       this.$router.push("/cargar-gasto");
@@ -539,5 +561,15 @@ export default {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+@keyframes fade {
+  0% { opacity: 0; transform: translateY(-10px); }
+  10% { opacity: 1; transform: translateY(0); }
+  90% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+
+.animate-fade {
+  animation: fade 3s ease forwards;
 }
 </style>
