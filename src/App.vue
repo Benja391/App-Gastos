@@ -107,12 +107,12 @@
           </button>
         </li>
 
-        <!-- 🔥 AQUI AGREGADO EL MENSAJE DE LOGOUT -->
+       
         <li v-if="logoutMessage" class="ml-2 text-red-600 font-semibold">
            {{ logoutMessage }}
         </li>
 
-        <!-- 🔥 SI NO HAY MENSAJE → BOTONES NORMALES -->
+       
         <template v-else>
           <li v-if="!userId && !loading" class="ml-2">
             <router-link
@@ -381,14 +381,14 @@ export default {
       userId: null,
       userName: null,
       loading: true,
-      badgeCount: 0, // 👈 Solo el contador del badge
-      showNotifications: false, // 👈 Solo el estado del modal
-      intervaloVerificacion: null, // 👈 NUEVO
+      badgeCount: 0, 
+      showNotifications: false, 
+      intervaloVerificacion: null, 
       logoutMessage: null,
     };
   },
 
-  // 🗑️ QUITA EL COMPUTED - ya no manejas notificaciones aquí
+  
 
   mounted() {
     const auth = getAuth();
@@ -397,10 +397,10 @@ export default {
         this.userId = user.uid;
         await this.loadUserInfo(user.uid);
 
-        // 🆕 Suscribirse a cambios en la subcolección de notificaciones no leídas
+        
         this.suscribirseNotificaciones(user.uid);
 
-        // 👇 NUEVO: Verificar notificaciones al cargar la app
+       
         setTimeout(() => {
           this.verificarNotificacionesIniciales();
         }, 2000);
@@ -418,13 +418,13 @@ export default {
     const { collection, query, where, getDocs } = await import("firebase/firestore");
     const { db } = await import("./services/firebase");
     try {
-      // Verificación rápida de presupuestos excedidos
+     
       const gastosSnapshot = await getDocs(query(collection(db, "gastos"), where("uid", "==", this.userId)));
       const presupuestosSnapshot = await getDocs(query(collection(db, "Presupuestos"), where("uid", "==", this.userId)));
 
       if (gastosSnapshot.docs.length > 0 && presupuestosSnapshot.docs.length > 0) {
-        // Si hay datos, hay posibles notificaciones
-        this.badgeCount = 1; // Mostrar indicador
+        
+        this.badgeCount = 1; 
         console.log("🔔 Hay datos para verificar notificaciones");
       }
     } catch (error) {
@@ -446,13 +446,13 @@ export default {
       this.isMenuOpen = false;
     },
 
-    // 🔔 SOLO MANEJA EL MODAL
+    
 
     suscribirseNotificaciones(uid) {
       const notificacionesRef = collection(db, `users/${uid}/notificaciones`);
       const q = query(notificacionesRef, where("leida", "==", false));
 
-      this.unsubscribeNotificaciones?.(); // Limpia si ya existe
+      this.unsubscribeNotificaciones?.();
 
       this.unsubscribeNotificaciones = onSnapshot(q, (snapshot) => {
         this.badgeCount = snapshot.size;
@@ -461,19 +461,19 @@ export default {
 
     toggleNotifications() {
       console.log("Toggle notificaciones:", !this.showNotifications);
-      console.log("UserId actual:", this.userId); // 👈 AGREGÁ ESTE
+      console.log("UserId actual:", this.userId);
       this.showNotifications = !this.showNotifications;
       console.log("showNotifications después del toggle:", this.showNotifications); // 👈 Y ESTE
     },
 
-    // 🔔 RECIBE UPDATES DEL BADGE DESDE EL COMPONENTE
+    
     actualizarBadge(count) {
       console.log("Actualizando badge:", count);
       this.badgeCount = count;
     },
 
     handleClickOutside(event) {
-      // Manejo del menú
+      
       const menu = this.$refs.menu;
       const btn = this.$refs.menuButton;
 
@@ -481,7 +481,7 @@ export default {
         this.isMenuOpen = false;
       }
 
-      // Manejo de notificaciones
+      
       const notifBtn = this.$refs.notificationButton;
       const notifWrapper = this.$refs.notificationWrapper;
 
@@ -499,7 +499,7 @@ export default {
       const snap = await getDocs(q);
       if (!snap.empty) {
         this.userName = snap.docs[0].data().nombreDeUsuario || null;
-        // 🗑️ QUITA la notificación de prueba - ahora se maneja en Notificaciones.vue
+        
       }
     },
 
@@ -519,10 +519,10 @@ export default {
   this.userName = null;
   this.isMenuOpen = false;
 
-  // Mostrar mensaje en el navbar
+  
   this.logoutMessage = "¡Sesión cerrada con éxito!";
 
-  // Ocultar mensaje y restaurar botones en 3 segundos
+  
   setTimeout(() => {
     this.logoutMessage = null;
   }, 2000);

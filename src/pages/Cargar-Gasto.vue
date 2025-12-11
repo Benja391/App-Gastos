@@ -4,7 +4,7 @@
          hover:shadow-[0_12px_45px_rgba(0,0,0,0.45)]
          transition-shadow duration-500">
 
-      <!-- Loader -->
+      
       <div v-if="loading" class="flex justify-center items-center">
         <div class="relative">
           <div class="animate-spin rounded-full h-10 w-10 border-4 border-green-200"></div>
@@ -12,9 +12,9 @@
         </div>
       </div>
 
-      <!-- FORMULARIO -->
+      
       <form @submit.prevent="handleSubmit" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Nombre del gasto -->
+
         <div class="space-y-2">
           <label for="name" class="block text-sm font-semibold text-gray-700">Nombre del gasto</label>
           <BaseInputs
@@ -27,7 +27,7 @@
           />
         </div>
 
-        <!-- Monto del gasto -->
+       
         <div class="space-y-2">
           <label for="amount" class="block text-sm font-semibold text-gray-700">Monto del gasto</label>
           <BaseInputs
@@ -42,7 +42,7 @@
           />
         </div>
 
-        <!-- Presupuesto asignado -->
+       
         <div class="space-y-2">
           <label for="budget" class="block text-sm font-semibold text-gray-700">Presupuesto asignado</label>
           <select
@@ -58,7 +58,7 @@
           </select>
         </div>
 
-        <!-- Categoría -->
+  
         <div class="space-y-2">
           <label for="category" class="block text-sm font-semibold text-gray-700">Categoría</label>
           <div class="relative">
@@ -89,7 +89,7 @@
           </div>
         </div>
 
-        <!-- Descripción -->
+        
         <div class="lg:col-span-2 space-y-2">
           <label for="description" class="block text-sm font-semibold text-gray-700">Descripción del gasto</label>
           <BaseInputs
@@ -101,7 +101,7 @@
           />
         </div>
 
-        <!-- Método de pago -->
+      
         <div class="space-y-2">
           <label for="paymentMethod" class="block text-sm font-semibold text-gray-700">Método de pago</label>
           <select
@@ -117,7 +117,7 @@
           </select>
         </div>
 
-        <!-- Detalles tarjeta -->
+        
         <div class="lg:col-span-2">
           <CreditCardDetails
             v-if="showCreditCardDetails"
@@ -127,7 +127,7 @@
           />
         </div>
 
-        <!-- Desglose cuotas -->
+       
         <div v-if="showInstallmentBreakdown" class="lg:col-span-2 p-6 bg-gradient-to-r from-gray-50 to-green-50/30 rounded-2xl border border-green-100">
           <h3 class="text-lg font-bold text-green-800 mb-2">Desglose de cuotas</h3>
           <div class="text-sm text-gray-600 space-y-1">
@@ -137,12 +137,12 @@
           </div>
         </div>
 
-        <!-- Mensaje -->
+       
         <div v-if="message" class="lg:col-span-2 mt-4 p-4 rounded-2xl font-medium border-l-4 shadow-sm text-center" :class="messageClass">
           {{ message }}
         </div>
 
-        <!-- Botón -->
+     
         <div class="lg:col-span-2 flex justify-center pt-6">
           <button
             type="submit"
@@ -192,7 +192,7 @@ export default {
       isOtherCategorySelected: false,
       customCategory: '',
       budgets: [],
-      tarjetasConfiguradas: [], // 🔹 tarjetas desde Firestore
+      tarjetasConfiguradas: [], 
       paymentMethods: ["Efectivo", "Tarjeta de Débito", "Tarjeta de Crédito", "Transferencia Bancaria", "Billetera Virtual"],
       showCreditCardDetails: false,
       installmentAmount: 0,
@@ -209,7 +209,7 @@ export default {
 
   mounted() {
     this.fetchBudgets();
-    this.fetchTarjetas(); // 🔹 cargar tarjetas al inicio
+    this.fetchTarjetas(); 
   },
 
   methods: {
@@ -246,7 +246,7 @@ async fetchTarjetas() {
     if (!user) return;
 
     const db = getFirestore();
-    // Buscar doc en "users" cuyo campo uid == user.uid
+    
     const q = query(collection(db, "users"), where("uid", "==", user.uid));
     const querySnapshot = await getDocs(q);
 
@@ -256,11 +256,10 @@ async fetchTarjetas() {
       return;
     }
 
-    // Como puede haber uno solo:
+   
     const userDoc = querySnapshot.docs[0];
     console.log("DEBUG - Usuario encontrado con id:", userDoc.id);
 
-    // Ahora sí traemos las tarjetas
     const cardsRef = collection(db, "users", userDoc.id, "cards");
     const cardsSnapshot = await getDocs(cardsRef);
 
@@ -308,25 +307,7 @@ async fetchTarjetas() {
       }).format(value);
     },
 
-    // async updateBudgetAmount(budgetId, expenseAmount) {
-    //   try {
-    //     const db = getFirestore();
-    //     const budgetRef = doc(db, "Presupuestos", budgetId);
-    //     const budgetSnap = await getDoc(budgetRef);
-        
-    //     if (budgetSnap.exists()) {
-    //       const budgetData = budgetSnap.data();
-    //       const newRemainingAmount = budgetData.amount - expenseAmount;
-          
-    //       await updateDoc(budgetRef, {
-    //         amount: newRemainingAmount
-    //       });
-    //     }
-    //   } catch (error) {
-    //     console.error("Error al actualizar presupuesto:", error);
-    //     throw error;
-    //   }
-    // },
+
 
     async handleSubmit() {
       if (!this.expense.name || !this.expense.amount || !this.expense.category || !this.expense.paymentMethod) {
@@ -388,18 +369,7 @@ if (this.expense.paymentMethod === "Tarjeta de Crédito") {
         const categoryToSave = this.isOtherCategorySelected ? this.customCategory : this.expense.category;
         
          const isCreditCard = this.expense.paymentMethod === 'Tarjeta de Crédito';
-        // const shouldUpdateBudgetNow = !isCreditCard;
-        
-        // if (shouldUpdateBudgetNow && this.expense.budget !== 'none' && this.expense.budget !== '') {
-        //   const budget = this.budgets.find(b => b.id === this.expense.budget);
-        //   if (budget) {
-        //     const newAmount = Number(this.expense.amount);
-        //     if (newAmount > budget.amount) {
-        //       this.messageClass = "bg-yellow-100 border border-yellow-400 text-yellow-800 font-semibold";
-        //     }
-        //     await this.updateBudgetAmount(this.expense.budget, newAmount);
-        //   }
-        // }
+      
 
         const expenseData = {
           uid: user.uid,

@@ -1,13 +1,13 @@
 <template>
   <div class="flex flex-col items-center justify-center min-h-screen bg-[#08a04b]  py-12 px-6 mt-8">
-    <!-- Card principal -->
+   
     <div
       class="bg-white/95 backdrop-blur-sm rounded-3xl p-10 grid gap-8 w-full max-w-lg shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:shadow-[0_12px_45px_rgba(0,0,0,0.45)] transition-shadow duration-500 border border-white/20"
     >
-      <!-- Encabezado -->
+     
       <BaseHeading class="text-center text-gray-800">Mi Perfil</BaseHeading>
 
-      <!-- Sección foto -->
+     
       <div class="flex flex-col items-center">
         <img
           :src="profileImageUrl || 'https://placehold.co/150'"
@@ -15,7 +15,7 @@
           class="w-32 h-32 rounded-full border-4 border-gray-200 object-cover shadow-md mb-4"
         />
 
-        <!-- Mensajes de feedback -->
+       
         <transition name="fade">
           <p v-if="saveSuccess" class="text-green-600 text-sm mb-2 font-medium">
             Imagen guardada con éxito
@@ -27,14 +27,14 @@
           </p>
         </transition>
 
-        <!-- Subir imagen -->
+       
         <input
           type="file"
           @change="uploadImage"
           class="mb-6 w-full rounded-xl border border-gray-300 bg-gray-50 text-gray-700 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-600 file:text-white hover:file:bg-emerald-700 transition"
         />
 
-        <!-- Botón guardar -->
+        
         <BaseButtonSecondary
           @click="saveImageUrl"
           :disabled="!selectedImage"
@@ -44,7 +44,7 @@
         </BaseButtonSecondary>
       </div>
 
-      <!-- Info usuario -->
+      
 <div class="text-left w-full mb-6 bg-gray-50 border border-gray-200 rounded-2xl p-5 shadow-sm">
   <div class="flex flex-col gap-2 text-gray-700">
     <div class="flex gap-1">
@@ -62,7 +62,7 @@
   </div>
 </div>
 
-      <!-- Total gastado -->
+     
       <div class="bg-gradient-to-r from-rose-50 to-red-50 p-6 rounded-2xl w-full text-center border border-red-100 shadow-inner">
         <h2 class="text-lg font-semibold text-gray-700 mb-2">Total gastado</h2>
         <p class="text-3xl font-extrabold text-red-600">

@@ -1,7 +1,7 @@
 <template>
   <div class="credit-card-details grid gap-6 w-full">
 
-    <!-- Tipo de Tarjeta -->
+    
     <div class="grid gap-2 w-full">
       <label for="cardType" class="block text-lg font-medium text-gray-900">
         Tipo de Tarjeta
@@ -20,7 +20,6 @@
       </select>
     </div>
 
-    <!-- Cuotas -->
     <div class="grid gap-2 w-full">
       <label for="installments" class="block text-lg font-medium text-gray-900">
         Número de Cuotas
@@ -42,7 +41,6 @@
       </div>
     </div>
 
-    <!-- Mensaje de cuotas -->
     <div v-if="installments > 1" class="p-3 bg-gray-800 rounded-lg text-gray-300 text-sm w-full">
       <p class="flex items-center">
         El pago se dividirá en {{ installments }} cuotas iguales.

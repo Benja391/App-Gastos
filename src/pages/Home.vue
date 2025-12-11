@@ -1,9 +1,9 @@
 <template>
   <main class="bg-green-50 min-h-screen">
-    <!-- HERO SECTION -->
+  
     <section class="py-20 px-4 sm:px-8 bg-green-600 rounded-3xl shadow-2xl mx-4 mt-8 overflow-hidden">
       <div class="container mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
-        <!-- Texto -->
+        
         <div class="text-center lg:text-left max-w-2xl mb-12 lg:mb-0">
           <h1 class="text-5xl lg:text-7xl font-extrabold text-white leading-tight mb-6">
             Bienvenido a
@@ -24,7 +24,7 @@
           </div>
         </div>
 
-        <!-- Mockup a la derecha -->
+      
         <div class="flex justify-start lg:justify-start">
           <div
             class="w-52 sm:w-56 transform rotate-6 rounded-[2.5rem] border-8 border-black shadow-[0_15px_45px_rgba(0,0,0,0.3)] bg-black overflow-hidden transition-transform duration-500 hover:scale-105 hover:rotate-3"
@@ -39,7 +39,7 @@
       </div>
     </section>
 
-    <!-- CARACTERÍSTICAS -->
+   
     <section class="py-20 px-4 sm:px-8">
       <div class="container mx-auto">
         <div class="text-center mb-16">
@@ -56,7 +56,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <!-- Registro Fácil -->
+        
           <div class="group bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
             <div class="relative overflow-hidden rounded-2xl mb-6">
               <img
@@ -72,7 +72,7 @@
             </p>
           </div>
 
-          <!-- Reportes Visuales -->
+        
           <div class="group bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
             <div class="relative overflow-hidden rounded-2xl mb-6">
               <img
@@ -88,7 +88,7 @@
             </p>
           </div>
 
-          <!-- Presupuestos Personalizados -->
+          
           <div class="group bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
             <div class="relative overflow-hidden rounded-2xl mb-6">
               <img
@@ -104,7 +104,7 @@
             </p>
           </div>
 
-          <!-- Personalización -->
+          
           <div class="group bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
             <div class="relative overflow-hidden rounded-2xl mb-6">
               <img
@@ -120,7 +120,7 @@
             </p>
           </div>
 
-          <!-- Interfaz Amigable -->
+          
           <div class="group bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
             <div class="relative overflow-hidden rounded-2xl mb-6">
               <img
@@ -136,7 +136,7 @@
             </p>
           </div>
 
-          <!-- Reportes Simples -->
+         
           <div class="group bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
             <div class="relative overflow-hidden rounded-2xl mb-6">
               <img
@@ -155,7 +155,7 @@
       </div>
     </section>
 
-    <!-- TESTIMONIOS -->
+    
     <section class="py-20 px-4 sm:px-8 bg-gray-50">
       <div class="container mx-auto">
         <div class="text-center mb-16">
@@ -168,7 +168,7 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <!-- Testimonio 1 -->
+         
           <div class="bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300">
             <div class="flex items-center mb-6">
               <div class="flex text-yellow-400">
@@ -191,11 +191,11 @@
             </div>
           </div>
 
-          <!-- Testimonio 2 -->
+          
           <div class="bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300">
             <div class="flex items-center mb-6">
               <div class="flex text-yellow-400">
-                <!-- estrellas (omitidas por brevedad, mismas que arriba) -->
+                
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049..."/></svg>
               </div>
             </div>
@@ -211,11 +211,11 @@
             </div>
           </div>
 
-          <!-- Testimonio 3 -->
+          
           <div class="bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300">
             <div class="flex items-center mb-6">
               <div class="flex text-yellow-400">
-                <!-- estrellas (omitidas por brevedad, mismas que arriba) -->
+                
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049..."/></svg>
               </div>
             </div>
@@ -234,7 +234,7 @@
       </div>
     </section>
 
-    <!-- CONSEJOS -->
+  
     <section class="py-20 px-4 sm:px-8 bg-green-800">
       <div class="container mx-auto">
         <div class="text-center mb-16">
@@ -301,7 +301,7 @@
       </div>
     </section>
 
-    <!-- CTA FINAL -->
+ 
     <section class="py-20 px-4 sm:px-8 bg-green-600 mx-4 mb-4 rounded-3xl mt-8">
       <div class="container mx-auto text-center">
         <div class="max-w-3xl mx-auto">

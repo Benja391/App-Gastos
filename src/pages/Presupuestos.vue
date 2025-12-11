@@ -1,11 +1,11 @@
 <template>
-  <!-- CONTENEDOR PRINCIPAL CON GRADIENTE MEJORADO -->
+  
   <section class="flex items-center justify-center min-h-screen bg-[#08a04b] text-white px-4 py-10 mt-8">
-    <!-- CAJA PRINCIPAL CON GLASSMORPHISM -->
+   
     <div class="relative bg-white/95 backdrop-blur-sm text-gray-900 rounded-3xl  border border-white/20 w-full max-w-5xl p-8 grid gap-8 mt-1 overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.35)]
          hover:shadow-[0_12px_45px_rgba(0,0,0,0.45)]
          transition-shadow duration-500">
-      <!-- Elemento decorativo de fondo -->
+      
       <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-green-200/20 to-transparent rounded-full -mr-32 -mt-32"></div>
       <div class="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-emerald-200/20 to-transparent rounded-full -ml-24 -mb-24"></div>
       
@@ -13,12 +13,12 @@
         <BaseHeading >Presupuestos</BaseHeading>
         <p class="text-center text-gray-600 mb-6">Administrá tus finanzas de manera inteligente</p>
 
-        <!-- Mensaje mejorado -->
+       
         <div v-if="message" class="mb-6 p-4 rounded-2xl text-black font-medium border-l-4 shadow-sm" :class="messageClass">
           {{ message }}
         </div>
 
-        <!-- Loader mejorado -->
+       
         <div v-if="isLoading" class="flex justify-center items-center mb-8">
           <div class="relative">
             <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-200"></div>
@@ -26,7 +26,7 @@
           </div>
         </div>
 
-        <!-- Formulario de presupuesto mejorado -->
+        
         <div class="bg-gradient-to-r from-gray-50 to-green-50/30 p-8 rounded-2xl shadow-lg border border-gray-100 mb-8">  
           <form @submit.prevent="addBudget" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="space-y-2">
@@ -93,7 +93,7 @@
           </form>
         </div>
 
-        <!-- Lista de presupuestos mejorada -->
+        
         <div class="max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
           <div class="flex items-center justify-between mb-8">
             <h2 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
@@ -142,7 +142,7 @@
                 </button>
               </div>
 
-              <!-- Detalle del presupuesto mejorado -->
+             
               <div 
                 v-if="activeDesglose === budget.id" 
                 class="mt-6 bg-gradient-to-r from-green-50 to-emerald-50/50 p-6 rounded-xl border border-green-100 animate-fadeIn"
@@ -173,7 +173,7 @@
                   </div>
                 </div>
 
-                <!-- 📊 Comparación Presupuesto vs Gastado -->
+                
                 <div class="mt-6 text-sm text-gray-700">
                   <p><strong>Total presupuestado:</strong> {{ formatCurrency(budget.amount) }}</p>
                   <p><strong>Total gastado:</strong> {{ formatCurrency(getTotalGastado(budget.id)) }}</p>
@@ -244,7 +244,7 @@ setup() {
     );
     budgets.value = snap.docs
   .map((d) => ({ id: d.id, ...d.data() }))
-  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // ⬅️ Orden descendente
+  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); 
     isLoading.value = false;
   };
   watch(newBudgetName, (val) => {
@@ -266,18 +266,18 @@ watch(newBudgetAmount, (val) => {
   };
 
   const addBudget = async () => {
-  // Validaciones
+  
   budgetNameError.value = !newBudgetName.value.trim();
   budgetAmountError.value = newBudgetAmount.value <= 0;
 
-  // Ocultar mensajes de error tras 2.5 segundos
+  
  if (budgetNameError.value || budgetAmountError.value) {
   return;
 }
 
 
 
-  // Verificar nombre duplicado
+  
   const nombreNormalizado = newBudgetName.value.trim().toLowerCase();
   const yaExiste = budgets.value.some(
     (b) => b.name.trim().toLowerCase() === nombreNormalizado
@@ -290,12 +290,12 @@ watch(newBudgetAmount, (val) => {
     return;
   }
 
-  // Guardar presupuesto
+  
   await addDoc(collection(db, 'Presupuestos'), {
     uid: user.value.uid,
     name: newBudgetName.value.trim(),
     amount: newBudgetAmount.value,
-     createdAt: new Date().toISOString(), // ⬅️ Agregado
+     createdAt: new Date().toISOString(), 
   });
 
   message.value = 'Presupuesto agregado.';

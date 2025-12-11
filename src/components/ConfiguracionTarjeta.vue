@@ -1,19 +1,19 @@
 <template>
-  <!-- CONTENEDOR PRINCIPAL -->
+  
   <section class="flex items-center justify-center min-h-screen bg-[#08a04b] text-white px-4 py-10 mt-8">
-    <!-- CAJA GLASSMORPHISM -->
+ 
     <div class="relative bg-white/95 backdrop-blur-sm text-gray-900 rounded-3xl  border border-white/20 w-full max-w-4xl p-8 grid gap-10 overflow-hidden  shadow-[0_8px_30px_rgba(0,0,0,0.35)]
          hover:shadow-[0_12px_45px_rgba(0,0,0,0.45)]
          transition-shadow duration-500">
 
-      <!-- Encabezado -->
+      
       <BaseHeading >
         {{ editingCardId ? 'Editá tarjeta' : 'Agregá tarjeta' }}
       </BaseHeading>
 
-      <!-- FORMULARIO -->
+     
       <form @submit.prevent="onSubmit" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Tipo -->
+       
         <div class="space-y-2">
           <label class="block text-sm font-semibold text-gray-700">Tipo de tarjeta</label>
           <select
@@ -35,7 +35,7 @@
           <p v-if="errors.cardType" class="text-sm text-red-500">{{ errors.cardType }}</p>
         </div>
 
-        <!-- Nombre -->
+       
         <div class="space-y-2">
           <label class="block text-sm font-semibold text-gray-700">Nombre en la tarjeta</label>
           <input
@@ -53,7 +53,7 @@
           <p v-if="errors.cardholder" class="text-sm text-red-500">{{ errors.cardholder }}</p>
         </div>
 
-        <!-- Número -->
+        
         <div class="space-y-2">
           <label class="block text-sm font-semibold text-gray-700">Número de tarjeta</label>
           <input
@@ -73,7 +73,7 @@
           <p v-if="errors.number" class="text-sm text-red-500">{{ errors.number }}</p>
         </div>
 
-        <!-- CVV -->
+       
         <div class="space-y-2">
           <label class="block text-sm font-semibold text-gray-700">Código de seguridad</label>
           <input
@@ -92,7 +92,7 @@
           <p v-if="errors.securityCode" class="text-sm text-red-500">{{ errors.securityCode }}</p>
         </div>
 
-        <!-- Vencimiento -->
+     
         <div class="space-y-2">
           <label class="block text-sm font-semibold text-gray-700">Fecha de vencimiento (MM/AA)</label>
           <input
@@ -112,7 +112,6 @@
           <p v-if="errors.expirationDate" class="text-sm text-red-500">{{ errors.expirationDate }}</p>
         </div>
 
-        <!-- Fecha de cierre -->
         <div class="space-y-2">
           <label class="block text-sm font-semibold text-gray-700">Fecha de cierre</label>
           <input
@@ -129,7 +128,7 @@
           <p v-if="errors.closingDate" class="text-sm text-red-500">{{ errors.closingDate }}</p>
         </div>
 
-        <!-- Días hasta vencimiento -->
+       
         <div class="space-y-2">
           <label class="block text-sm font-semibold text-gray-700">Días hasta vencimiento</label>
           <input
@@ -148,7 +147,7 @@
           <p class="text-xs text-gray-500">Se calculará la fecha exacta de vencimiento.</p>
           <p v-if="errors.daysUntilDue" class="text-sm text-red-500">{{ errors.daysUntilDue }}</p>
         </div>
-        <!-- BOTONES -->
+        
 <div class="md:col-span-2 flex gap-3 justify-center">
   <button
     type="submit"
@@ -167,7 +166,7 @@
 </div>
       </form>
 
-      <!-- Vista previa -->
+    
       <div v-if="newCard.closingDate && newCard.daysUntilDue" class="bg-blue-50 p-4 rounded-xl border border-blue-100 text-sm text-blue-800">
         <strong>Vista previa:</strong>
         Cierra el día {{ formatDate(newCard.closingDate) }}, vence el día {{ formatDate(computeDueDate) }}
@@ -175,10 +174,10 @@
 
     
 
-      <!-- MENSAJE -->
+     
       <p v-if="message" class="text-green-600 font-medium text-center mt-2">{{ message }}</p>
 
-      <!-- RESUMEN -->
+      
 <div
   v-for="card in cards"
   :key="card.id"
@@ -190,7 +189,7 @@
     'bg-gradient-to-br from-gray-400 to-gray-600': card.cardType === 'otra'
   }"
 >
-  <!-- Logo y tipo -->
+ 
   <div class="flex justify-between items-center mb-6">
     <img
       :src="getCardLogo(card.cardType)"
@@ -200,12 +199,12 @@
     
   </div>
 
-  <!-- Número -->
+ 
   <div class="text-xl font-mono tracking-widest mb-4">
     **** **** **** {{ card.number.slice(-4) }}
   </div>
 
- <!-- Titular y vencimiento -->
+ 
 <div class="flex justify-between text-sm uppercase tracking-wide mt-6">
   <div>
     <p class="text-gray-200 text-xs">Titular</p>
@@ -217,13 +216,13 @@
   </div>
 </div>
 
- <!-- Fechas adicionales -->
+ 
 <div class="mt-3 text-xs text-gray-300">
   <p>Cierre: {{ formatDate(card.closingDate) }}</p>
   <p>Vencimiento: {{ formatDate(card.dueDate) }}</p>
 </div>
 
-  <!-- Acciones -->
+  
   <div class="absolute top-3 right-4 flex space-x-3 text-sm">
     <button @click="editCard(card)" class="text-blue-300 hover:text-blue-500">Editar</button>
     <button @click="cardToDelete = card" class="text-red-300 hover:text-red-500">Eliminar</button>
@@ -232,7 +231,7 @@
 </div>
     </div>
   </section>
-  <!-- MODAL ELIMINAR TARJETA -->
+  
 <div
   v-if="cardToDelete"
   class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"
@@ -295,17 +294,16 @@ const newCard = ref({
   number: '',
   securityCode: '',
   expirationDate: '',
-  closingDate: '',   // 'YYYY-MM-DD'
+  closingDate: '',   
   daysUntilDue: null,
-  dueDate: ''        // 'YYYY-MM-DD'
+  dueDate: ''       
 })
 const cards = ref([])
 const message = ref('')
 const errors = ref({})
 const cardToDelete = ref(null)
 
-/* ====== FIX FECHAS (sin +1/-1) ====== */
-// 'YYYY-MM-DD' -> Date local al MEDIODÍA (neutraliza TZ)
+
 function fromYMD(s) {
   if (!s) return null
   const [y, m, d] = s.split('-').map(Number)
@@ -321,41 +319,41 @@ function getCardLogo(type) {
     case "amex":
       return "/amex.png"
     default:
-      return "/generic.png" // para "Otra"
+      return "/generic.png"
   }
 }
-// Date -> 'YYYY-MM-DD' (string plano, sin Z)
+
 function toYMD(date) {
   const y = date.getFullYear()
   const m = String(date.getMonth() + 1).padStart(2, '0')
   const d = String(date.getDate()).padStart(2, '0')
   return `${y}-${m}-${d}`
 }
-/* ===================================== */
 
-// Formatea número con espacios
+
+
 function formatCardNumber(e) {
   let val = e.target.value.replace(/\D/g, '').slice(0,16)
   newCard.value.number = val.replace(/(.{4})/g, '$1 ').trim()
   if (errors.value.number) validateField('number')
 }
 
-// Recalcula dueDate cada vez que cambia cierre/días (SIN toISOString)
+
 watch(
   () => [newCard.value.closingDate, newCard.value.daysUntilDue],
   ([close, days]) => {
     const n = Number(days)
     if (close && n > 0) {
-      const d = fromYMD(close)     // <- local, mediodía
+      const d = fromYMD(close)     
       d.setDate(d.getDate() + n)
-      newCard.value.dueDate = toYMD(d)  // <- string 'YYYY-MM-DD'
+      newCard.value.dueDate = toYMD(d) 
     } else {
       newCard.value.dueDate = ''
     }
   }
 )
 
-// Formatea MM/AA
+
 function formatExpirationDate(e) {
   let val = e.target.value.replace(/\D/g, '').slice(0,4)
   if (val.length > 2) val = val.slice(0,2) + '/' + val.slice(2)
@@ -363,7 +361,7 @@ function formatExpirationDate(e) {
   if (errors.value.expirationDate) validateField('expirationDate')
 }
 
-// (lo dejamos por si lo usás en el submit / preview)
+
 const computeDueDate = computed(() => {
   const close = newCard.value.closingDate
   const days  = Number(newCard.value.daysUntilDue)
@@ -373,10 +371,10 @@ const computeDueDate = computed(() => {
   return toYMD(dt)
 })
 
-// Mostrar fechas en UI sin corrimiento
+
 function formatDate(s) {
   if (!s) return ''
-  // si viene como 'YYYY-MM-DD', parseo con fromYMD
+ 
   if (typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s)) {
     const d = fromYMD(s)
     return d.toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric' })
@@ -422,7 +420,7 @@ function validate() {
 
 async function onSubmit() {
   if (!validate()) return
-  // guardo dueDate calculado sin TZ
+  
   const cardData = { ...newCard.value, dueDate: computeDueDate.value }
   const colRef = collection(db,'users',userDocId.value,'cards')
 

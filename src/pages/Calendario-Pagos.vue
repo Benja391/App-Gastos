@@ -1,6 +1,6 @@
 <template>
   <div class="payment-calendar min-h-screen bg-[#08a04b] text-gray-900 p-6 md:p-10 mt-8">
-    <!-- Floating toast -->
+   
     <div
       v-if="showFloatingMessage"
       class="fixed top-5 right-5 bg-blue-600/90 backdrop-blur px-6 py-3 rounded-2xl shadow-xl z-50 border border-white/20 text-white font-medium"
@@ -8,7 +8,7 @@
       {{ floatingMessage }}
     </div>
 
-    <!-- Modales -->
+   
     <div
       v-if="pendingPayment || expenseToDelete || expenseToArchive"
       class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"
@@ -96,10 +96,10 @@
       </div>
     </div>
 
-    <!-- Header -->
+   
     <BaseHeading>Calendario de pagos</BaseHeading>
 
-    <!-- Month switcher -->
+    
     <div class="flex justify-between items-center mb-8">
       <button
         @click="previousMonth"
@@ -124,7 +124,6 @@
       </button>
     </div>
 
-    <!-- Link a configuración -->
     <div class="flex justify-center mb-6">
       <button
         @click="$router.push('/Configuracion-Tarjeta')"
@@ -134,7 +133,7 @@
       </button>
     </div>
 
-    <!-- Calendario -->
+   
     <div class="grid grid-cols-7 gap-2 mb-4 text-center">
       <div
         v-for="day in weekDays"
@@ -146,14 +145,14 @@
     </div>
 
     <div class="grid grid-cols-7 gap-2">
-      <!-- espacios vacíos -->
+     
       <div
         v-for="n in firstDayOfMonth"
         :key="`empty-${n}`"
         class="h-24 p-2 bg-gray-100 rounded-lg"
       ></div>
 
-      <!-- días -->
+   
       <div
         v-for="day in daysInMonth"
         :key="day"
@@ -197,7 +196,6 @@
       </div>
     </div>
 
-    <!-- Próximos pagos -->
 <div class="mt-10 rounded-2xl p-6 bg-white border border-gray-200 shadow-md">
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
     <h3 class="text-xl font-bold text-gray-800">Próximos pagos</h3>
@@ -282,7 +280,6 @@
     </div>
   </div>
 
-  <!-- archivados -->
   <div v-if="archivedExpensesCount > 0" class="mt-6 border-t border-gray-200 pt-4">
     <div class="flex justify-between items-center mb-3">
       <h4 class="text-md font-bold text-gray-800">Gastos archivados ({{ archivedExpensesCount }})</h4>
@@ -327,7 +324,7 @@
   </div>
 </div>
 
-    <!-- Tarjetas -->
+    
     <div class="mt-10 rounded-2xl p-6 bg-white border border-gray-200 shadow-md">
       <h3 class="text-xl font-bold text-gray-800 mb-4">Mis tarjetas</h3>
       <div v-if="cards.length === 0" class="text-center text-gray-500 italic">
@@ -351,7 +348,7 @@
       </ul>
     </div>
 
-    <!-- CTA -->
+   
     <div class="mt-8 flex justify-center">
       <button
         @click="$router.push('/Monto-Total')"
@@ -402,7 +399,7 @@ export default {
       expensesData: {},
       refreshKey: 0,
 
-      // Config por si faltan tarjetas guardadas
+      
       cardSettings: {
         visa: { closingDay: null, daysUntilDue: null, fechaCierre: "", fechaVencimiento: "" },
         mastercard: { closingDay: null, daysUntilDue: null, fechaCierre: "", fechaVencimiento: "" },
@@ -455,11 +452,11 @@ export default {
     }
   },
 
-  // CARGA EN ORDEN para evitar carreras
+  
   async mounted() {
-    await this.loadCards();        // llena this.cards
-    await this.loadCardSettings(); // opcional; no llama fetchPayments
-    await this.fetchPayments();    // calcula usando tarjetas del usuario
+    await this.loadCards();        
+    await this.loadCardSettings(); 
+    await this.fetchPayments();    
   },
 
   watch: {
@@ -470,12 +467,11 @@ export default {
   },
 
   methods: {
-    // -------- Helpers de fecha (evitan el +1 por zona horaria) --------
-    fromYMD(ymd) { // 'YYYY-MM-DD' -> Date al mediodía local
+    fromYMD(ymd) { 
       const [y, m, d] = ymd.split("-").map(Number);
       return new Date(y, m - 1, d, 12, 0, 0, 0);
     },
-    toYMD(date) {  // Date -> 'YYYY-MM-DD' (string plano)
+    toYMD(date) {  
       const y = date.getFullYear();
       const m = String(date.getMonth() + 1).padStart(2, "0");
       const d = String(date.getDate()).padStart(2, "0");
@@ -632,7 +628,7 @@ export default {
       } catch { return "Fecha inválida"; }
     },
 
-    // Muestra "Cierre: día X - Vence: Y días después" con datos de tarjetas guardadas (sin +1)
+   
     getCardClosingInfo(cardType) {
       if (!cardType) return null;
       const t = (cardType || "").toLowerCase();
@@ -660,7 +656,7 @@ export default {
              this.currentYear === this.currentYear;
     },
 
-    // Carga configuración (no dispara fetchPayments aquí)
+   
     async loadCardSettings() {
       try {
         const auth = getAuth();
@@ -696,7 +692,7 @@ export default {
       }
     },
 
-    // Trae tarjetas del usuario
+  
     async loadCards() {
       try {
         const auth = getAuth();
@@ -716,7 +712,7 @@ export default {
       }
     },
 
-    // Calcula la **fecha de vencimiento** de una compra usando la tarjeta del usuario (sin +1)
+    
     calcDueFromCards(purchaseDate, cardType) {
       if (!cardType || !this.cards?.length) return new Date(purchaseDate);
 
@@ -730,16 +726,16 @@ export default {
       });
       if (!card) return new Date(purchaseDate);
 
-      // NO parseamos como Date el 'YYYY-MM-DD' para obtener el día.
+    
       const closingDOM = card.closingDate ? Number(card.closingDate.slice(8, 10)) : null;
       const daysUntilDue = card.daysUntilDue != null ? Number(card.daysUntilDue) : null;
       if (!closingDOM || (daysUntilDue == null)) return new Date(purchaseDate);
 
-      const p = this.atNoon(new Date(purchaseDate)); // neutraliza TZ
+      const p = this.atNoon(new Date(purchaseDate)); 
 
       const daysIn = (y, m) => new Date(y, m + 1, 0).getDate();
 
-      // Fecha de cierre del mes de la compra (o el siguiente si pasó el día de cierre)
+    
       let close = new Date(p.getFullYear(), p.getMonth(), 12);
       close.setDate(Math.min(closingDOM, daysIn(close.getFullYear(), close.getMonth())));
       if (p.getDate() > closingDOM) {
@@ -876,7 +872,7 @@ export default {
       }).format(amount);
     },
 
-    // --------- Carga y normalización de pagos (sin +1) ----------
+
     async fetchPayments() {
       try {
         this.loading = true;
@@ -910,22 +906,22 @@ export default {
             for (let i = 0; i < expense.creditCard.installments; i++) {
               const isPaid = i < (expense.creditCard.installmentsPaid || 0);
 
-              // Base de la compra
+            
               const baseDate =
                 expense.date?.toDate ? expense.date.toDate()
                   : (typeof expense.date === "string"
                       ? (expense.date.length === 10 ? this.fromYMD(expense.date) : new Date(expense.date))
                       : new Date(expense.date));
 
-              // Mes correspondiente a la cuota i
+             
               const purchaseDateForInstallment = this.atNoon(new Date(baseDate));
               purchaseDateForInstallment.setMonth(purchaseDateForInstallment.getMonth() + i);
 
-              // Fecha correcta de VENCIMIENTO según tarjeta guardada (sin +1)
+             
               const correctDate = this.calcDueFromCards(purchaseDateForInstallment, String(expense.creditCard.type || "").toLowerCase());
-              correctDates.push(this.toYMD(correctDate)); // guardamos como 'YYYY-MM-DD'
+              correctDates.push(this.toYMD(correctDate));
 
-              // Elegimos la fecha a mostrar
+           
               let paymentDate;
               if (expense.creditCard.paymentDates && expense.creditCard.paymentDates[i]) {
                 const saved = expense.creditCard.paymentDates[i];
@@ -987,7 +983,7 @@ export default {
         const batch = writeBatch(db);
         expensesToUpdate.forEach(exp => {
           const ref = doc(db, "gastos", exp.id);
-          batch.update(ref, { "creditCard.paymentDates": exp.dates }); // ['YYYY-MM-DD', ...]
+          batch.update(ref, { "creditCard.paymentDates": exp.dates }); 
         });
         await batch.commit();
       } catch (error) {

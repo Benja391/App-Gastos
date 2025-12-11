@@ -29,7 +29,7 @@
     class="w-full px-4 py-3 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
   />
 
-  <!-- Bloque de requisitos siempre visible -->
+  
   <ul class="mt-2 text-sm">
     <li :class="{'text-green-500': user.password.length >= 8, 'text-red-500': user.password.length < 8}">
        Mínimo 8 caracteres
@@ -124,7 +124,7 @@ export default {
 
   let valid = true;
 
-  // Validación de email
+  
   if (!this.user.email) {
     this.emailError = 'El correo electrónico es obligatorio.';
     valid = false;
@@ -133,7 +133,7 @@ export default {
     valid = false;
   }
 
-  // Validación de contraseña
+  
   const password = this.user.password;
   if (!password) {
     this.passwordError = 'La contraseña es obligatoria.';

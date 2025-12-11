@@ -10,14 +10,14 @@
         Gestioná tu saldo y registros de manera clara
       </p>
 
-      <!-- Dos columnas: izquierda gastos, derecha saldos -->
+     
      <div class="grid grid-cols-1 lg:grid-cols-6 gap-8">
 
-        <!-- ========== IZQUIERDA: HISTORIAL DE GASTOS ========== -->
+      
         <div class="lg:col-span-4">
           <h2 class="text-2xl font-bold text-gray-900 mb-2">Gastos</h2>
 
-          <!-- Filtros -->
+  
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <input
               v-model="filters.search"
@@ -71,7 +71,7 @@
             />
           </div>
 
-          <!-- Selector de cantidad por página -->
+        
           <div class="mt-4 text-sm text-gray-700 flex items-center justify-end gap-2">
             <label for="perPage">Mostrar:</label>
             <select
@@ -86,7 +86,7 @@
             <span>por página</span>
           </div>
 
-          <!-- Lista de gastos paginada -->
+    
           <div v-if="paginatedExpenses.length" class="grid gap-4 mt-4 max-h-[600px] overflow-y-auto pr-2">
             <div
               v-for="exp in paginatedExpenses"
@@ -112,7 +112,7 @@
             No se encontraron gastos con los filtros seleccionados.
           </p>
 
-          <!-- Paginación -->
+    
           <div v-if="totalPages > 1" class="flex justify-center items-center gap-2 mt-6 flex-wrap">
             <button
               @click="goToPage(currentPage - 1)"
@@ -146,11 +146,11 @@
           </div>
         </div>
 
-        <!-- ========== DERECHA: HISTORIAL DE SALDOS ========== -->
+     
       <div class="lg:col-span-2">
           <h2 class="text-2xl font-bold text-gray-900 mb-2">Saldos</h2>
 
-          <!-- Resumen -->
+     
           <div class="grid gap-4">
             <div class="bg-green-50 border border-green-200 p-4 rounded-xl">
               <p class="text-sm text-gray-600">Saldo inicial</p>
@@ -159,7 +159,7 @@
 
           </div>
 
-          <!-- Listado de adicionales -->
+  
           <div class="mt-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-2">Ingresos / saldos agregados</h3>
 
@@ -204,7 +204,6 @@ export default {
   components: { BaseHeading },
   data() {
     return {
-      // GASTOS
       expenses: [],
       currentPage: 1,
       itemsPerPage: 5,
@@ -218,17 +217,17 @@ export default {
         dateEnd: "",
       },
 
-      // SALDOS
+  
       saldos: {
         initialAmount: 0,
         remainingAmount: 0,
         additionalAmounts: []
       },
-      saldosList: [] // lista plana ordenada para mostrar
+      saldosList: [] 
     };
   },
   computed: {
-    // ---------- GASTOS ----------
+   
     filteredExpenses() {
       return this.expenses.filter((exp) => {
         const text = this.filters.search.toLowerCase();
@@ -278,7 +277,7 @@ export default {
     },
   },
   methods: {
-    // ---------- GASTOS ----------
+   
     async fetchExpenses(uid) {
       const db = getFirestore();
       const snapshot = await getDocs(collection(db, "gastos"));
@@ -286,11 +285,11 @@ export default {
         .map((d) => ({ id: d.id, ...d.data() }))
         .filter((e) => e.uid === uid);
     },
-    // ---------- SALDOS ----------
+   
     async fetchSaldos(uid) {
       const db = getFirestore();
 
-      // Busco el userDocId por uid
+    
       const qUser = query(collection(db, "users"), where("uid", "==", uid));
       const userSnap = await getDocs(qUser);
       if (userSnap.empty) {
@@ -300,7 +299,7 @@ export default {
       }
       const userDocId = userSnap.docs[0].id;
 
-      // Leo settings/montoTotal
+   
       const settingsRef = doc(db, "users", userDocId, "settings", "montoTotal");
       const settingsSnap = await getDoc(settingsRef);
 
@@ -313,7 +312,7 @@ export default {
       const data = settingsSnap.data() || {};
       const add = Array.isArray(data.additionalAmounts) ? data.additionalAmounts : [];
 
-      // Normalizo lista para mostrar (ordenado por fecha desc)
+      
       const list = add
         .map((item, idx) => ({
           id: String(idx),
@@ -335,7 +334,7 @@ export default {
       this.saldosList = list;
     },
 
-    // ---------- UTIL ----------
+  
     formatCurrency(value) {
       const amount = parseFloat(value);
       if (isNaN(amount)) return "Monto inválido";

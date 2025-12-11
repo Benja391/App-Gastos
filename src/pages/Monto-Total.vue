@@ -1,23 +1,23 @@
 <template>
-  <!-- CONTENEDOR PRINCIPAL -->
+  
   <section class="flex items-center justify-center min-h-screen bg-[#08a04b] text-white px-4 py-10 mt-8">
-    <!-- CAJA PRINCIPAL GLASSMORPHISM -->
+   
     <div class="relative bg-white/95 backdrop-blur-sm text-gray-900 rounded-3xl  border border-white/20 w-full max-w-5xl p-8 grid gap-10 mt-1 overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.35)]
          hover:shadow-[0_12px_45px_rgba(0,0,0,0.45)]
          transition-shadow duration-500">
       
-      <!-- Decoraciones de fondo -->
+      
       <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-green-200/20 to-transparent rounded-full -mr-32 -mt-32"></div>
       <div class="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-emerald-200/20 to-transparent rounded-full -ml-24 -mb-24"></div>
 
       <div class="relative z-10">
-        <!-- Encabezado -->
+       
         <BaseHeading>
           Ingresos Totales
         </BaseHeading>
         <p class="text-center text-gray-600 mb-6">Gestioná tu saldo y registros de manera clara</p>
 
-        <!-- Mensaje flotante -->
+      
         <div
           v-if="showFloatingMessage"
           class="mb-6 p-4 rounded-2xl text-black font-medium border-l-4 shadow-sm bg-green-50 border-green-200 text-green-800"
@@ -25,9 +25,9 @@
           {{ floatingMessage }}
         </div>
 
-        <!-- Sección de saldos -->
+       
         <div v-if="userId" class="bg-gradient-to-r from-gray-50 to-green-50/30 p-8 rounded-2xl shadow-lg border border-gray-100 mb-8 space-y-6">
-          <!-- Saldo inicial -->
+          
           <div class="space-y-3">
             <label class="block text-sm font-semibold text-gray-700">Saldo inicial</label>
             <input
@@ -45,10 +45,10 @@
             </button>
           </div>
 
-          <!-- Separador -->
+         
           <div class="border-t border-gray-200"></div>
 
-          <!-- Otros saldos -->
+          
           <div class="space-y-3">
             <label class="block text-sm font-semibold text-gray-700">Agregá otro saldo</label>
             <input
@@ -76,7 +76,7 @@
           </div>
         </div>
 
-        <!-- Monto disponible -->
+        
         <div v-if="userId" class="bg-gradient-to-r from-green-50 to-emerald-50/50 border border-green-100 p-8 rounded-2xl text-center shadow-md mb-8">
           <p class="text-sm text-gray-500 mb-1">Monto disponible</p>
           <p class="text-4xl font-extrabold bg-gradient-to-r from-green-700 to-emerald-600 bg-clip-text text-transparent">
@@ -84,9 +84,9 @@
           </p>
         </div>
 
-        <!-- Listados -->
+       
         <div v-if="userId" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <!-- Lista de gastos -->
+          
           <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
             <h2 class="text-xl font-bold text-red-600 mb-4">Gastos</h2>
             <ul v-if="gastos.length > 0" class="space-y-4 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
@@ -116,7 +116,7 @@
             <p v-else class="text-gray-500 text-center text-sm">No hay gastos registrados aún.</p>
           </div>
 
-          <!-- Lista de saldos -->
+         
           <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
             <h2 class="text-xl font-bold text-green-600 mb-4">Saldos ingresados</h2>
             <div class="space-y-3 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
@@ -139,7 +139,7 @@
           </div>
         </div>
 
-        <!-- Modal confirmación -->
+        
         <div v-if="mostrarConfirmacion" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full">
             <h3 class="text-xl font-bold mb-4 text-gray-800">Confirmar eliminación</h3>
@@ -186,35 +186,35 @@ export default {
   components: { BaseHeading, BaseButtonSecondary },
   data() {
     return {
-      // UI
+   
       floatingMessage: null,
       showFloatingMessage: false,
       mostrarConfirmacion: false,
 
-      // Usuario / datos
+     
       userId: null,
 
-      // Saldos
+     
       tempInitialAmount: null,
       initialAmount: 0,
       remainingAmount: 0,
-      additionalAmounts: [], // [{amount, description, date}]
+      additionalAmounts: [], 
 
       tempAdditionalAmount: null,
       tempAdditionalDescription: "",
 
-      // Errores
+      
       initialAmountError: false,
       additionalAmountError: false,
       additionalDescriptionError: false,
 
-      // Gastos
+      
       gastos: [],
     };
   },
 
   methods: {
-    /* ===== Utilidades ===== */
+   
     formatCurrency(value) {
       const amount = parseFloat(value);
       if (isNaN(amount)) return "Monto inválido";
@@ -228,9 +228,9 @@ export default {
 
     formatDate(tsOrIso) {
       if (!tsOrIso) return "Fecha desconocida";
-      // Firestore Timestamp
+      
       if (tsOrIso?.toDate) return tsOrIso.toDate().toLocaleDateString("es-AR");
-      // ISO/string/date
+     
       return new Date(tsOrIso).toLocaleDateString("es-AR");
     },
 
@@ -254,7 +254,7 @@ export default {
       return snap.docs[0].id;
     },
 
-    /* ===== Lectura reactiva de saldos ===== */
+    
     async listenForChanges() {
       const userDocId = await this.getUserDocIdByUID();
       const montoRef = doc(db, "users", userDocId, "settings", "montoTotal");
@@ -267,12 +267,12 @@ export default {
         this.remainingAmount = Number(data.remainingAmount || 0);
         this.additionalAmounts = Array.isArray(data.additionalAmounts) ? data.additionalAmounts : [];
 
-        // Cada vez que cambien saldos desde fuera, recalculo el restante con gastos actuales
+        
         this.updateRemainingAmount();
       });
     },
 
-    /* ===== Gastos en vivo ===== */
+
     listenForGastos() {
       const gastosRef = query(
         collection(db, "gastos"),
@@ -286,7 +286,7 @@ export default {
       });
     },
 
-    /* ===== Cálculo central del disponible ===== */
+    
  async updateRemainingAmount() {
   const totalGastos = this.gastos.reduce((acc, gasto) => {
     if (gasto.paymentMethod === "Tarjeta de Crédito" && gasto.creditCard) {
@@ -311,7 +311,7 @@ export default {
       {
         initialAmount: this.initialAmount,
         additionalAmounts: this.additionalAmounts,
-        remainingAmount: this.remainingAmount, // 👈 ya calculado acá
+        remainingAmount: this.remainingAmount, 
       },
       { merge: true }
     );
@@ -320,9 +320,9 @@ export default {
   }
 },
 
-    /* ===== Agregar saldo adicional ===== */
+    
    async addAdditionalAmount() {
-  // Validación
+  
   this.additionalAmountError =
     this.tempAdditionalAmount === null || Number(this.tempAdditionalAmount) <= 0;
   this.additionalDescriptionError = !this.tempAdditionalDescription.trim();
@@ -335,7 +335,7 @@ export default {
     return;
   }
 
-  // Agrego local
+  
   const nuevoSaldo = {
     amount: Number(this.tempAdditionalAmount),
     description: this.tempAdditionalDescription || null,
@@ -347,14 +347,14 @@ export default {
     const userDocId = await this.getUserDocIdByUID();
     const montoRef = doc(db, "users", userDocId, "settings", "montoTotal");
 
-    // 👇 guardo el array, sin calcular acá el remaining
+    
     await setDoc(
       montoRef,
       { additionalAmounts: this.additionalAmounts },
       { merge: true }
     );
 
-    await this.updateRemainingAmount(); // 👈 recalculo disponible
+    await this.updateRemainingAmount(); 
     this.tempAdditionalAmount = null;
     this.tempAdditionalDescription = "";
     this.mostrarMensajeTemporal("Saldo adicional agregado correctamente");
@@ -363,7 +363,7 @@ export default {
   }
 },
 
-    /* ===== Saldo inicial ===== */
+    
    async setInitialAmount() {
   if (this.tempInitialAmount === null || Number(this.tempInitialAmount) < 0) {
     this.initialAmountError = true;
@@ -383,7 +383,7 @@ export default {
       { merge: true }
     );
 
-    await this.updateRemainingAmount(); // 👈 recalculo acá
+    await this.updateRemainingAmount(); 
     this.tempInitialAmount = null;
     this.mostrarMensajeTemporal("Saldo inicial agregado correctamente");
   } catch (e) {
@@ -391,7 +391,7 @@ export default {
   }
 },
 
-    /* ===== Eliminar todos los gastos ===== */
+    
     async eliminarTodosLosGastos() {
       try {
         const gastosRef = collection(db, "gastos");
@@ -399,7 +399,7 @@ export default {
         const snap = await getDocs(qG);
         await Promise.all(snap.docs.map((d) => deleteDoc(d.ref)));
 
-        // Restante = initial + sum(adicionales) (sin gastos)
+        
         const userDocId = await this.getUserDocIdByUID();
         const montoRef = doc(db, "users", userDocId, "settings", "montoTotal");
         const newRemaining = Number(this.initialAmount || 0) + this.sumAdditionalAmounts();
@@ -422,7 +422,7 @@ export default {
       }
     },
 
-    /* ===== Navegación ===== */
+    
     irACalendarioPagos() {
       this.$router.push("/calendario-pagos");
     },
@@ -433,14 +433,14 @@ export default {
   },
 
   async mounted() {
-    // Aseguramos UID antes de enganchar listeners
+    
     onAuthStateChanged(getAuth(), async (user) => {
       if (!user) return;
       this.userId = user.uid;
 
-      // Engancho listeners reactivos
-      await this.listenForChanges(); // saldo inicial, adicionales, remaining
-      this.listenForGastos();        // gastos en vivo
+      
+      await this.listenForChanges(); 
+      this.listenForGastos();       
     });
   },
 };

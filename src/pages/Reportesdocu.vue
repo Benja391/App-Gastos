@@ -5,11 +5,11 @@
              w-full max-w-5xl p-8 grid gap-8 mt-1 overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.35)]
              hover:shadow-[0_12px_45px_rgba(0,0,0,0.45)] transition-shadow duration-500">
 
-      <!-- Encabezado -->
+     
       <BaseHeading>Reportes</BaseHeading>
       <p class="text-center text-gray-600 mb-6">Generá reportes detallados con tus datos reales</p>
 
-      <!-- Mensaje -->
+ 
       <transition name="fade">
         <div
           v-if="mensaje"
@@ -20,13 +20,13 @@
         </div>
       </transition>
 
-      <!-- Loader -->
+     
       <div v-if="loading" class="flex justify-center items-center my-6">
         <div class="animate-spin rounded-full h-10 w-10 border-4 border-green-200"></div>
         <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-green-600 absolute"></div>
       </div>
 
-      <!-- Lista de reportes -->
+     
       <div v-else class="space-y-6">
         <div
           v-for="reporte in reportesDisponibles"
@@ -88,7 +88,7 @@ export default {
     const settings = ref(null);
     const loading = ref(false);
 
-    // 🔹 sistema de mensajes
+    
     const mensaje = ref("");
     const mensajeClass = ref("");
 
@@ -113,7 +113,7 @@ export default {
       { id: "settings", nombre: "Reporte de Saldos", descripcion: "Saldo inicial y adicionales guardados." },
     ]);
 
-    // 🔹 Cargar datos
+   
     const cargarDatos = async () => {
       if (!user.value) return;
       loading.value = true;
@@ -141,7 +141,7 @@ export default {
       loading.value = false;
     };
 
-    // ===== DESCARGAS =====
+  
     const descargarExcel = (id) => {
       let data = [];
       let nombre = "";
@@ -250,7 +250,7 @@ export default {
       mostrarMensaje(`Reporte de ${nombre} descargado en Word`, "success");
     };
 
-    // ===== INIT =====
+    
     onMounted(() => {
       auth.onAuthStateChanged(async (u) => {
         if (u) {
