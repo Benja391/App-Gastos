@@ -10,8 +10,39 @@
       <div class="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-emerald-200/20 to-transparent rounded-full -ml-24 -mb-24"></div>
       
       <div class="relative z-10">
-        <BaseHeading >Presupuestos</BaseHeading>
-        <p class="text-center text-gray-600 mb-6">Administrá tus finanzas de manera inteligente</p>
+        <BaseHeading >Control de gastos</BaseHeading>
+        <p class="text-center text-gray-600 mb-2">Definí límites por categoría y seguí tu avance en tiempo real</p>
+        <div class="flex justify-center mb-6">
+          <div class="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 px-4 py-2 rounded-xl text-sm text-blue-900">
+            <span>ℹ️</span>
+            <span>Creá presupuestos para controlar tus gastos por categoría. Te avisamos cuando te acerques al límite.</span>
+          </div>
+        </div>
+
+        <div
+          v-if="showOnboarding"
+          class="mb-6 bg-amber-50 border border-amber-200 p-4 rounded-2xl flex flex-col md:flex-row md:items-center md:justify-between gap-3"
+        >
+          <p class="text-sm text-amber-900 font-medium">
+            👋 Primera vez acá: podés empezar con un ejemplo rápido y después personalizarlo.
+          </p>
+          <div class="flex gap-2">
+            <button
+              type="button"
+              @click="applyBudgetExample"
+              class="px-4 py-2 rounded-lg bg-green-600 text-white text-sm font-semibold hover:bg-green-700 transition"
+            >
+              Usar ejemplo “Comida - $15.000”
+            </button>
+            <button
+              type="button"
+              @click="dismissOnboarding"
+              class="px-4 py-2 rounded-lg bg-white border border-amber-300 text-amber-900 text-sm font-semibold hover:bg-amber-100 transition"
+            >
+              Entendido
+            </button>
+          </div>
+        </div>
 
        
         <div v-if="message" class="mb-6 p-4 rounded-2xl text-black font-medium border-l-4 shadow-sm" :class="messageClass">
@@ -79,7 +110,7 @@
               </p>
             </div>
 
-            <div class="lg:col-span-2 flex justify-center pt-4">
+            <div class="lg:col-span-2 flex flex-col md:flex-row justify-center items-center gap-3 pt-4">
               <button
                 type="submit"
                 class="group relative px-8 py-4 bg-green-600 text-white font-bold rounded-2xl hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-green-200"
@@ -88,6 +119,13 @@
                   Agregá presupuesto
                 </span>
                 <div class="absolute inset-0 bg-green-600 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </button>
+              <button
+                type="button"
+                @click="applyBudgetExample"
+                class="px-6 py-3 rounded-xl border-2 border-green-200 text-green-700 font-semibold hover:bg-green-50 transition"
+              >
+                Cargar ejemplo “Comida - $15.000”
               </button>
             </div>
           </form>
@@ -98,7 +136,7 @@
           <div class="flex items-center justify-between mb-8">
             <h2 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
               <div class="w-1 h-8 bg-gradient-to-b from-green-600 to-emerald-600 rounded-full"></div>
-              Mis presupuestos
+              Mis límites de gasto
             </h2>
             <div class="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
               {{ budgets.length }} {{ budgets.length === 1 ? 'presupuesto' : 'presupuestos' }}
@@ -140,6 +178,32 @@
                   </svg>
                   {{ activeDesglose === budget.id ? 'Ocultar' : 'Ver desglose' }}
                 </button>
+              </div>
+
+              <div class="mb-4">
+                <div class="flex items-center justify-between text-xs text-gray-600 mb-1">
+                  <span>{{ formatCurrency(getTotalGastado(budget.id)) }} gastados</span>
+                  <span>{{ getBudgetProgress(budget) }}%</span>
+                </div>
+                <div class="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+                  <div
+                    class="h-full transition-all duration-300"
+                    :class="getBudgetProgressClass(budget)"
+                    :style="{ width: `${Math.min(getBudgetProgress(budget), 100)}%` }"
+                  ></div>
+                </div>
+                <p
+                  class="text-xs mt-1 font-semibold"
+                  :class="getBudgetProgress(budget) >= 100 ? 'text-red-600' : getBudgetProgress(budget) >= 80 ? 'text-amber-600' : 'text-green-600'"
+                >
+                  {{
+                    getBudgetProgress(budget) >= 100
+                      ? 'Superaste el límite'
+                      : getBudgetProgress(budget) >= 80
+                        ? 'Te estás acercando al límite'
+                        : 'Vas bien con este límite'
+                  }}
+                </p>
               </div>
 
              
@@ -232,6 +296,7 @@ setup() {
   const isLoading = ref(false);
   const message = ref('');
   const messageClass = ref('bg-green-100 border border-green-400 text-green-800');
+  const showOnboarding = ref(false);
 
   const formatCurrency = (v) =>
     `$ ${parseInt(v, 10).toLocaleString('es-AR')}`;
@@ -334,10 +399,40 @@ watch(newBudgetAmount, (val) => {
   const getExpensesByBudget = (budgetId) =>
     expenses.value.filter((e) => e.budget === budgetId);
 
+  const applyBudgetExample = () => {
+    newBudgetName.value = 'Comida';
+    newBudgetAmount.value = 15000;
+    budgetNameError.value = false;
+    budgetAmountError.value = false;
+  };
+
+  const dismissOnboarding = () => {
+    showOnboarding.value = false;
+    if (user.value?.uid) {
+      localStorage.setItem(`presupuestos_onboarding_seen_${user.value.uid}`, '1');
+    }
+  };
+
+  const getBudgetProgress = (budget) => {
+    const monto = Number(budget.amount || 0);
+    if (monto <= 0) return 0;
+    const total = getTotalGastado(budget.id);
+    return Math.round((total / monto) * 100);
+  };
+
+  const getBudgetProgressClass = (budget) => {
+    const progress = getBudgetProgress(budget);
+    if (progress >= 100) return 'bg-red-500';
+    if (progress >= 80) return 'bg-amber-500';
+    return 'bg-green-500';
+  };
+
   onMounted(() => {
     auth.onAuthStateChanged(async (u) => {
       if (u) {
         user.value = u;
+        const onboardingSeen = localStorage.getItem(`presupuestos_onboarding_seen_${u.uid}`);
+        showOnboarding.value = onboardingSeen !== '1';
         await loadBudgets();
         await loadExpenses();
       }
@@ -361,6 +456,11 @@ watch(newBudgetAmount, (val) => {
     budgetNameError,
     budgetAmountError,
     getTotalGastado,
+    applyBudgetExample,
+    dismissOnboarding,
+    showOnboarding,
+    getBudgetProgress,
+    getBudgetProgressClass,
   };
 }
 
