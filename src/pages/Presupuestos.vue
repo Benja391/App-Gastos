@@ -9,7 +9,7 @@
       <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-green-200/20 to-transparent rounded-full -mr-32 -mt-32"></div>
       <div class="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-emerald-200/20 to-transparent rounded-full -ml-24 -mb-24"></div>
       
-      <div class="relative z-10">
+      <div class="relative z-10 flex flex-col gap-6">
         <BaseHeading >Control de gastos</BaseHeading>
         <p class="text-center text-gray-600 mb-2">Definí límites por categoría y seguí tu avance en tiempo real</p>
         <div class="flex justify-center mb-6">
@@ -58,7 +58,7 @@
         </div>
 
         
-        <div class="bg-gradient-to-r from-gray-50 to-green-50/30 p-8 rounded-2xl shadow-lg border border-gray-100 mb-8">  
+        <div class="w-full bg-gradient-to-r from-gray-50 to-green-50/30 p-8 rounded-2xl shadow-lg border border-gray-100">  
           <form @submit.prevent="addBudget" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="space-y-2">
               <label class="block text-sm font-semibold text-gray-700 mb-3">Nombre del presupuesto</label>
@@ -132,7 +132,7 @@
         </div>
 
         
-        <div class="max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+        <div class="w-full clear-both rounded-2xl bg-white/70 border border-gray-100 p-6 md:p-8">
           <div class="flex items-center justify-between mb-8">
             <h2 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
               <div class="w-1 h-8 bg-gradient-to-b from-green-600 to-emerald-600 rounded-full"></div>
@@ -143,11 +143,11 @@
             </div>
           </div>
 
-          <div class="space-y-6">
+          <div class="space-y-6 max-h-[520px] overflow-y-auto pr-2 custom-scrollbar">
             <div
               v-for="budget in budgets"
               :key="budget.id"
-              class="group bg-white border-2 border-gray-100 hover:border-green-200 p-6 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+              class="w-full group bg-white border-2 border-gray-100 hover:border-green-200 p-6 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
             >
               <div class="flex justify-between items-start mb-4">
                 <div class="flex-1">
