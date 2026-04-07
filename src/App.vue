@@ -81,14 +81,6 @@
             >Gráficos</router-link
           >
         </li>
-        <li>
-          <router-link
-            class="py-2 whitespace-nowrap px-3 inline-block rounded-2xl font-medium hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-            to="/Calendario-Pagos"
-            @click="closeMenu"
-            >Calendario de pagos</router-link
-          >
-        </li>
         <li v-if="userId">
           <router-link
             class="block py-2 px-4 rounded-2xl font-medium whitespace-nowrap hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
@@ -185,14 +177,6 @@
               class="block py-2 px-4 rounded-2xl hover:bg-green-600 hover:text-white transition-all duration-300 font-medium"
               to="/Graficos"
               >Gráficos</router-link
-            >
-          </li>
-          <li class="w-full text-right">
-            <router-link
-              @click="closeMenu"
-              class="block py-2 px-4 rounded-2xl hover:bg-green-600 hover:text-white transition-all duration-300 font-medium"
-              to="/Calendario-Pagos"
-              >Calendario de pagos</router-link
             >
           </li>
           <li v-if="userId">
@@ -303,13 +287,6 @@
                 to="/monto-total"
                 class="hover:text-green-600 transition-colors duration-300 py-2 px-3 rounded-lg hover:bg-green-50"
                 >Ingresos</router-link
-              >
-            </li>
-            <li>
-              <router-link
-                to="/Calendario-Pagos"
-                class="hover:text-green-600 transition-colors duration-300 py-2 px-3 rounded-lg hover:bg-green-50"
-                >Calendario</router-link
               >
             </li>
             <li>
