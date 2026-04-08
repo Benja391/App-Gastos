@@ -14,7 +14,7 @@
 
         <div
           v-if="showFloatingMessage"
-          class="p-4 rounded-2xl text-black font-medium border-l-4 shadow-sm bg-green-50 border-green-200 text-green-800"
+          class="p-4 rounded-2xl text-black font-medium border-l-4 shadow-sm bg-green-50 border-green-200 "
         >
           {{ floatingMessage }}
         </div>

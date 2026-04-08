@@ -1,6 +1,6 @@
  <template>
      <nav
-      class="sticky top-2 z-40 flex justify-between items-center px-8 md:px-6 py-8 bg-gradient-to-r from-emerald-100 via-green-50 to-emerald-100 text-gray-900 mb-4 relative rounded-3xl mx-2 mt-3 border border-emerald-300/60 shadow-[0_12px_30px_rgba(16,185,129,0.18)] backdrop-blur-sm"
+      class="sticky top-2 z-40 flex justify-between items-center px-8 md:px-6 py-8 bg-gradient-to-r from-emerald-100 via-green-50 to-emerald-100 text-gray-900 mb-4  rounded-3xl mx-2 mt-3 border border-emerald-300/60 shadow-[0_12px_30px_rgba(16,185,129,0.18)] backdrop-blur-sm"
     >
       
        <p class="text-2xl flex items-center">
