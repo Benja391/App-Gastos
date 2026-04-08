@@ -8,7 +8,6 @@ import CargarGasto from "../pages/Cargar-Gasto.vue";
 import MontoTotal from "../pages/Monto-Total.vue";
 import Presupuestos from "../pages/Presupuestos.vue";
  import MiPerfil from "../pages/Mi-Perfil.vue";
-import CalendarioPagos from "../pages/Calendario-Pagos.vue";
 import ConfiguracionTarjeta from "../components/ConfiguracionTarjeta.vue";
 import HistorialGastos from "../pages/Historial-Gastos.vue";
 import Graficos from "../pages/Graficos.vue";
@@ -22,8 +21,7 @@ const routes = [
     { path: '/Monto-Total',    component: MontoTotal,  meta:{ requiresAuth: true }},
     { path: '/Cargar-Gasto',   component: CargarGasto,  meta:{ requiresAuth: true }},
     { path: '/Presupuestos',   component: Presupuestos, meta:{ requiresAuth: true }},
-    { path: '/Mi-Perfil',      component: MiPerfil, meta:{ requiresAuth: true }},
-    { path: '/Calendario-Pagos', component: CalendarioPagos, meta:{ requiresAuth: true }},
+     { path: '/Mi-Perfil',      component: MiPerfil, meta:{ requiresAuth: true }},
     { path: '/Configuracion-Tarjeta', component: ConfiguracionTarjeta, meta:{ requiresAuth: true }},
     { path: '/Historial-Gastos', component: HistorialGastos, meta:{ requiresAuth: true }},
     { path: '/Graficos', component: Graficos, meta:{ requiresAuth: true }},

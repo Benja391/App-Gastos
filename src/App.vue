@@ -1,11 +1,11 @@
  <template>
-    <nav
-      class="flex justify-between items-center px-2 py-9 bg-green-200  text-gray-900 mb-4 relative rounded-3xl mx-1 mt-3 border border-green-500 "
+     <nav
+      class="sticky top-2 z-40 flex justify-between items-center px-8 md:px-6 py-8 bg-gradient-to-r from-emerald-100 via-green-50 to-emerald-100 text-gray-900 mb-4 relative rounded-3xl mx-2 mt-3 border border-emerald-300/60 shadow-[0_12px_30px_rgba(16,185,129,0.18)] backdrop-blur-sm"
     >
       
-      <p class="text-2xl">
+       <p class="text-2xl flex items-center">
         <router-link to="/" @click="closeMenu">
-          <img src="/logo-definitivo.png" alt="Logo" class="h-16 w-auto" />
+          <img src="/logo-definitivo.png" alt="Logo App Gastos" class="h-14 md:h-16 w-auto drop-shadow-md hover:scale-[1.02] transition-transform" decoding="async" fetchpriority="high" />
         </router-link>
       </p>
 
@@ -13,7 +13,7 @@
         <button
           @click="toggleMenu"
           ref="menuButton"
-          class="text-gray-700 hover:text-white hover:bg-green-600 p-3 rounded-2xl transition-all duration-300 shadow-lg"
+           class="text-gray-700 hover:text-white hover:bg-green-600 p-3 rounded-2xl transition-all duration-300 shadow-md border border-emerald-200 bg-white/90"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -32,10 +32,10 @@
         </button>
       </div>
 
-    <ul class="hidden xl:flex flex-wrap items-center">
+     <ul class="hidden xl:flex flex-wrap items-center gap-1">
         <li>
           <router-link
-            class="block py-2 px-4 rounded-2xl font-medium hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+            class="block py-2.5 px-4 rounded-2xl font-medium hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             to="/"
             @click="closeMenu"
             >Inicio</router-link
@@ -43,7 +43,7 @@
         </li>
         <li>
           <router-link
-            class="block py-2 px-4 rounded-2xl font-medium hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+          class="block py-2.5 px-4 rounded-2xl font-medium hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             to="/Presupuestos"
             @click="closeMenu"
             >Presupuestos</router-link
@@ -51,7 +51,7 @@
         </li>
         <li>
           <router-link
-            class="py-2 whitespace-nowrap px-3 inline-block rounded-2xl font-medium hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+             class="py-2.5 whitespace-nowrap px-4 inline-block rounded-2xl font-medium hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             to="/monto-total"
             @click="closeMenu"
             >Ingresos totales</router-link
@@ -60,14 +60,14 @@
         <li>
           <button
             @click="irACargarGasto"
-            class="py-2 px-5 inline-block whitespace-nowrap rounded-xl font-medium text-green-700 border bg-white hover:bg-green-100 transition duration-200"
+          class="py-2.5 px-5 inline-block whitespace-nowrap rounded-xl font-medium text-green-700 border border-emerald-300 bg-white hover:bg-green-100 transition duration-200 shadow-sm hover:shadow"
           >
             <span class="flex items-center gap-2">Cargar gasto</span>
           </button>
         </li>
         <li>
           <router-link
-            class="py-2 whitespace-nowrap px-3 inline-block rounded-2xl font-medium hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                    class="py-2.5 whitespace-nowrap px-4 inline-block rounded-2xl font-medium hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             to="/Historial-Gastos"
             @click="closeMenu"
             >Historial de gastos</router-link
@@ -75,24 +75,23 @@
         </li>
         <li>
           <router-link
-            class="block py-2 px-4 rounded-2xl font-medium hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+            class="block py-2.5 px-4 rounded-2xl font-medium hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             to="/Graficos"
             @click="closeMenu"
             >Gráficos</router-link
           >
         </li>
-        <li>
+        <!-- <li>
           <router-link
             class="py-2 whitespace-nowrap px-3 inline-block rounded-2xl font-medium hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             to="/Calendario-Pagos"
             @click="closeMenu"
             >Calendario de pagos</router-link
           >
-        </li>
+        </li> -->
         <li v-if="userId">
           <router-link
-            class="block py-2 px-4 rounded-2xl font-medium whitespace-nowrap hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-            to="/Mi-Perfil"
+             class="block py-2.5 px-4 rounded-2xl font-medium whitespace-nowrap hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             @click="closeMenu"
           >
             Mi perfil
@@ -101,7 +100,7 @@
         <li v-if="userId">
           <button
             @click="logout"
-            class="py-3 whitespace-nowrap px-3 inline-block text-red-600 hover:text-white hover:bg-red-500 font-medium rounded-2xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ml-2"
+           class="py-2.5 whitespace-nowrap px-4 inline-block text-red-600 hover:text-white hover:bg-red-500 font-medium rounded-2xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ml-2 border border-red-200"
           >
             Cerrar sesión
           </button>
@@ -137,7 +136,7 @@
         <ul
           v-show="isMenuOpen"
           ref="menu"
-          class="absolute top-full right-0 w-80 bg-white backdrop-blur-lg flex flex-col items-end px-6 py-4 gap-3 xl:hidden z-50 rounded-3xl shadow-2xl border border-gray-100 mt-2"
+         class="absolute top-full right-0 w-80 bg-white/95 backdrop-blur-lg flex flex-col items-end px-6 py-4 gap-3 xl:hidden z-50 rounded-3xl shadow-2xl border border-gray-100 mt-2"
         >
           <li class="w-full text-right">
             <router-link
@@ -187,14 +186,14 @@
               >Gráficos</router-link
             >
           </li>
-          <li class="w-full text-right">
+          <!-- <li class="w-full text-right">
             <router-link
               @click="closeMenu"
               class="block py-2 px-4 rounded-2xl hover:bg-green-600 hover:text-white transition-all duration-300 font-medium"
               to="/Calendario-Pagos"
               >Calendario de pagos</router-link
             >
-          </li>
+          </li>  -->
           <li v-if="userId">
             <router-link
               class="block py-2 px-4 rounded-2xl font-medium hover:bg-green-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
@@ -305,13 +304,13 @@
                 >Ingresos</router-link
               >
             </li>
-            <li>
+           <!-- <li>
               <router-link
                 to="/Calendario-Pagos"
                 class="hover:text-green-600 transition-colors duration-300 py-2 px-3 rounded-lg hover:bg-green-50"
                 >Calendario</router-link
               >
-            </li>
+            </li>  -->
             <li>
               <router-link
                 to="/Historial-Gastos"

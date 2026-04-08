@@ -1,167 +1,235 @@
 <template>
-  <section class="flex items-center justify-center min-h-screen bg-[#08a04b] text-white mt-8">
-    <div class="relative bg-gray-900 rounded-lg shadow-[0_15px_30px_rgba(0,0,0,0.6)] w-full max-w-lg p-8 mx-4 mt-12 mb-12">
-      <h1 class="text-2xl md:text-3xl font-bold text-white mb-6 text-center">
-        Creá una cuenta
-      </h1>
+  <section class="min-h-screen bg-[#08a04b] px-4 py-10 mt-8 flex items-center justify-center">
+    <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 bg-white/95 rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.35)] border border-white/40">
+      <div class="p-6 md:p-10 bg-gray-950 text-white order-2 lg:order-1">
+        <h1 class="text-3xl font-bold mb-2 text-center">Creá tu cuenta</h1>
+        <p class="text-center text-gray-400 mb-6">Empezá a organizar tus finanzas hoy.</p>
 
-      <form @submit.prevent="handleSubmit" class="mt-6 space-y-6">
-        <div class="space-y-4">
+        <form @submit.prevent="handleSubmit" class="space-y-4">
           <div>
-            <label for="email" class="block text-sm font-medium text-gray-300">Email</label>
-            <BaseInputs 
-              type="email"
-              placeholder="Ingresá tu email"
-              id="email"
-              v-model="user.email"
-              class="w-full px-4 py-3 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
-            <p v-if="emailError" class="text-red-500 text-sm mt-2">{{ emailError }}</p>
-          </div>
-
-          <div>
-  <label for="password" class="block text-sm font-medium text-gray-300">Contraseña</label>
-  <BaseInputs 
-    type="password"
-    placeholder="Creá una contraseña"
-    id="password"
-    v-model="user.password"
-    class="w-full px-4 py-3 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-  />
-
-  
-  <ul class="mt-2 text-sm">
-    <li :class="{'text-green-500': user.password.length >= 8, 'text-red-500': user.password.length < 8}">
-       Mínimo 8 caracteres
-    </li>
-    <li :class="{'text-green-500': /[A-Z]/.test(user.password), 'text-red-500': !/[A-Z]/.test(user.password)}">
-       Al menos una letra mayúscula
-    </li>
-    <li :class="{'text-green-500': /[0-9]/.test(user.password), 'text-red-500': !/[0-9]/.test(user.password)}">
-       Al menos un número
-    </li>
-   <li :class="{
-  'text-green-500': /[!@#$%^&*(),.?':{}|<>]/.test(user.password),
-  'text-red-500': !/[!@#$%^&*(),.?':{}|<>]/.test(user.password)
-}">
-   Al menos un carácter especial
-</li>
-  
-  </ul>
-</div>
-          <div>
-            <label for="nombreDeUsuario" class="block text-sm font-medium text-gray-300">
-              Nombre de usuario <span class="text-gray-400">(opcional)</span>
-            </label>
-            <BaseInputs 
-              type="text"
+            <label for="nombreDeUsuario" class="block text-sm font-medium text-gray-300 mb-1">Nombre de usuario (opcional)</label>
+            <BaseInputs
               id="nombreDeUsuario"
-              placeholder="Ingresá tu nombre de usuario"
               v-model="user.nombreDeUsuario"
-              class="w-full px-4 py-3 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              type="text"
+              placeholder="Ej: juan_finanzas"
+              class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-green-500"
             />
-            <p v-if="nombreDeUsuarioError" class="text-red-500 text-sm mt-2">{{ nombreDeUsuarioError }}</p>
           </div>
-        </div>
 
-        <button 
-          type="submit"
-          :disabled="loading || cuentaCreada"
-          class="w-full py-3 mt-4 bg-green-600 text-white rounded-lg shadow-lg hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-500"
-        >
-          <span v-if="loading">Cargando...</span>
-          <span v-else-if="cuentaCreada">¡Cuenta creada con éxito!</span>
-          <span v-else>¡Creá tu cuenta!</span>
-        </button>
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email</label>
+            <div class="relative">
+              <BaseInputs
+                id="email"
+                v-model="user.email"
+                type="email"
+                placeholder="tuemail@ejemplo.com"
+                class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-green-500"
+                @input="validateEmail"
+                @blur="touched.email = true"
+              />
+              <span v-if="touched.email" class="absolute right-3 top-1/2 -translate-y-1/2 text-sm">{{ emailIcon }}</span>
+            </div>
+            <p v-if="touched.email && emailError" class="text-red-400 text-sm mt-1">{{ emailError }}</p>
+          </div>
+
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-300 mb-1">Contraseña</label>
+            <div class="relative">
+              <BaseInputs
+                id="password"
+                v-model="user.password"
+                type="password"
+                placeholder="Creá una contraseña segura"
+                class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-green-500"
+                @input="validatePassword"
+                @blur="touched.password = true"
+              />
+              <span v-if="touched.password" class="absolute right-3 top-1/2 -translate-y-1/2 text-sm">{{ passwordIcon }}</span>
+            </div>
+            <p v-if="touched.password && passwordError" class="text-red-400 text-sm mt-1">{{ passwordError }}</p>
+
+            <ul class="mt-2 text-xs space-y-1 text-gray-300">
+              <li :class="passwordChecks.length ? 'text-green-400' : 'text-red-400'">• Mínimo 8 caracteres</li>
+              <li :class="passwordChecks.upper ? 'text-green-400' : 'text-red-400'">• Al menos una mayúscula</li>
+              <li :class="passwordChecks.number ? 'text-green-400' : 'text-red-400'">• Al menos un número</li>
+              <li :class="passwordChecks.special ? 'text-green-400' : 'text-red-400'">• Al menos un carácter especial</li>
+            </ul>
+          </div>
+
+          <div>
+            <label for="confirmPassword" class="block text-sm font-medium text-gray-300 mb-1">Confirmar contraseña</label>
+            <div class="relative">
+              <BaseInputs
+                id="confirmPassword"
+                v-model="confirmPassword"
+                type="password"
+                placeholder="Repetí tu contraseña"
+                class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-green-500"
+                @input="validateConfirmPassword"
+                @blur="touched.confirmPassword = true"
+              />
+              <span v-if="touched.confirmPassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-sm">{{ confirmIcon }}</span>
+            </div>
+            <p v-if="touched.confirmPassword && confirmPasswordError" class="text-red-400 text-sm mt-1">{{ confirmPasswordError }}</p>
+          </div>
+
+          <button
+            type="submit"
+            :disabled="loading || cuentaCreada"
+            class="w-full py-3 bg-green-600 rounded-xl font-bold hover:bg-green-500 transition disabled:opacity-60"
+          >
+            <span v-if="loading">Creando cuenta...</span>
+            <span v-else-if="cuentaCreada">¡Cuenta creada!</span>
+            <span v-else>Crear cuenta</span>
+          </button>
+
+          <button
+            type="button"
+            @click="handleGoogleRegister"
+            :disabled="googleLoading"
+            class="w-full py-3 border border-white/30 rounded-xl font-semibold hover:bg-white/10 transition disabled:opacity-60"
+          >
+            {{ googleLoading ? 'Conectando con Google...' : 'Registrarme con Google' }}
+          </button>
+        </form>
+
+        <p v-if="errorMessage" class="text-red-400 mt-4 text-sm text-center">{{ errorMessage }}</p>
+        <p v-if="successMessage" class="text-green-400 mt-4 text-sm text-center">{{ successMessage }}</p>
 
         <p class="text-center text-sm text-gray-300 mt-6">
           ¿Ya tenés una cuenta?
-          <router-link to="/Iniciar-sesion" class="text-green-400 hover:underline hover:text-green-300">
-            Iniciá sesión
-          </router-link>
+          <router-link to="/Iniciar-sesion" class="text-green-400 hover:underline hover:text-green-300">Iniciá sesión</router-link>
         </p>
-      </form>
+      </div>
 
-      <p v-if="errorMessage" class="text-red-500 mt-4 text-center">{{ errorMessage }}</p>
+      <div class="hidden lg:flex relative items-end p-8 bg-gradient-to-br from-emerald-700 to-green-900 text-white order-1 lg:order-2">
+        <img src="/registro-facil.png" alt="Ilustración registro" class="absolute inset-0 w-full h-full object-cover opacity-25" />
+        <div class="relative z-10">
+          <p class="text-sm uppercase tracking-widest text-green-100 mb-2">Primer paso</p>
+          <h2 class="text-4xl font-extrabold leading-tight mb-3">Creá tu perfil y empezá a tomar control</h2>
+          <p class="text-green-100">Configurá tu cuenta en minutos y accedé a todas las herramientas.</p>
+        </div>
+      </div>
     </div>
   </section>
 </template>
 
-
-
 <script>
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  setPersistence,
+  browserLocalPersistence,
+} from 'firebase/auth';
 import { db } from '../services/firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import BaseInputs from '../components/BaseInputs.vue';
 
-
 export default {
-  name: "Register",
-  components: { BaseInputs, },
+  name: 'Register',
+  components: { BaseInputs },
   data() {
     return {
       user: {
-        
         nombreDeUsuario: '',
         email: '',
         password: '',
       },
+      confirmPassword: '',
       loading: false,
+      googleLoading: false,
       successMessage: '',
       errorMessage: '',
-      
-    
       emailError: '',
       passwordError: '',
+      confirmPasswordError: '',
       cuentaCreada: false,
+      touched: {
+        email: false,
+        password: false,
+        confirmPassword: false,
+      },
     };
   },
+  computed: {
+    passwordChecks() {
+      const p = this.user.password || '';
+      return {
+        length: p.length >= 8,
+        upper: /[A-Z]/.test(p),
+        number: /[0-9]/.test(p),
+        special: /[!@#$%^&*(),.?":{}|<>]/.test(p),
+      };
+    },
+    emailIcon() {
+      if (!this.user.email) return '•';
+      return this.emailError ? '❌' : '✅';
+    },
+    passwordIcon() {
+      if (!this.user.password) return '•';
+      return this.passwordError ? '❌' : '✅';
+    },
+    confirmIcon() {
+      if (!this.confirmPassword) return '•';
+      return this.confirmPasswordError ? '❌' : '✅';
+    },
+  },
   methods: {
-    validateForm() {
-  this.emailError = '';
-  this.passwordError = '';
-
-  let valid = true;
-
-  
-  if (!this.user.email) {
-    this.emailError = 'El correo electrónico es obligatorio.';
-    valid = false;
-  } else if (!/\S+@\S+\.\S+/.test(this.user.email)) {
-    this.emailError = 'Por favor ingresa un correo electrónico válido.';
-    valid = false;
-  }
-
-  
-  const password = this.user.password;
-  if (!password) {
-    this.passwordError = 'La contraseña es obligatoria.';
-    valid = false;
-  } else {
-    if (password.length < 8) {
-      this.passwordError = 'La contraseña debe tener al menos 8 caracteres.';
-      valid = false;
-    } else if (!/[A-Z]/.test(password)) {
-      this.passwordError = 'La contraseña debe contener al menos una letra mayúscula.';
-      valid = false;
-    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      this.passwordError = 'La contraseña debe contener al menos un carácter especial.';
-      valid = false;
-    }
-  }
-
-  if (!valid) {
-    setTimeout(() => {
-      this.nombreDeUsuarioError = '';
+    validateEmail() {
       this.emailError = '';
+      if (!this.user.email) {
+        this.emailError = 'El correo electrónico es obligatorio.';
+      } else if (!/\S+@\S+\.\S+/.test(this.user.email)) {
+        this.emailError = 'Ingresá un correo válido (ej: nombre@dominio.com).';
+      }
+    },
+
+    validatePassword() {
       this.passwordError = '';
-    }, 2000);
-  }
+      const checks = this.passwordChecks;
+      if (!this.user.password) {
+        this.passwordError = 'La contraseña es obligatoria.';
+      } else if (!checks.length || !checks.upper || !checks.number || !checks.special) {
+        this.passwordError = 'Tu contraseña no cumple todos los requisitos.';
+      }
+      this.validateConfirmPassword();
+    },
 
-  return valid;
-},
+    validateConfirmPassword() {
+      this.confirmPasswordError = '';
+      if (!this.confirmPassword) {
+        this.confirmPasswordError = 'Confirmá tu contraseña.';
+      } else if (this.confirmPassword !== this.user.password) {
+        this.confirmPasswordError = 'Las contraseñas no coinciden.';
+      }
+    },
 
+    validateForm() {
+      this.validateEmail();
+      this.validatePassword();
+      this.validateConfirmPassword();
+      this.touched.email = true;
+      this.touched.password = true;
+      this.touched.confirmPassword = true;
+      return !this.emailError && !this.passwordError && !this.confirmPasswordError;
+    },
+
+    async createUserDocIfNeeded({ uid, email, nombreDeUsuario }) {
+      const usersRef = collection(db, 'users');
+      const q = query(usersRef, where('uid', '==', uid));
+      const existing = await getDocs(q);
+      if (!existing.empty) return;
+
+      await addDoc(usersRef, {
+        uid,
+        email,
+        nombreDeUsuario: nombreDeUsuario || '',
+      });
+    },
 
     async handleSubmit() {
       this.loading = true;
@@ -175,48 +243,71 @@ export default {
 
       try {
         const auth = getAuth();
+        await setPersistence(auth, browserLocalPersistence);
+
         const userCredential = await createUserWithEmailAndPassword(auth, this.user.email, this.user.password);
 
-        const userDoc = {
-        
-          nombreDeUsuario: this.user.nombreDeUsuario,
+        await this.createUserDocIfNeeded({
+          uid: userCredential.user.uid,
           email: this.user.email,
-          uid: userCredential.user.uid
-        };
+          nombreDeUsuario: this.user.nombreDeUsuario.trim(),
+        });
 
-        await addDoc(collection(db, 'users'), userDoc);
-
-        
+        this.successMessage = '¡Cuenta creada con éxito!';
         this.cuentaCreada = true;
 
-      
-        this.user.nombreDeUsuario = '';
-        this.user.email = '';
-        this.user.password = '';
+        this.user = { nombreDeUsuario: '', email: '', password: '' };
+        this.confirmPassword = '';
 
         setTimeout(() => {
           this.$router.push({ path: '/Monto-Total' });
-        }, 1500);
-
+        }, 1200);
       } catch (error) {
-        console.error('Error al crear cuenta:', error);
-
         if (error.code === 'auth/email-already-in-use') {
-          this.errorMessage = 'El correo electrónico ya está en uso.';
+          this.errorMessage = 'Ese correo ya está registrado. Probá iniciar sesión.';
+        } else if (error.code === 'auth/weak-password') {
+          this.errorMessage = 'La contraseña es débil. Usá una más segura.';
         } else {
-          this.errorMessage = 'Hubo un error al crear la cuenta. Por favor, intente nuevamente.';
+          this.errorMessage = 'No se pudo crear la cuenta. Intentá nuevamente.';
         }
-
-        setTimeout(() => {
-          this.errorMessage = '';
-        }, 2000);
       } finally {
         this.loading = false;
         setTimeout(() => {
           this.cuentaCreada = false;
-        }, 3000);
+        }, 2500);
       }
-    }
-  }
+    },
+
+    async handleGoogleRegister() {
+      this.errorMessage = '';
+      this.successMessage = '';
+      this.googleLoading = true;
+      try {
+        const auth = getAuth();
+        await setPersistence(auth, browserLocalPersistence);
+        const provider = new GoogleAuthProvider();
+        const result = await signInWithPopup(auth, provider);
+
+        await this.createUserDocIfNeeded({
+          uid: result.user.uid,
+          email: result.user.email || '',
+          nombreDeUsuario: result.user.displayName || '',
+        });
+
+        this.successMessage = 'Registro con Google exitoso.';
+        setTimeout(() => {
+          this.$router.push({ path: '/Monto-Total' });
+        }, 1000);
+      } catch (error) {
+        if (error.code === 'auth/popup-closed-by-user') {
+          this.errorMessage = 'Cerraste la ventana de Google antes de completar el registro.';
+        } else {
+          this.errorMessage = 'No se pudo registrar con Google. Probá nuevamente.';
+        }
+      } finally {
+        this.googleLoading = false;
+      }
+    },
+  },
 };
 </script>

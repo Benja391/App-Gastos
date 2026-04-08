@@ -1,0 +1,394 @@
+# PLAN DE MEJORAS - APP GASTOS
+Documento unificado de feedback y hoja de ruta
+
+**Fecha:** 6 de Abril 2026  
+**Versión actual:** https://app-gastos-seven.vercel.app/  
+**Objetivo:** Mejorar UX/UI antes del lanzamiento público con analytics
+**Ruta para ajecutarlo:** cd "C:\Users\Pato\Documents\App-Gastos\Gastos"
+
+---
+
+## RESUMEN EJECUTIVO
+
+### Problema principal identificado:
+**"La idea es clara, pero el desarrollo está desordenado y confuso"**
+
+### Causas raíz:
+1. Demasiados formularios y campos innecesarios
+2. Falta de jerarquía visual clara
+3. Flujos poco intuitivos
+4. Ausencia de feedback visual al usuario
+5. Funcionalidades mal explicadas o confusas
+
+### Solución:
+**Simplificar, priorizar y mejorar el feedback visual**
+
+---
+
+## PROBLEMAS CRÍTICOS (BLOQUEANTES)
+
+### 1. PANTALLA: CARGAR GASTO
+**Prioridad:** CRÍTICA  
+
+**Feedback usuario:**
+- Formulario largo y redundante
+- Bug al seleccionar "Otro" en categorías (no se puede volver)
+- Validaciones poco claras
+- Gastos rechazados sin explicación clara
+
+**Feedback técnico (Claude):**
+- Sin feedback visual al guardar
+- Campos muy planos
+- No hay preview del gasto
+
+**SOLUCIÓN PROPUESTA:**
+
+Reducir campos al mínimo:
+- Nombre (obligatorio)
+- Monto (obligatorio)
+- Categoría (obligatorio, con poder crear nueva)
+- Fecha (opcional, default: hoy)
+- Notas (opcional, colapsado)
+
+Mejoras adicionales:
+- Arreglar bug de categoría "Otro"
+- Validaciones en tiempo real con mensajes claros
+- Toast notification al guardar exitosamente
+- Animación de confirmación
+- Preview del gasto antes de guardar
+
+---
+
+### 2. PANTALLA: SALDO INICIAL / HOME
+**Prioridad:** CRÍTICA  
+
+**Feedback usuario:**
+- "Agregar otro saldo" confunde
+- No se entiende si es obligatorio cargar saldo
+- Poco claro qué hacer primero
+
+**Feedback técnico (Claude):**
+- Dashboard sin jerarquía visual
+- Información amontonada
+- No hay CTA principal claro
+
+**SOLUCIÓN PROPUESTA:**
+
+Jerarquía clara:
+1. SALDO DISPONIBLE (grande, destacado)
+2. Botón principal: "Agregar Gasto" (CTA verde, grande)
+3. Botón secundario: "Agregar Ingreso" (menos prominente)
+4. Resumen rápido (últimos 3 gastos)
+
+Mejoras adicionales:
+- Onboarding para nuevos usuarios: "¿Querés empezar registrando tu saldo actual o ir directo a gastos?"
+- Rediseño con cards y separación visual
+- Iconos para cada sección
+
+---
+
+### 3. PANTALLA: PRESUPUESTO
+**Prioridad:** ALTA  
+
+**Feedback usuario:**
+- "No se entiende claramente su función"
+- Concepto confuso
+
+**Feedback técnico (Claude):**
+- Ya mejoramos el diseño, pero falta explicación
+
+**SOLUCIÓN PROPUESTA:**
+
+- Agregar tooltip o ayuda contextual: "Creá presupuestos para controlar tus gastos por categoría. Te avisamos cuando te acerques al límite."
+- Onboarding/tutorial la primera vez
+- Ejemplo pre-cargado: "Comida - $15.000"
+- Barra de progreso visual (cuánto gastaste vs presupuesto)
+- Cambiar copy: "Mis límites de gasto" o "Control de gastos"
+
+---
+
+### 4. PANTALLA: HISTORIAL DE GASTOS
+**Prioridad:** ALTA  
+
+**Feedback usuario:**
+- Exceso de formularios y filtros
+- Confusión: aparecen saldos en pantalla de gastos
+
+**Feedback técnico (Claude):**
+- Sobrecarga visual
+- Filtros poco claros
+
+**SOLUCIÓN PROPUESTA:**
+
+Separar claramente:
+- Pestaña "Gastos" (solo gastos)
+- Pestaña "Ingresos" (solo ingresos)
+
+Simplificar filtros:
+- Por fecha (última semana, mes, año, personalizado)
+- Por categoría (dropdown simple)
+- Por monto (mayor a / menor a)
+
+Mejoras adicionales:
+- Filtros colapsables (mostrar solo cuando se necesiten)
+- Vista de lista mejorada con iconos
+- Opción de editar/eliminar más visible
+
+---
+
+### 5. PANTALLA: CALENDARIO DE PAGOS
+**Prioridad:** MEDIA  
+
+**Feedback usuario:**
+- "Agregar deuda" es confuso
+- No se comprende el flujo ni el beneficio
+- Usuario optó por no usarlo
+
+**SOLUCIÓN PROPUESTA:**
+
+CONSIDERAR ELIMINAR esta funcionalidad temporalmente
+
+O bien:
+- Renombrar a "Recordatorios de pago"
+- Simplificar: solo fecha + monto + concepto
+- Notificación/alerta el día del pago
+- Tutorial explicativo la primera vez
+- Ejemplos: "Alquiler - 1° de cada mes - $50.000"
+
+---
+
+## PROBLEMAS IMPORTANTES (NO BLOQUEANTES)
+
+### 6. PANTALLA: GRÁFICOS
+**Prioridad:** MEDIA  
+
+**Feedback usuario:**
+- Visualmente buenos
+- Primeros dos gráficos difíciles de interpretar
+- Sugerencia: cambiar nombre a "Estadísticas"
+
+**Feedback técnico (Claude):**
+- Gráficos pequeños
+- Colores poco vibrantes
+- Sin tooltips interactivos
+
+**SOLUCIÓN PROPUESTA:**
+- Renombrar sección: "Mis Estadísticas" o "Análisis"
+- Gráficos más grandes y responsive
+- Tooltips al pasar el mouse
+- Leyendas más claras
+- Paleta de colores mejorada
+- Reordenar: poner primero el más claro/útil
+
+---
+
+### 7. LOGIN / REGISTER
+**Prioridad:** ALTA (primera impresión)  
+
+**Feedback técnico (Claude):**
+- Formularios básicos y poco atractivos
+- Sin validación visual
+- Mensajes de error genéricos
+
+**SOLUCIÓN PROPUESTA:**
+
+Rediseño completo con:
+- Ilustración o imagen de fondo
+- Validación en tiempo real (check verde/X roja)
+- Mensajes de error específicos
+- Loading state al hacer submit
+- Opción "Recordarme"
+- Link "¿Olvidaste tu contraseña?"
+- Social login (Google) si es posible
+
+---
+
+## MEJORAS TÉCNICAS (PERFORMANCE)
+
+### Performance
+- Imágenes sin optimizar → Usar WebP, lazy loading
+- Bundle JS grande → Code splitting, tree shaking
+- Sin caché Firebase → Implementar persistence
+- Sin Service Worker → PWA básica
+
+### Accesibilidad
+- Sin atributos alt → Agregar alt a todas las imágenes
+- Contraste insuficiente → Verificar con WCAG AA
+- No navegable con teclado → Agregar tabindex, focus visible
+- Sin ARIA labels → Agregar labels básicos
+
+### SEO
+- Sin meta tags → Description, og:image, og:title
+- Títulos genéricos → Títulos descriptivos por página
+- Sin sitemap → Generar sitemap.xml
+
+---
+
+## HOJA DE RUTA (ROADMAP)
+
+### FASE 1: ARREGLOS CRÍTICOS (1-2 semanas)
+**Objetivo:** Que la app sea usable sin frustraciones
+
+**Semana 1**
+- Día 1-2: Arreglar bug de categoría "Otro"
+- Día 2-3: Simplificar formulario de gastos (solo campos esenciales)
+- Día 3-4: Agregar validaciones claras con mensajes específicos
+- Día 4-5: Implementar toast notifications (con Sonner o similar)
+- Día 5-7: Rediseñar Home/Dashboard con jerarquía clara
+
+**Semana 2**
+- Día 1-2: Mejorar pantalla de Presupuestos (tooltips + onboarding)
+- Día 3-4: Simplificar Historial (tabs + filtros colapsables)
+- Día 5: Decidir qué hacer con Calendario de pagos
+- Día 6-7: Testing interno + ajustes
+
+**Entregable:** Versión funcional sin bugs críticos
+
+---
+
+### FASE 2: MEJORAS DE DISEÑO (1 semana)
+**Objetivo:** Que la app se vea profesional y moderna
+
+- Día 1-2: Rediseñar Login/Register
+- Día 3-4: Mejorar gráficos (tamaño, colores, tooltips)
+- Día 5: Pulir detalles visuales (espaciados, sombras, hover states)
+- Día 6-7: Responsive mobile (verificar todo funcione bien)
+
+**Entregable:** Versión visualmente atractiva
+
+---
+
+### FASE 3: OPTIMIZACIÓN TÉCNICA (3-4 días)
+**Objetivo:** Performance y accesibilidad básica
+
+- Día 1: Optimizar imágenes + lazy loading
+- Día 2: Mejorar accesibilidad (alt, contraste, navegación teclado)
+- Día 3: SEO básico (meta tags, títulos)
+- Día 4: Testing en múltiples navegadores
+
+**Entregable:** App optimizada para producción
+
+---
+
+### FASE 4: LANZAMIENTO CON ANALYTICS (1 día)
+**Objetivo:** Deploy final + tracking configurado
+
+Tareas:
+- Deploy a producción en Vercel
+- Instalar Microsoft Clarity
+- Configurar Google Analytics (opcional)
+- Crear link de feedback para usuarios
+- Compartir con grupo de testers (20-30 personas)
+
+**Entregable:** App en producción con analytics activas
+
+---
+
+## MÉTRICAS A MONITOREAR
+
+Una vez que esté en producción con usuarios reales:
+
+### En Microsoft Clarity:
+- Heatmaps: ¿dónde hacen más clic?
+- Grabaciones: ¿dónde se frustran?
+- Dead clicks: ¿qué intentan hacer que no funciona?
+- Rage clicks: ¿dónde se enojan?
+
+### En Vercel Analytics:
+- Páginas más visitadas
+- Tiempo promedio en cada página
+- Tasa de rebote
+- Dispositivos más usados (mobile vs desktop)
+
+### Feedback directo:
+Crear formulario de feedback con preguntas específicas:
+- ¿Qué fue lo más confuso?
+- ¿Qué te gustaría que tenga?
+- ¿Recomendarías la app? (NPS)
+
+---
+
+## CRITERIOS DE ÉXITO
+
+### Antes de lanzar públicamente:
+- Sin bugs críticos (formularios funcionan 100%)
+- Flujo principal claro: Registrarse → Ver saldo → Agregar gasto → Ver historial
+- Responsive funciona bien en mobile
+- Lighthouse score > 80 en Performance y Accesibilidad
+- Al menos 5 usuarios pueden completar el flujo sin ayuda
+
+### Después de 2 semanas con usuarios:
+- Al menos 50 usuarios registrados
+- Tasa de retención > 30% (vuelven al menos 3 veces)
+- NPS (Net Promoter Score) > 40
+- Sin quejas repetidas sobre el mismo problema
+
+---
+
+## HERRAMIENTAS RECOMENDADAS
+
+### Para desarrollo:
+- Sonner → Toast notifications (npm install sonner)
+- Headless UI → Componentes accesibles
+- Hero Icons → Iconos consistentes
+- Chart.js o Recharts → Gráficos mejorados
+
+### Para testing:
+- Microsoft Clarity → Heatmaps + grabaciones (GRATIS)
+- Google Lighthouse → Performance + accesibilidad
+- Vercel Analytics → Métricas básicas (incluido en Vercel)
+
+### Para feedback:
+- Google Forms → Encuestas simples
+- Tally.so → Formularios más bonitos (gratis)
+- TypeForm → Encuestas interactivas (plan free)
+
+---
+
+## NOTAS ADICIONALES
+
+### Sugerencia de testeo presencial (feedback usuario):
+"Sería valioso realizar testeos presenciales con usuarios reales y contexto claro"
+
+**Plan sugerido:**
+1. Invitar 5 amigos/conocidos (target: 20-25 años)
+2. Darles un contexto: "Imaginá que te mudaste a Buenos Aires y querés controlar tus gastos"
+3. Pedirles que completen tareas específicas:
+   - Registrarse
+   - Agregar un saldo inicial
+   - Cargar 3 gastos diferentes
+   - Crear un presupuesto
+   - Ver sus estadísticas
+4. Observar (sin ayudar) y tomar notas
+5. Preguntar al final: ¿qué fue confuso? ¿qué cambiarías?
+
+---
+
+## PRÓXIMOS PASOS INMEDIATOS
+
+### Esta semana:
+1. HOY: Revisar este documento y priorizar
+2. MAÑANA: Empezar con Fase 1 - Arreglos críticos
+3. Crear checklist en Notion/Trello/GitHub Issues
+
+### Pregunta para vos:
+**¿Querés que empecemos juntos con alguna de estas mejoras?**
+
+Opciones:
+- A) Arreglar formulario de gastos (bug + validaciones)
+- B) Rediseñar Home/Dashboard completo
+- C) Mejorar Login/Register
+- D) Implementar toast notifications primero
+
+**¿Por cuál arrancamos?**
+
+---
+
+**Documento creado por:** Claude (Anthropic)  
+**Basado en:** Feedback de usuario + Análisis técnico  
+**Última actualización:** 6 de Abril 2026
+
+
+**ANOTAMOS LO QUE VENIMOS HACIENDO**: 
+- HASTA LA PANTALLA GRAFICOS TODO HECHO (INCLUYENDO LOGIN Y REGISTER)
+- DIAGRAMA DE FLUJO HECHO (AGREGAR EL LINK DE VERCEL UNA VEZ QUE SE SUBA LA VERSION FINAL)

@@ -13,50 +13,49 @@
       <div class="relative z-10">
      
         <BaseHeading >
-          Tus finanzas en gráficos
+          Mis Estadísticas
         </BaseHeading>
-        <p class="text-center text-gray-600 mb-8">Analizá y visualizá tus datos de manera clara</p>
+        <p class="text-center text-gray-600 mb-8">Visualizá tus gastos con gráficos más claros e interactivos</p>
 
        
 
       
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+          <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
        
           <div class="bg-gradient-to-r from-gray-50 to-green-50/30 border border-green-100 rounded-2xl p-8 shadow-md hover:shadow-lg transition">
+            <h2 class="text-xl font-bold mb-2 text-gray-800">Distribución por categoría</h2>
+            <p class="text-sm text-gray-600 mb-4">Primero mirá en qué categorías se concentra más tu gasto.</p>
+            <div class="h-[320px] md:h-[360px]">
+              <DoughnutChart :data="doughnutChartData" :options="doughnutChartOptions" />
+            </div>
+          </div>
+
+          
+          <div class="bg-gradient-to-r from-gray-50 to-green-50/30 border border-green-100 rounded-2xl p-8 shadow-md hover:shadow-lg transition">
             <h2 class="text-xl font-bold mb-2 text-gray-800">Gastos mensuales</h2>
-            <p class="text-sm text-gray-600 mb-4">Compará cuánto gastaste en cada mes.</p>
-            <BarChart :data="barChartData" :options="barChartOptions" />
+            <p class="text-sm text-gray-600 mb-4">Compará cuánto gastaste en cada mes con tooltip detallado.</p>
+            <div class="h-[320px] md:h-[360px]">
+              <BarChart :data="barChartData" :options="barChartOptions" />
+            </div>
           </div>
 
           
           <div class="bg-gradient-to-r from-gray-50 to-green-50/30 border border-green-100 rounded-2xl p-8 shadow-md hover:shadow-lg transition">
             <h2 class="text-xl font-bold mb-2 text-gray-800">Ahorro acumulado</h2>
-            <p class="text-sm text-gray-600 mb-4">Observá cómo crecen tus ahorros mes a mes.</p>
-            <LineChart :data="lineChartData" :options="lineChartOptions" />
-          </div>
-
-          
-          <div class="bg-gradient-to-r from-gray-50 to-green-50/30 border border-green-100 rounded-2xl p-8 shadow-md hover:shadow-lg transition">
-            <h2 class="text-xl font-bold mb-2 text-gray-800">Distribución por categoría</h2>
-            <p class="text-sm text-gray-600 mb-4">Visualizá el porcentaje de gasto en cada categoría.</p>
-            <DoughnutChart :data="doughnutChartData" :options="doughnutChartOptions" />
+            <p class="text-sm text-gray-600 mb-4">Seguí la evolución del ahorro y detectá meses críticos.</p>
+            <div class="h-[320px] md:h-[360px]">
+              <LineChart :data="lineChartData" :options="lineChartOptions" />
+            </div>
           </div>
 
   
           <div class="bg-gradient-to-r from-gray-50 to-green-50/30 border border-green-100 rounded-2xl p-8 shadow-md hover:shadow-lg transition">
             <h2 class="text-xl font-bold mb-2 text-gray-800">Porcentaje de gasto</h2>
-            <p class="text-sm text-gray-600 mb-4">Desglosá tu presupuesto en porciones porcentuales.</p>
-            <PieChart :data="pieChartData" :options="pieChartOptions" />
+            <p class="text-sm text-gray-600 mb-4">Leyenda ampliada por categoría para lectura rápida.</p>
+            <div class="h-[320px] md:h-[360px]">
+              <PieChart :data="pieChartData" :options="pieChartOptions" />
+            </div>
           </div>
-        </div>
-
-        <div class="bg-gradient-to-r from-gray-50 to-green-50/30 border border-green-100 rounded-2xl p-8 shadow-md mt-8">
-          <h3 class="text-2xl font-bold text-gray-800 mb-4">Recomendaciones</h3>
-          <ul class="list-disc list-inside space-y-2 text-gray-700 text-sm">
-            <li v-for="(rec, i) in recommendations" :key="i" class="hover:text-green-700 transition">
-              {{ rec }}
-            </li>
-          </ul>
         </div>
      
           <div class="flex justify-center mt-10">
@@ -106,12 +105,36 @@ import BaseHeading from '../components/BaseHeading.vue';
         pieChartData:   { labels: [], datasets: [] },
   
         
-        barChartOptions:   { responsive: true, plugins: { legend: { position: 'top' } } },
-        lineChartOptions:  { responsive: true, plugins: { legend: { position: 'top' } }, elements: { line: { tension: 0.3 } } },
+         barChartOptions:   {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 14, usePointStyle: true } },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => `${ctx.dataset.label}: $ ${Number(ctx.raw || 0).toLocaleString('es-AR')}`
+              }
+            }
+          }
+        },
+        lineChartOptions:  {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 14, usePointStyle: true } },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => `${ctx.dataset.label}: $ ${Math.round(ctx.raw || 0).toLocaleString('es-AR')}`
+              }
+            }
+          },
+          elements: { line: { tension: 0.3 } }
+        },
         doughnutChartOptions: {
           responsive: true,
+          maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'top' },
+            legend: { position: 'bottom', labels: { boxWidth: 14, usePointStyle: true } },
             tooltip: {
               callbacks: {
                 label: ctx => {
@@ -125,10 +148,11 @@ import BaseHeading from '../components/BaseHeading.vue';
             }
           }
         },
-        pieChartOptions:   {
+           pieChartOptions:   {
           responsive: true,
+          maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'top' },
+            legend: { position: 'bottom', labels: { boxWidth: 14, usePointStyle: true } },
             tooltip: {
               callbacks: {
                 label: ctx => {
@@ -189,9 +213,9 @@ import BaseHeading from '../components/BaseHeading.vue';
         const months = Object.keys(byMonth).sort();
         const monthTotals = months.map(m=> byMonth[m]);
   
-        this.barChartData = {
+         this.barChartData = {
           labels: months,
-          datasets: [{ label:'Gastos ARS', data: monthTotals, backgroundColor:'#42A5F5' }]
+          datasets: [{ label:'Gastos ARS', data: monthTotals, backgroundColor:'#2563eb', borderRadius: 8 }]
         };
   
         let cum = 0;
@@ -200,9 +224,9 @@ import BaseHeading from '../components/BaseHeading.vue';
           return this.initialMonthlyBudget - cum;
         });
   
-        this.lineChartData = {
+       this.lineChartData = {
           labels: months,
-          datasets: [{ label:'Ahorros mensuales', data: savings, borderColor:'#10b981', fill:false }]
+          datasets: [{ label:'Ahorros mensuales', data: savings, borderColor:'#0ea5e9', backgroundColor: 'rgba(14,165,233,0.2)', fill:true }]
         };
   
         
@@ -212,7 +236,7 @@ import BaseHeading from '../components/BaseHeading.vue';
         });
         const cats = Object.keys(byCat);
         const totals = cats.map(c=>byCat[c]);
-        const colors = ['#f87171','#fbbf24','#34d399','#60a5fa','#a78bfa'];
+        const colors = ['#22c55e','#0ea5e9','#f59e0b','#ef4444','#8b5cf6','#14b8a6','#f97316'];
   
         this.pieChartData = {
           labels: cats,
@@ -276,7 +300,5 @@ import BaseHeading from '../components/BaseHeading.vue';
 </script>
   
 <style scoped>
-  .grid { margin: 20px; }
-  h2 { color: #444; margin-bottom: .5rem; }
 </style>
   
